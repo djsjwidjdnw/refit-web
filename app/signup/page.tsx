@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/client';
 
 export default function SignupPage() {
   const router = useRouter();
+  const [shopName, setShopName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -18,19 +19,30 @@ export default function SignupPage() {
     setBusy(true);
     setError(null);
     const supabase = createClient();
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    // Stash the shop name in user metadata so provisioning can still use it if email
+    // confirmation is on (the shop then gets created on the first authenticated load).
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { shop_name: shopName.trim() } },
+    });
     if (error) {
       setBusy(false);
       setError(error.message);
       return;
     }
-    // If email confirmation is required, no session is returned — tell the user to confirm.
     if (data.session) {
+      // Session in hand → provision the shop + 14-day trial atomically (SECURITY DEFINER
+      // RPC, migration 0028). If the RPC isn't applied yet the dashboard's create-shop
+      // step handles it, so don't block the user on that error.
+      await supabase.rpc('provision_new_shop', { _shop_name: shopName.trim() });
       router.push('/dashboard');
       router.refresh();
     } else {
       setBusy(false);
-      setConfirmMsg('Check your email to confirm your account, then sign in.');
+      setConfirmMsg(
+        "Check your email to confirm your account, then sign in — we'll finish setting up your shop.",
+      );
     }
   }
 
@@ -51,6 +63,18 @@ export default function SignupPage() {
           </div>
         ) : (
           <form onSubmit={onSubmit}>
+            <div className="field">
+              <label htmlFor="shop">Shop / business name</label>
+              <input
+                id="shop"
+                className="input"
+                type="text"
+                placeholder="e.g. Bradshaw Marine"
+                value={shopName}
+                onChange={(e) => setShopName(e.target.value)}
+                required
+              />
+            </div>
             <div className="field">
               <label htmlFor="email">Work email</label>
               <input
