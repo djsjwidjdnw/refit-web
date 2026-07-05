@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { SignOutButton } from './sign-out-button';
 import { CreateShop } from './create-shop';
+import { PlanPicker } from './plan-picker';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,6 +16,7 @@ type Entitlement = {
   seats_used: number;
   add_on_seats: number;
   trial_ends_at: string | null;
+  stripe_customer_id: string | null;
 };
 
 function shopName(m: MemberRow): string {
@@ -26,7 +28,12 @@ function trialDaysLeft(iso: string | null): number | null {
   return Math.ceil((new Date(iso).getTime() - Date.now()) / 86_400_000);
 }
 
-export default async function Dashboard() {
+export default async function Dashboard({
+  searchParams,
+}: {
+  searchParams: Promise<{ checkout?: string }>;
+}) {
+  const { checkout } = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -45,7 +52,7 @@ export default async function Dashboard() {
     const { data: entData } = await supabase
       .from('shop_entitlements')
       .select(
-        'shop_id, plan, subscription_status, seats_included, seats_used, add_on_seats, trial_ends_at',
+        'shop_id, plan, subscription_status, seats_included, seats_used, add_on_seats, trial_ends_at, stripe_customer_id',
       )
       .in('shop_id', shopIds);
     for (const e of (entData ?? []) as Entitlement[]) entMap.set(e.shop_id, e);
@@ -81,8 +88,18 @@ export default async function Dashboard() {
           <>
             <h1 style={{ fontSize: 26, fontWeight: 900, margin: '8px 0 4px' }}>Your shop</h1>
             <p style={{ color: 'var(--text-muted)', marginTop: 0 }}>
-              Read-only for now — plans &amp; billing land in the next step.
+              Manage your plan, seats, and billing below.
             </p>
+            {checkout === 'success' && (
+              <div className="trial-banner" style={{ marginTop: 12 }}>
+                Thanks — your plan is being activated. It may take a moment to appear here.
+              </div>
+            )}
+            {checkout === 'cancelled' && (
+              <p className="note" style={{ textAlign: 'left', marginTop: 8 }}>
+                Checkout cancelled — your trial is unchanged.
+              </p>
+            )}
             <div style={{ display: 'grid', gap: 16, marginTop: 16 }}>
               {members.map((m) => {
                 const ent = entMap.get(m.shop_id);
@@ -125,13 +142,11 @@ export default async function Dashboard() {
                       <span className="k">Seats used</span>
                       <span className="v">{ent ? `${ent.seats_used} / ${totalSeats}` : '—'}</span>
                     </div>
-                    <button
-                      className="btn btn-ghost btn-block"
-                      disabled
-                      style={{ opacity: 0.5, cursor: 'not-allowed', marginTop: 16 }}
-                    >
-                      Choose a plan (coming soon)
-                    </button>
+                    <PlanPicker
+                      shopId={m.shop_id}
+                      canManage={m.role === 'admin'}
+                      hasCustomer={!!ent?.stripe_customer_id}
+                    />
                   </div>
                 );
               })}

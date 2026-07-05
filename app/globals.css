@@ -281,3 +281,79 @@ a {
   font-size: 14px;
   text-align: center;
 }
+
+/* ── Plan picker (dashboard billing controls) ─────────────────────────────── */
+.seg {
+  display: inline-flex;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  margin-bottom: 14px;
+}
+.seg button {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 800;
+  font-size: 13px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.seg button.on {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.seg .save {
+  font-size: 11px;
+  font-weight: 800;
+  margin-left: 7px;
+  opacity: 0.85;
+}
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+@media (max-width: 520px) {
+  .plan-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.plan-opt {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  text-align: left;
+  padding: 13px 16px;
+}
+.plan-opt:hover:not(:disabled) {
+  border-color: var(--accent);
+  opacity: 1;
+}
+.plan-opt:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.plan-opt .po-name {
+  font-size: 14px;
+  font-weight: 800;
+}
+.plan-opt .po-price {
+  font-size: 21px;
+  font-weight: 900;
+}
+.plan-opt .po-price small {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-left: 1px;
+}
+.plan-opt .po-seats {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
