@@ -13,13 +13,17 @@ export async function replayPendingJoin(supabase: SupabaseClient, user: User): P
   const code = (user.user_metadata as { pending_join_code?: string } | null)?.pending_join_code;
   if (!code) return;
 
-  // rpc() returns { error } rather than throwing on an RLS/business error — we intentionally
-  // ignore it (the page reads the real state from my_pending_join / shop_members afterward).
-  await supabase.rpc('request_join_shop', { _join_code: code });
+  // rpc() returns { error } rather than throwing. Only clear the stashed code once the
+  // request actually recorded — otherwise a transient failure on a VALID code would strand
+  // the tech on the create-shop CTA and they'd become an accidental admin. Keeping the code
+  // simply replays (idempotently) on the next load. A genuinely invalid/expired code keeps
+  // erroring, and the dashboard shows the "invite couldn't be applied" state, not create-shop.
+  const { error } = await supabase.rpc('request_join_shop', { _join_code: code });
+  if (error) return;
 
-  // Clear the flag so we don't re-submit on every load. Best-effort: in a Server Component
-  // the refreshed cookie can't be written, but the metadata change still persists in GoTrue,
-  // and request_join_shop is idempotent regardless.
+  // Success → clear the flag so we don't re-submit forever. Best-effort: in a Server
+  // Component the refreshed cookie can't be written, but the metadata change still persists
+  // in GoTrue, and a stray replay is idempotent anyway.
   try {
     await supabase.auth.updateUser({ data: { pending_join_code: null } });
   } catch {

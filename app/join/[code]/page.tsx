@@ -58,6 +58,18 @@ export default async function JoinPage({ params }: { params: Promise<{ code: str
               </p>
             </div>
           </>
+        ) : rpcError ? (
+          // The code we just submitted failed — surface THAT, never a stale pending row for a
+          // different shop (my_pending_join returns any prior request, unrelated to this code).
+          <>
+            <h1>Couldn’t join</h1>
+            <p className="sub">{rpcError}</p>
+            <div className="card">
+              <p style={{ margin: 0 }}>
+                Double-check the invite link with your shop admin, or ask them to send a new one.
+              </p>
+            </div>
+          </>
         ) : req ? (
           <>
             <h1>Request sent</h1>
@@ -72,9 +84,11 @@ export default async function JoinPage({ params }: { params: Promise<{ code: str
             </div>
           </>
         ) : (
+          // Reached only if the request recorded but no pending row came back (shouldn't
+          // normally happen) — show a neutral fallback rather than a false success.
           <>
             <h1>Couldn’t join</h1>
-            <p className="sub">{rpcError ?? 'That invite link didn’t work.'}</p>
+            <p className="sub">That invite link didn’t work.</p>
             <div className="card">
               <p style={{ margin: 0 }}>
                 Double-check the invite link with your shop admin, or ask them to send a new one.

@@ -58,6 +58,13 @@ export default async function Dashboard({
     const { data: pj } = await supabase.rpc('my_pending_join');
     pendingJoin = (Array.isArray(pj) ? pj[0] : null) as { shop_name: string } | null;
   }
+  // Signed up via an invite? Then even if the request hasn't landed (invalid/expired code,
+  // or a transient replay failure) they are joining a shop, not creating one — never show
+  // the create-shop CTA to them.
+  const invitedButUnresolved =
+    members.length === 0 &&
+    !pendingJoin &&
+    !!(user.user_metadata as { pending_join_code?: string } | null)?.pending_join_code;
 
   const shopIds = members.map((m) => m.shop_id);
   const entMap = new Map<string, Entitlement>();
@@ -96,6 +103,16 @@ export default async function Dashboard({
               <p style={{ color: 'var(--text-muted)', marginTop: 0 }}>
                 Waiting for an admin at <strong>{pendingJoin.shop_name}</strong> to approve you.
                 You&apos;ll get access as soon as they do — nothing else is needed.
+              </p>
+            </>
+          ) : invitedButUnresolved ? (
+            // Joined via an invite but the request hasn't landed (invalid/expired code or a
+            // transient hiccup). They're a joiner, not an owner — don't offer create-shop.
+            <>
+              <h1 style={{ fontSize: 26, fontWeight: 900, margin: '8px 0 4px' }}>Almost there</h1>
+              <p style={{ color: 'var(--text-muted)', marginTop: 0 }}>
+                We couldn&apos;t confirm your shop invite. Refresh this page, or ask your shop
+                admin to send you a fresh invite link.
               </p>
             </>
           ) : (
