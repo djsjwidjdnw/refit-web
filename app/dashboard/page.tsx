@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import { replayPendingJoin } from '@/lib/join';
 import { SignOutButton } from './sign-out-button';
 import { CreateShop } from './create-shop';
 import { PlanPicker } from './plan-picker';
@@ -40,11 +41,23 @@ export default async function Dashboard({
   } = await supabase.auth.getUser();
   if (!user) redirect('/login');
 
+  // If they signed up via an invite while email confirmation was on, the join code was
+  // stashed in metadata — submit it now (idempotent) before deciding what to render.
+  await replayPendingJoin(supabase, user);
+
   const { data: membersData } = await supabase
     .from('shop_members')
     .select('shop_id, role, shops(name)')
     .eq('user_id', user.id);
   const members = (membersData ?? []) as MemberRow[];
+
+  // No shop yet → either a pending join request (waiting for approval) or the create-shop
+  // CTA. A tech who used an invite has a pending request and must NOT see create-shop.
+  let pendingJoin: { shop_name: string } | null = null;
+  if (members.length === 0) {
+    const { data: pj } = await supabase.rpc('my_pending_join');
+    pendingJoin = (Array.isArray(pj) ? pj[0] : null) as { shop_name: string } | null;
+  }
 
   const shopIds = members.map((m) => m.shop_id);
   const entMap = new Map<string, Entitlement>();
@@ -76,14 +89,25 @@ export default async function Dashboard({
 
       <main className="container">
         {members.length === 0 ? (
-          // Step-4 guard: signed in but no shop yet → create-shop state (not an error).
-          <>
-            <h1 style={{ fontSize: 26, fontWeight: 900, margin: '8px 0 4px' }}>Welcome to ReFit</h1>
-            <p style={{ color: 'var(--text-muted)', marginTop: 0 }}>
-              You&apos;re signed in — create your shop to start your free trial.
-            </p>
-            <CreateShop defaultName={shopNameHint} />
-          </>
+          pendingJoin ? (
+            // Joined via invite: waiting on an admin — do NOT show the create-shop CTA.
+            <>
+              <h1 style={{ fontSize: 26, fontWeight: 900, margin: '8px 0 4px' }}>Request sent</h1>
+              <p style={{ color: 'var(--text-muted)', marginTop: 0 }}>
+                Waiting for an admin at <strong>{pendingJoin.shop_name}</strong> to approve you.
+                You&apos;ll get access as soon as they do — nothing else is needed.
+              </p>
+            </>
+          ) : (
+            // Step-4 guard: signed in but no shop yet → create-shop state (not an error).
+            <>
+              <h1 style={{ fontSize: 26, fontWeight: 900, margin: '8px 0 4px' }}>Welcome to ReFit</h1>
+              <p style={{ color: 'var(--text-muted)', marginTop: 0 }}>
+                You&apos;re signed in — create your shop to start your free trial.
+              </p>
+              <CreateShop defaultName={shopNameHint} />
+            </>
+          )
         ) : (
           <>
             <h1 style={{ fontSize: 26, fontWeight: 900, margin: '8px 0 4px' }}>Your shop</h1>
