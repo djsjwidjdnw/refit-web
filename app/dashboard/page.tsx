@@ -17,8 +17,17 @@ type Entitlement = {
   seats_used: number;
   add_on_seats: number;
   trial_ends_at: string | null;
+  grace_started_at: string | null;
   stripe_customer_id: string | null;
 };
+
+// Days left in the 14-day payment-failure grace window (null if not past_due / no anchor).
+function graceDaysLeft(ent: Entitlement | undefined): number | null {
+  if (!ent || ent.subscription_status !== 'past_due' || !ent.grace_started_at) return null;
+  return Math.ceil(
+    (new Date(ent.grace_started_at).getTime() + 14 * 86_400_000 - Date.now()) / 86_400_000,
+  );
+}
 
 function shopName(m: MemberRow): string {
   const s = m.shops;
@@ -72,7 +81,7 @@ export default async function Dashboard({
     const { data: entData } = await supabase
       .from('shop_entitlements')
       .select(
-        'shop_id, plan, subscription_status, seats_included, seats_used, add_on_seats, trial_ends_at, stripe_customer_id',
+        'shop_id, plan, subscription_status, seats_included, seats_used, add_on_seats, trial_ends_at, grace_started_at, stripe_customer_id',
       )
       .in('shop_id', shopIds);
     for (const e of (entData ?? []) as Entitlement[]) entMap.set(e.shop_id, e);
@@ -147,6 +156,11 @@ export default async function Dashboard({
                 const totalSeats = ent ? ent.seats_included + ent.add_on_seats : null;
                 const days = ent ? trialDaysLeft(ent.trial_ends_at) : null;
                 const trialing = ent?.subscription_status === 'trialing';
+                const status = ent?.subscription_status;
+                const graceLeft = graceDaysLeft(ent);
+                // read-only once past_due's 14-day grace elapses (or when canceled).
+                const pastDueReadOnly =
+                  status === 'past_due' && ent?.grace_started_at != null && (graceLeft ?? 1) <= 0;
                 return (
                   <div key={m.shop_id} className="card">
                     {trialing && (
@@ -154,6 +168,21 @@ export default async function Dashboard({
                         {days != null && days > 0
                           ? `Trial — ${days} day${days === 1 ? '' : 's'} left`
                           : 'Trial ended — choose a plan to keep going'}
+                      </div>
+                    )}
+                    {status === 'past_due' && (
+                      <div className="trial-banner">
+                        {pastDueReadOnly
+                          ? 'Payment failed — your shop is now read-only. Update your card below to restore full access.'
+                          : `Payment failed — update your card${
+                              graceLeft && graceLeft > 0 ? ` within ${graceLeft} day${graceLeft === 1 ? '' : 's'}` : ''
+                            } to keep full access.`}
+                      </div>
+                    )}
+                    {status === 'canceled' && (
+                      <div className="trial-banner">
+                        Subscription canceled — your shop is read-only. Reactivate below to restore
+                        full access.
                       </div>
                     )}
                     <div
@@ -186,7 +215,15 @@ export default async function Dashboard({
                     <PlanPicker
                       shopId={m.shop_id}
                       canManage={m.role === 'admin'}
-                      hasCustomer={!!ent?.stripe_customer_id}
+                      // Portal manages a LIVE subscription. A canceled/none shop has no
+                      // resumable subscription, so show plan/Checkout buttons instead (Checkout
+                      // reuses the retained Stripe customer). Otherwise they'd be stranded in
+                      // read-only with only a dead-end "Manage billing" button.
+                      hasCustomer={
+                        !!ent?.stripe_customer_id &&
+                        status !== 'canceled' &&
+                        status !== 'none'
+                      }
                     />
                   </div>
                 );
