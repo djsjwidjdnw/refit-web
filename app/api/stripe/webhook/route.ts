@@ -84,6 +84,8 @@ export async function POST(request: Request) {
         const customerId = idOf(invoice.customer);
         // Mark past_due without touching plan/limits. Located by subscription or customer id.
         if (subId || customerId) {
+          // Comped/enterprise shops are operator-managed — never let Stripe flip them.
+          if (await isManuallyManaged(admin, { subId, customerId, shopId: null })) break;
           const { error } = await admin.rpc('apply_stripe_subscription', {
             _shop_id: null,
             _stripe_customer_id: customerId,
@@ -126,6 +128,12 @@ async function syncSubscription(
   const item = sub.items?.data?.[0];
   const priceId = item?.price?.id ?? null;
   const { plan, interval } = resolvePlan(sub, priceId);
+
+  // Comped/enterprise shops (managed_manually) are controlled from /ops — a Stripe event must
+  // not overwrite the operator-set plan/status. Skip the write for them.
+  if (await isManuallyManaged(admin, { subId: sub.id, customerId: idOf(sub.customer), shopId: shopIdHint })) {
+    return;
+  }
 
   const { error } = await admin.rpc('apply_stripe_subscription', {
     _shop_id: shopIdHint,
@@ -217,4 +225,32 @@ function invoiceSubscriptionId(invoice: Stripe.Invoice): string | null {
 function idOf(v: string | { id: string } | null | undefined): string | null {
   if (!v) return null;
   return typeof v === 'string' ? v : v.id;
+}
+
+// True if the target shop is operator-managed (comped/enterprise, managed_manually=true), in
+// which case Stripe events must NOT overwrite its plan/status. Resolves the shop the SAME way
+// apply_stripe_subscription does — subscription id, then customer id, then checkout shop id —
+// using the service-role client (RLS-bypassing, no user session in a webhook).
+async function isManuallyManaged(
+  admin: Admin,
+  ids: { subId?: string | null; customerId?: string | null; shopId?: string | null },
+): Promise<boolean> {
+  // 'managed' | 'not' | 'unknown' (no value, no match, or a query error). Uses a plain array
+  // read (NOT maybeSingle, which ERRORS if a customer maps to >1 shop — Max multi-shop) and
+  // treats ANY matching managed row as managed. On error we return 'unknown' and fall through;
+  // if all paths are unknown the result is false (fail-open) — acceptable because comped shops
+  // rarely have live Stripe events and Stripe retries transient failures.
+  const lookup = async (
+    column: string,
+    value: string | null | undefined,
+  ): Promise<'managed' | 'not' | 'unknown'> => {
+    if (!value) return 'unknown';
+    const { data, error } = await admin.from('shop_entitlements').select('managed_manually').eq(column, value);
+    if (error || !data || data.length === 0) return 'unknown';
+    return data.some((r) => r.managed_manually === true) ? 'managed' : 'not';
+  };
+  let result = await lookup('stripe_subscription_id', ids.subId);
+  if (result === 'unknown') result = await lookup('stripe_customer_id', ids.customerId);
+  if (result === 'unknown') result = await lookup('shop_id', ids.shopId);
+  return result === 'managed';
 }

@@ -6,6 +6,11 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Run on all routes except static assets / images.
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
+  matcher: [
+    // Run on all routes except static assets / images.
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    // ALWAYS run on the operator cockpit — even for image-like paths (e.g. /ops/shops/x.png,
+    // which the [id] route would otherwise match) — so the /ops web gate is never bypassed.
+    '/ops/:path*',
+  ],
 };
