@@ -23,7 +23,10 @@ export default function LoginPage() {
       setError(error.message);
       return;
     }
-    router.push('/dashboard');
+    // Route platform operators to their cockpit; everyone else to the customer dashboard.
+    // is_platform_operator is DB-gated and evaluated for the just-signed-in session's uid.
+    const { data: isOperator } = await supabase.rpc('is_platform_operator');
+    router.push(isOperator === true ? '/ops' : '/dashboard');
     router.refresh();
   }
 

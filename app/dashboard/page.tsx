@@ -60,6 +60,14 @@ export default async function Dashboard({
     .eq('user_id', user.id);
   const members = (membersData ?? []) as MemberRow[];
 
+  // Platform operators are shop-less by design — never funnel them into customer onboarding
+  // (create-shop). If a shop-less operator lands here, send them to their cockpit. (An operator
+  // who also has a shop keeps the normal dashboard; this only triggers when shop-less.)
+  if (members.length === 0) {
+    const { data: isOperator } = await supabase.rpc('is_platform_operator');
+    if (isOperator === true) redirect('/ops');
+  }
+
   // No shop yet → either a pending join request (waiting for approval) or the create-shop
   // CTA. A tech who used an invite has a pending request and must NOT see create-shop.
   let pendingJoin: { shop_name: string } | null = null;
