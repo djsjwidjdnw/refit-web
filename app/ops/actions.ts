@@ -36,3 +36,21 @@ export async function reactivateShop(shopId: string): Promise<void> {
 export async function setEnterprise(shopId: string, on: boolean): Promise<void> {
   await operatorRpc('ops_set_enterprise', { _shop_id: shopId, _on: on }, shopId);
 }
+
+// ── operator management (OWNER-only; enforced at the DB by ops_add/remove_operator) ──
+// requireOperator() gates the web layer; the RPC raises unless the caller is an owner.
+export async function addOperator(email: string): Promise<void> {
+  await requireOperator();
+  const supabase = await createClient();
+  const { error } = await supabase.rpc('ops_add_operator', { _email: email });
+  if (error) throw new Error(error.message);
+  revalidatePath('/ops');
+}
+
+export async function removeOperator(userId: string): Promise<void> {
+  await requireOperator();
+  const supabase = await createClient();
+  const { error } = await supabase.rpc('ops_remove_operator', { _user_id: userId });
+  if (error) throw new Error(error.message);
+  revalidatePath('/ops');
+}

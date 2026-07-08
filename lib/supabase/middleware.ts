@@ -1,6 +1,5 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
-import { isOperatorEmail } from '@/lib/ops/allowlist';
 
 // Refreshes the Supabase auth session on each request and guards /dashboard.
 export async function updateSession(request: NextRequest) {
@@ -38,13 +37,13 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Operator cockpit (/ops): the WEB gate. Anyone who isn't a signed-in operator (email in the
-  // OPS_OPERATOR_EMAILS allowlist) is bounced to home — no /login hint that /ops exists. The
-  // /ops layout + every server action re-check this, and every ops_* RPC is DB-gated too.
-  if (request.nextUrl.pathname.startsWith('/ops') && !isOperatorEmail(user?.email)) {
+  // Operator cockpit (/ops): require a signed-in user here (cheap edge check). The AUTHORITATIVE
+  // operator check is DB-backed (is_platform_operator) in the /ops layout + every server action,
+  // so a newly-added operator gets in with NO redeploy, and a signed-in NON-operator is
+  // redirected server-side by the layout before any /ops content renders.
+  if (!user && request.nextUrl.pathname.startsWith('/ops')) {
     const url = request.nextUrl.clone();
-    url.pathname = '/';
-    url.search = '';
+    url.pathname = '/login';
     return NextResponse.redirect(url);
   }
 
