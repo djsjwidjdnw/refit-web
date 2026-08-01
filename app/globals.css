@@ -357,3 +357,373 @@ a {
   color: var(--text-muted);
   font-weight: 700;
 }
+
+/* ══ Landing page ═══════════════════════════════════════════════════════════
+   Mobile-first: everything below is a single column by default, and only
+   splits into two at 760px+. The screenshots are real app screens cropped out
+   of the App Store assets with no device frame, so `.shot` supplies one. */
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+.shot {
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  overflow: hidden;
+  background: var(--bg-elev);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45);
+  max-width: 300px;
+  margin-inline: auto;
+}
+.shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ── Hero ─────────────────────────────────────────────────────────────────── */
+.hero-split {
+  padding-block: 40px 8px;
+}
+.hero-copy h1 {
+  font-size: 38px;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  margin: 0 0 16px;
+  font-weight: 900;
+}
+.hero-copy > p {
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--text-muted);
+  margin: 0 0 26px;
+  max-width: 52ch;
+}
+.hero-cta {
+  flex-wrap: wrap;
+}
+.hero-meta {
+  margin-top: 18px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.hero-shot {
+  margin-top: 40px;
+}
+
+/* ── Section furniture ────────────────────────────────────────────────────── */
+.section-head {
+  font-size: 27px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 900;
+  margin: 0 0 14px;
+  text-align: center;
+}
+.section-sub {
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.55;
+  max-width: 60ch;
+  margin: 0 auto 32px;
+  text-align: center;
+}
+.mini-head {
+  font-size: 18px;
+  font-weight: 900;
+  margin: 40px 0 14px;
+  text-align: center;
+}
+
+/* ── How it works ─────────────────────────────────────────────────────────── */
+.steps {
+  display: grid;
+  gap: 56px;
+  margin-top: 34px;
+}
+.step {
+  display: grid;
+  gap: 26px;
+  align-items: center;
+}
+.step-n {
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.step h3 {
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 900;
+  margin: 0 0 10px;
+}
+.step p {
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 48ch;
+}
+
+/* ── The numbers ──────────────────────────────────────────────────────────── */
+.numbers {
+  display: grid;
+  gap: 14px;
+}
+.num-v {
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+.num-k {
+  font-size: 15px;
+  font-weight: 800;
+  margin: 4px 0 6px;
+}
+.num-d {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.bottomline {
+  margin-top: 16px;
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  text-align: center;
+  border-color: var(--accent);
+  background: rgba(255, 106, 44, 0.07);
+}
+.bl-k {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.bl-v {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin-top: 2px;
+}
+.bl-x {
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+/* ── ROI calculator ───────────────────────────────────────────────────────── */
+.roi-inputs {
+  display: grid;
+  gap: 12px;
+}
+.roi-field span {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.roi-out {
+  margin-top: 20px;
+  border-top: 1px solid var(--border);
+  padding-top: 6px;
+}
+.roi-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 9px 0;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+.roi-line b {
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.roi-net {
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+  padding-top: 12px;
+}
+.roi-net b {
+  color: var(--accent);
+  font-size: 23px;
+  font-weight: 900;
+}
+.roi-foot {
+  margin: 14px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* ── Trust ────────────────────────────────────────────────────────────────── */
+.trust-list {
+  max-width: 720px;
+}
+.trust-list li {
+  line-height: 1.55;
+}
+
+/* ── Pricing ──────────────────────────────────────────────────────────────── */
+.tier {
+  position: relative;
+}
+.tier-featured {
+  border-color: var(--accent);
+}
+.tier-flag {
+  position: absolute;
+  top: -10px;
+  left: 24px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+/* ── FAQ ──────────────────────────────────────────────────────────────────── */
+.faq {
+  max-width: 720px;
+  margin-inline: auto;
+}
+.faq-item {
+  border-bottom: 1px solid var(--border);
+}
+.faq-item summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 17px 34px 17px 0;
+  font-size: 16px;
+  font-weight: 800;
+  position: relative;
+}
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-item summary::after {
+  content: '+';
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+.faq-item[open] summary::after {
+  content: '−';
+}
+.faq-item p {
+  margin: 0 0 18px;
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 62ch;
+}
+
+/* ── Closing CTA ──────────────────────────────────────────────────────────── */
+.closer {
+  text-align: center;
+  padding: 40px 24px;
+}
+.closer h2 {
+  font-size: 27px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+}
+.closer p {
+  color: var(--text-muted);
+  margin: 0 0 24px;
+}
+.closer .row {
+  justify-content: center;
+}
+
+/* ── Wider than a phone ───────────────────────────────────────────────────── */
+@media (min-width: 760px) {
+  .hero-split {
+    grid-template-columns: 1.05fr 0.95fr;
+    display: grid;
+    gap: 48px;
+    align-items: center;
+    padding-block: 72px 24px;
+  }
+  .hero-copy h1 {
+    font-size: 52px;
+  }
+  .hero-copy > p {
+    font-size: 19px;
+  }
+  .hero-shot {
+    margin-top: 0;
+  }
+  .section-head {
+    font-size: 34px;
+  }
+
+  .step {
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+  /* Alternate which side the phone sits on so the eye zig-zags down the page
+     instead of running down one rail. */
+  .step:nth-child(even) .step-copy {
+    order: 2;
+  }
+
+  .numbers {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .bottomline {
+    grid-template-columns: auto auto auto;
+    justify-content: center;
+    align-items: center;
+    gap: 34px;
+    padding: 26px 32px;
+  }
+
+  .roi-inputs {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .trust-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 34px;
+    max-width: none;
+  }
+
+  .closer {
+    padding: 52px 32px;
+  }
+  .closer h2 {
+    font-size: 32px;
+  }
+}

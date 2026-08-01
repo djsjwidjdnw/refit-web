@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { createClient } from '@/lib/supabase/server';
+import RoiCalculator from './roi-calculator';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,6 +37,81 @@ async function getTiers(): Promise<Tier[]> {
   return FALLBACK_TIERS;
 }
 
+// Every image below is a real screen from the shipping iOS app, cropped out of the App
+// Store assets. Nothing here is a mockup.
+const SHOT_W = 860;
+const SHOT_H = 1713;
+
+const STEPS = [
+  {
+    n: '01',
+    title: 'Capture as you tear down',
+    body:
+      'Photograph the part while it is still in your hand, bag it, and label the bag with a scanned QR or an auto-generated number. No writing it up later from memory.',
+    src: '/shots/capture-identify.webp',
+    alt: 'The ReFit capture screen, choosing how to identify a bag: scan a QR code, auto-number it, or enter a label.',
+  },
+  {
+    n: '02',
+    title: 'Organised by boat, area and component',
+    body:
+      'Every capture lands under the right boat, area and component — so six months later the record reads like the vessel, not like a camera roll.',
+    src: '/shots/job-overview.webp',
+    alt: 'A ReFit job overview for the vessel Castaway showing capture counts and flagged items by area.',
+  },
+  {
+    n: '03',
+    title: 'Reassemble from the record',
+    body:
+      'Each part carries its own stage, notes and photos from removal through to reinstall, so the tech doing the rebuild can see what the tech who pulled it saw.',
+    src: '/shots/part-lifecycle.webp',
+    alt: 'A ReFit part detail screen showing its lifecycle stage and technician notes.',
+  },
+  {
+    n: '04',
+    title: 'Export the whole job',
+    body:
+      'Hand the owner, the surveyor or your own files a complete record — Excel, CSV, JSON or PDF, with the photos attached.',
+    src: '/shots/export.webp',
+    alt: 'The ReFit export screen offering Excel, CSV, JSON and PDF formats.',
+  },
+];
+
+const FAQ = [
+  {
+    q: 'Does it work where there is no signal?',
+    a: 'Yes. Capture runs offline and syncs when the device is back on a connection, which is the normal case in a shed or below decks.',
+  },
+  {
+    q: 'Do we have to buy QR labels?',
+    a: 'No. You can scan a QR or barcode if you already use them, or let ReFit auto-number each bag. Both work the same way afterwards.',
+  },
+  {
+    q: 'Can I control who sees which boat?',
+    a: 'Yes. Admins, team leads, techs and parts staff are separate roles, and techs and team leads only see the boats they are assigned to.',
+  },
+  {
+    q: 'What happens to the record if we stop paying?',
+    a: 'Export the full job — photos included — at any point during the subscription. The export is a plain file you keep, not a format that needs ReFit to open.',
+  },
+  {
+    q: 'How long before a crew is actually using it?',
+    a: 'It is a phone app with a camera and a job list. The first capture takes about a minute; there is no implementation project.',
+  },
+  {
+    q: 'What does the trial cost?',
+    a: 'Nothing for 14 days. A card is required to start, and you can cancel inside the trial without being charged.',
+  },
+];
+
+function Shot({ src, alt, priority = false }: { src: string; alt: string; priority?: boolean }) {
+  return (
+    <div className="shot">
+      <Image src={src} alt={alt} width={SHOT_W} height={SHOT_H} priority={priority} sizes="(max-width: 760px) 78vw, 330px" />
+    </div>
+  );
+}
+
 export default async function Home() {
   const tiers = await getTiers();
 
@@ -56,72 +133,196 @@ export default async function Home() {
         </nav>
       </header>
 
-      <main className="container">
-        <section className="hero">
-          <h1>Put it back together without guessing.</h1>
-          <p>
-            ReFit photographs and voice-notes every part of a teardown — bagged, labelled,
-            and searchable — so reassembly is exact. Run your shop, your techs, and your
-            plan from one place.
-          </p>
-          <div className="row" style={{ justifyContent: 'center' }}>
-            <Link href="/signup" className="btn btn-primary">
-              Start 14-day free trial
-            </Link>
-            <Link href="/login" className="btn btn-ghost">
-              Sign in
-            </Link>
+      <main>
+        {/* ── HERO ─────────────────────────────────────────────────────────────── */}
+        <section className="container hero-split">
+          <div className="hero-copy">
+            <div className="eyebrow">For refit and boatyard crews</div>
+            <h1>Put it back together without guessing.</h1>
+            <p>
+              ReFit photographs, bags and labels every part as it comes off the boat — searchable
+              by boat, area and component — so the rebuild is exact and the record is done before
+              anyone walks off the job.
+            </p>
+            <div className="row hero-cta">
+              <Link href="/signup" className="btn btn-primary">
+                Start 14-day free trial
+              </Link>
+              <Link href="#how" className="btn btn-ghost">
+                See how it works
+              </Link>
+            </div>
+            <div className="hero-meta">
+              iPhone and Android · works offline · export anytime
+            </div>
+          </div>
+          <div className="hero-shot">
+            <Shot
+              src="/shots/fastener-photo.webp"
+              alt="A ReFit capture in progress: a gloved hand holding hardware photographed against the workbench, filed under bag 444."
+              priority
+            />
           </div>
         </section>
 
-        <div className="section-label">Plans</div>
-        <div className="pricing">
-          {tiers.map((t) => (
-            <div key={t.plan} className="card tier">
-              <div className="tier-name">{t.display_name}</div>
-              <div className="tier-price">
-                {t.price_usd_monthly != null ? (
-                  <>
-                    ${t.price_usd_monthly}
-                    <small>/mo</small>
-                  </>
-                ) : (
-                  'Custom'
-                )}
-              </div>
-              <div className="tier-seats">
-                {t.seats_included != null ? `${t.seats_included} techs included` : 'Custom seats'}
-              </div>
-              <div style={{ marginTop: 18 }}>
-                <Link href="/signup" className="btn btn-ghost btn-block">
-                  {t.plan === 'enterprise' ? 'Contact us' : 'Start trial'}
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-        <p className="note">
-          14-day trial (card required). Annual billing is 2 months free. Add-on seats $15/tech.
-          Owner/admin seat is free.
-        </p>
+        {/* ── HOW IT WORKS ─────────────────────────────────────────────────────── */}
+        <section id="how" className="container">
+          <div className="section-label">How it works</div>
+          <h2 className="section-head">Four steps, done at the bench</h2>
+          <div className="steps">
+            {STEPS.map((s) => (
+              <article key={s.n} className="step">
+                <div className="step-copy">
+                  <div className="step-n">{s.n}</div>
+                  <h3>{s.title}</h3>
+                  <p>{s.body}</p>
+                </div>
+                <Shot src={s.src} alt={s.alt} />
+              </article>
+            ))}
+          </div>
+        </section>
 
-        <div className="section-label">Why ReFit</div>
-        <ul className="feature-list">
-          <li>
-            <b>Bag &amp; label every part</b> — QR or auto-numbered, with photos and a voice
-            note per bag.
-          </li>
-          <li>
-            <b>Fastener totals</b> — know exactly what to re-order for a rebuild.
-          </li>
-          <li>
-            <b>Roles &amp; per-boat access</b> — admins, team leads, techs, and parts, assigned
-            to the jobs they work.
-          </li>
-          <li>
-            <b>Works offline</b> — capture on flaky yard wifi; it syncs when you're back.
-          </li>
-        </ul>
+        {/* ── THE NUMBERS ──────────────────────────────────────────────────────── */}
+        <section className="container">
+          <div className="section-label">The numbers</div>
+          <h2 className="section-head">What the hunting actually costs you</h2>
+          <p className="section-sub">
+            The expensive part of a refit is not the documentation — it is a tech standing in
+            front of an open bulkhead trying to remember which bolt went where. Twenty minutes a
+            day, per tech, is a conservative floor.
+          </p>
+
+          <div className="numbers">
+            <div className="card num">
+              <div className="num-v">$104,000</div>
+              <div className="num-k">Labour recovered / year</div>
+              <div className="num-d">10 techs × 20 min/day × 240 days × $130/hr</div>
+            </div>
+            <div className="card num">
+              <div className="num-v">~$6,000</div>
+              <div className="num-k">Duplicate orders avoided</div>
+              <div className="num-d">Fastener counts come off the record, not a guess</div>
+            </div>
+            <div className="card num">
+              <div className="num-v">~$20,000</div>
+              <div className="num-k">Faster turnaround</div>
+              <div className="num-d">Slips free up sooner when reassembly stops stalling</div>
+            </div>
+          </div>
+
+          <div className="bottomline card">
+            <div>
+              <div className="bl-k">Conservative floor</div>
+              <div className="bl-v">$130,000+ / year</div>
+            </div>
+            <div className="bl-x">against</div>
+            <div>
+              <div className="bl-k">ReFit, 10 techs</div>
+              <div className="bl-v">$2,148 / year</div>
+            </div>
+          </div>
+
+          <h3 className="mini-head">Run your own numbers</h3>
+          <RoiCalculator />
+        </section>
+
+        {/* ── WHO IT'S FOR / TRUST ─────────────────────────────────────────────── */}
+        <section className="container">
+          <div className="section-label">Who it&apos;s for</div>
+          <h2 className="section-head">Built on a working shop floor</h2>
+          <p className="section-sub">
+            ReFit was built alongside Philbrooks Boatyard in British Columbia — on real refits,
+            with the techs doing the work. Every screen on this page is the shipping app, not a
+            mockup.
+          </p>
+          <ul className="feature-list trust-list">
+            <li>
+              <b>Refit and repower yards</b> — teardowns that run for months and change hands
+              between techs.
+            </li>
+            <li>
+              <b>Service departments</b> — where the same boat comes back next season and nobody
+              remembers the last job.
+            </li>
+            <li>
+              <b>Owners and surveyors</b> — who need a record of what was actually done, with
+              photos.
+            </li>
+            <li>
+              <b>Roles &amp; per-boat access</b> — admins, team leads, techs and parts staff, each
+              assigned to the jobs they work.
+            </li>
+          </ul>
+        </section>
+
+        {/* ── PRICING ──────────────────────────────────────────────────────────── */}
+        <section className="container">
+          <div className="section-label">Plans</div>
+          <h2 className="section-head">Priced per shop, not per photo</h2>
+          <div className="pricing">
+            {tiers.map((t) => (
+              <div key={t.plan} className={`card tier${t.plan === 'pro' ? ' tier-featured' : ''}`}>
+                {t.plan === 'pro' && <div className="tier-flag">Most shops</div>}
+                <div className="tier-name">{t.display_name}</div>
+                <div className="tier-price">
+                  {t.price_usd_monthly != null ? (
+                    <>
+                      ${t.price_usd_monthly}
+                      <small>/mo</small>
+                    </>
+                  ) : (
+                    'Custom'
+                  )}
+                </div>
+                <div className="tier-seats">
+                  {t.seats_included != null ? `${t.seats_included} techs included` : 'Custom seats'}
+                </div>
+                <div style={{ marginTop: 18 }}>
+                  <Link
+                    href="/signup"
+                    className={`btn btn-block ${t.plan === 'pro' ? 'btn-primary' : 'btn-ghost'}`}
+                  >
+                    {t.plan === 'enterprise' ? 'Contact us' : 'Start trial'}
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="note">
+            14-day trial (card required). Annual billing is 2 months free. Add-on seats $15/tech.
+            Owner/admin seat is free.
+          </p>
+        </section>
+
+        {/* ── FAQ ──────────────────────────────────────────────────────────────── */}
+        <section className="container">
+          <div className="section-label">Questions</div>
+          <div className="faq">
+            {FAQ.map((f) => (
+              <details key={f.q} className="faq-item">
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* ── CLOSING CTA ──────────────────────────────────────────────────────── */}
+        <section className="container">
+          <div className="closer card">
+            <h2>Start on your next teardown.</h2>
+            <p>Fourteen days free. Cancel inside the trial and you are not charged.</p>
+            <div className="row hero-cta">
+              <Link href="/signup" className="btn btn-primary">
+                Start 14-day free trial
+              </Link>
+              <Link href="/login" className="btn btn-ghost">
+                Sign in
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer className="footer">
