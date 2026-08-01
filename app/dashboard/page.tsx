@@ -5,6 +5,7 @@ import { replayPendingJoin } from '@/lib/join';
 import { SignOutButton } from './sign-out-button';
 import { CreateShop } from './create-shop';
 import { PlanPicker } from './plan-picker';
+import { NextSteps } from './next-steps';
 
 export const dynamic = 'force-dynamic';
 
@@ -97,6 +98,10 @@ export default async function Dashboard({
 
   const shopNameHint = (user.user_metadata as { shop_name?: string } | null)?.shop_name;
 
+  // A shop still on trial has almost certainly not got the crew into the app yet — that,
+  // not billing, is the next thing they need from this page.
+  const anyTrialing = [...entMap.values()].some((e) => e.subscription_status === 'trialing');
+
   return (
     <>
       <header className="container">
@@ -148,6 +153,7 @@ export default async function Dashboard({
             <p style={{ color: 'var(--text-muted)', marginTop: 0 }}>
               Manage your plan, seats, and billing below.
             </p>
+            {anyTrialing && <NextSteps />}
             {checkout === 'success' && (
               <div className="trial-banner" style={{ marginTop: 12 }}>
                 Thanks — your plan is being activated. It may take a moment to appear here.

@@ -1,9 +1,15 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { createClient } from '@/lib/supabase/server';
+import { createPublicClient } from '@/lib/supabase/public';
 import RoiCalculator from './roi-calculator';
+import { CtaLink } from './cta-link';
+import { StickyCta } from './sticky-cta';
 
-export const dynamic = 'force-dynamic';
+// ISR rather than force-dynamic. The page renders nothing user-specific, so making every
+// ad click wait on a cookie read plus a Supabase round trip before first byte bought
+// nothing. Pricing is still read from billing_plans — just at most once per window, off
+// the request path.
+export const revalidate = 300;
 
 type Tier = {
   plan: string;
@@ -13,9 +19,11 @@ type Tier = {
   sort_order: number;
 };
 
-// Locked pricing, used if billing_plans can't be read yet (migration 0027 not applied, or
-// its RLS only grants SELECT to `authenticated` so an anon visitor gets nothing). The page
-// still renders the real tiers; once the table is readable by anon these come from the DB.
+// Locked pricing, used when billing_plans can't be read. This is the ACTIVE path today:
+// the table's RLS grants SELECT to `authenticated` only, so an anonymous visitor — i.e.
+// every ad click — gets zero rows and renders these. They match the live prices. Grant
+// anon SELECT on billing_plans and the values below start coming from the DB instead,
+// picked up within the revalidate window.
 const FALLBACK_TIERS: Tier[] = [
   { plan: 'lite', display_name: 'Lite', price_usd_monthly: 99, seats_included: 5, sort_order: 1 },
   { plan: 'pro', display_name: 'Pro', price_usd_monthly: 179, seats_included: 10, sort_order: 2 },
@@ -25,7 +33,7 @@ const FALLBACK_TIERS: Tier[] = [
 
 async function getTiers(): Promise<Tier[]> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data } = await supabase
       .from('billing_plans')
       .select('plan, display_name, price_usd_monthly, seats_included, sort_order')
@@ -92,7 +100,7 @@ const FAQ = [
   },
   {
     q: 'What happens to the record if we stop paying?',
-    a: 'Export the full job — photos included — at any point during the subscription. The export is a plain file you keep, not a format that needs ReFit to open.',
+    a: 'Nothing is deleted. The shop goes read-only — you can still open and export every job — and you can export the full record, photos included, at any time. The export is a plain file you keep, not a format that needs ReFit to open.',
   },
   {
     q: 'How long before a crew is actually using it?',
@@ -100,7 +108,7 @@ const FAQ = [
   },
   {
     q: 'What does the trial cost?',
-    a: 'Nothing for 14 days. A card is required to start, and you can cancel inside the trial without being charged.',
+    a: 'Nothing, and there is no card to enter. You sign up, name your shop and the 14-day trial starts. You only add payment details if you decide to keep going at the end.',
   },
 ];
 
@@ -126,9 +134,7 @@ export default async function Home() {
             <Link href="/login" className="btn btn-ghost">
               Sign in
             </Link>
-            <Link href="/signup" className="btn btn-primary">
-              Start free trial
-            </Link>
+            <CtaLink src="nav">Start free trial</CtaLink>
           </div>
         </nav>
       </header>
@@ -145,15 +151,18 @@ export default async function Home() {
               anyone walks off the job.
             </p>
             <div className="row hero-cta">
-              <Link href="/signup" className="btn btn-primary">
-                Start 14-day free trial
-              </Link>
+              <CtaLink src="hero">Start 14-day free trial</CtaLink>
               <Link href="#how" className="btn btn-ghost">
                 See how it works
               </Link>
             </div>
+            <div className="hero-trust">
+              <span>14 days free</span>
+              <span>No credit card</span>
+              <span>Cancel anytime</span>
+            </div>
             <div className="hero-meta">
-              iPhone and Android · works offline · export anytime
+              iPhone · works offline · export anytime
             </div>
           </div>
           <div className="hero-shot">
@@ -180,6 +189,10 @@ export default async function Home() {
                 <Shot src={s.src} alt={s.alt} />
               </article>
             ))}
+          </div>
+          <div className="mid-cta">
+            <CtaLink src="after-how">Start 14-day free trial</CtaLink>
+            <span className="mid-cta-note">Free for 14 days · no credit card</span>
           </div>
         </section>
 
@@ -225,6 +238,10 @@ export default async function Home() {
 
           <h3 className="mini-head">Run your own numbers</h3>
           <RoiCalculator />
+          <div className="mid-cta">
+            <CtaLink src="after-roi">Start 14-day free trial</CtaLink>
+            <span className="mid-cta-note">Free for 14 days · no credit card</span>
+          </div>
         </section>
 
         {/* ── WHO IT'S FOR / TRUST ─────────────────────────────────────────────── */}
@@ -279,19 +296,30 @@ export default async function Home() {
                   {t.seats_included != null ? `${t.seats_included} techs included` : 'Custom seats'}
                 </div>
                 <div style={{ marginTop: 18 }}>
-                  <Link
-                    href="/signup"
-                    className={`btn btn-block ${t.plan === 'pro' ? 'btn-primary' : 'btn-ghost'}`}
-                  >
-                    {t.plan === 'enterprise' ? 'Contact us' : 'Start trial'}
-                  </Link>
+                  {t.plan === 'enterprise' ? (
+                    // "Contact us" used to land on the signup form, which is not what it
+                    // says it does. Enterprise is a conversation, so send them to one.
+                    <a
+                      className="btn btn-ghost btn-block"
+                      href="mailto:support@refit-iq.com?subject=ReFit%20Enterprise%20enquiry"
+                    >
+                      Contact us
+                    </a>
+                  ) : (
+                    <CtaLink
+                      src={`pricing-${t.plan}`}
+                      className={`btn btn-block ${t.plan === 'pro' ? 'btn-primary' : 'btn-ghost'}`}
+                    >
+                      Start trial
+                    </CtaLink>
+                  )}
                 </div>
               </div>
             ))}
           </div>
           <p className="note">
-            14-day trial (card required). Annual billing is 2 months free. Add-on seats $15/tech.
-            Owner/admin seat is free.
+            14-day free trial — no credit card required. Annual billing is 2 months free. Add-on
+            seats $15/tech. Owner/admin seat is free.
           </p>
         </section>
 
@@ -310,13 +338,11 @@ export default async function Home() {
 
         {/* ── CLOSING CTA ──────────────────────────────────────────────────────── */}
         <section className="container">
-          <div className="closer card">
+          <div className="closer card" data-sticky-stop>
             <h2>Start on your next teardown.</h2>
             <p>Fourteen days free. Cancel inside the trial and you are not charged.</p>
             <div className="row hero-cta">
-              <Link href="/signup" className="btn btn-primary">
-                Start 14-day free trial
-              </Link>
+              <CtaLink src="closer">Start 14-day free trial</CtaLink>
               <Link href="/login" className="btn btn-ghost">
                 Sign in
               </Link>
@@ -325,8 +351,18 @@ export default async function Home() {
         </section>
       </main>
 
+      <StickyCta />
+
       <footer className="footer">
-        <div className="container">© {new Date().getFullYear()} ReFit · refit-iq.com</div>
+        <div className="container">
+          <div className="footer-links">
+            <Link href="/getting-started">Getting started</Link>
+            <Link href="/login">Sign in</Link>
+            <Link href="/signup?src=footer">Start free trial</Link>
+            <a href="mailto:support@refit-iq.com">support@refit-iq.com</a>
+          </div>
+          <div>© {new Date().getFullYear()} ReFit · refit-iq.com</div>
+        </div>
       </footer>
     </>
   );
