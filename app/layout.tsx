@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
@@ -17,6 +17,12 @@ export const metadata: Metadata = {
     type: 'website',
   },
   twitter: { card: 'summary_large_image' },
+};
+
+// Without this the iOS Safari toolbar stays light around a very dark page, which is the
+// first thing ad traffic sees. Matches --bg in globals.css.
+export const viewport: Viewport = {
+  themeColor: '#0e0e10',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

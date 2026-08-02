@@ -30,7 +30,8 @@ export function CreateShop({ defaultName }: { defaultName?: string }) {
     <form onSubmit={onSubmit} className="card" style={{ marginTop: 16, maxWidth: 460 }}>
       <h2 style={{ fontSize: 19, fontWeight: 800, margin: '0 0 6px' }}>Create your shop</h2>
       <p style={{ color: 'var(--text-muted)', marginTop: 0, marginBottom: 18 }}>
-        Name your shop to start your 14-day free trial. You&apos;re the admin — your seat is free.
+        Name your shop to start your 14-day free trial — cancel anytime, no charge. You&apos;re
+        the admin — your seat is free.
       </p>
       <div className="field">
         <label htmlFor="newshop">Shop / business name</label>

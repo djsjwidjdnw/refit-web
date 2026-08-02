@@ -11,3 +11,7 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# scripts/e2e-signup.mjs artifacts (the account itself is torn down; these are local)
+e2e-account.json
+e2e-dashboard-*.png

@@ -112,8 +112,9 @@ export default function GettingStarted() {
           </h2>
           <p>
             Sign up at <strong>refit-iq.com</strong> with your email and shop name. That creates
-            your shop and starts your <strong>14-day free trial</strong> — full access, no card
-            needed, cancel anytime.
+            your shop and starts your <strong>14-day free trial</strong> — full access, every
+            feature, cancel anytime. We collect a card at signup, but nothing is charged during
+            the 14 days. Cancel before it ends and you pay nothing.
           </p>
           <p>
             The person who signs up becomes the <strong>Admin</strong> (that&apos;s you — the owner
@@ -314,7 +315,7 @@ export default function GettingStarted() {
             </p>
             <div className="row hero-cta">
               <Link href="/signup?src=gs-footer" className="btn btn-primary">
-                Start 14-day free trial
+                Start your 14-day free trial
               </Link>
               <Link href="/" className="btn btn-ghost">
                 Back to home

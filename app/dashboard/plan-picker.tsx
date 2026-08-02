@@ -145,7 +145,8 @@ export function PlanPicker({
 
       {error && <div className="error" style={{ marginTop: 12 }}>{error}</div>}
       <p className="note" style={{ textAlign: 'left', marginTop: 12 }}>
-        14-day trial, card required.{' '}
+        We collect a card at signup, but nothing is charged during the 14 days. Cancel before it
+        ends and you pay nothing.{' '}
         {interval === 'year' ? 'Billed yearly after the trial.' : 'Billed monthly after the trial.'}{' '}
         Add-on seats $15/tech.
       </p>

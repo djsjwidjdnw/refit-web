@@ -22,10 +22,21 @@ const money = (n: number) =>
   n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 
 export default function RoiCalculator() {
-  const [techs, setTechs] = useState(10);
-  const [minutes, setMinutes] = useState(20);
-  const [rate, setRate] = useState(130);
+  // Kept as strings so a field can be empty mid-edit. Clamping on every keystroke made
+  // the inputs impossible to clear and retype on a phone — backspacing snapped them to 1.
+  const [techsRaw, setTechsRaw] = useState('10');
+  const [minutesRaw, setMinutesRaw] = useState('20');
+  const [rateRaw, setRateRaw] = useState('130');
   const days = 240;
+
+  const clamp = (raw: string, min: number, max: number, fallback: number) => {
+    const n = Number(raw);
+    if (raw.trim() === '' || !Number.isFinite(n)) return fallback;
+    return Math.max(min, Math.min(max, n));
+  };
+  const techs = clamp(techsRaw, 1, 200, 1);
+  const minutes = clamp(minutesRaw, 1, 240, 1);
+  const rate = clamp(rateRaw, 1, 1000, 1);
 
   const labour = (techs * minutes * days * rate) / 60;
   const subscription = MONTHLY_BY_TECHS(techs) * 12;
@@ -41,8 +52,9 @@ export default function RoiCalculator() {
             type="number"
             min={1}
             max={200}
-            value={techs}
-            onChange={(e) => setTechs(Math.max(1, Math.min(200, Number(e.target.value) || 1)))}
+            value={techsRaw}
+            onChange={(e) => setTechsRaw(e.target.value)}
+            onBlur={() => setTechsRaw(String(techs))}
           />
         </label>
         <label className="roi-field">
@@ -52,8 +64,9 @@ export default function RoiCalculator() {
             type="number"
             min={1}
             max={240}
-            value={minutes}
-            onChange={(e) => setMinutes(Math.max(1, Math.min(240, Number(e.target.value) || 1)))}
+            value={minutesRaw}
+            onChange={(e) => setMinutesRaw(e.target.value)}
+            onBlur={() => setMinutesRaw(String(minutes))}
           />
         </label>
         <label className="roi-field">
@@ -63,8 +76,9 @@ export default function RoiCalculator() {
             type="number"
             min={1}
             max={1000}
-            value={rate}
-            onChange={(e) => setRate(Math.max(1, Math.min(1000, Number(e.target.value) || 1)))}
+            value={rateRaw}
+            onChange={(e) => setRateRaw(e.target.value)}
+            onBlur={() => setRateRaw(String(rate))}
           />
         </label>
       </div>

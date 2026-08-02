@@ -213,7 +213,11 @@ export default async function Dashboard({
                     <div className="kv">
                       <span className="k">Plan</span>
                       <span className="v" style={{ textTransform: 'capitalize' }}>
-                        {ent ? ent.plan : 'none'}
+                        {ent && ent.plan !== 'none'
+                          ? ent.plan
+                          : trialing
+                            ? 'Free trial'
+                            : 'Not chosen yet'}
                       </span>
                     </div>
                     <div className="kv">
@@ -224,7 +228,16 @@ export default async function Dashboard({
                     </div>
                     <div className="kv">
                       <span className="k">Seats used</span>
-                      <span className="v">{ent ? `${ent.seats_used} / ${totalSeats}` : '—'}</span>
+                      <span className="v">
+                        {/* A trial shop has seats_included = 0 until a plan is picked, and
+                            "0 / 0" reads as "you cannot invite anyone" — which is not what
+                            it means. Show the count without a misleading denominator. */}
+                        {!ent
+                          ? '—'
+                          : totalSeats && totalSeats > 0
+                            ? `${ent.seats_used} / ${totalSeats}`
+                            : `${ent.seats_used} (unlimited during the trial)`}
+                      </span>
                     </div>
                     <PlanPicker
                       shopId={m.shop_id}

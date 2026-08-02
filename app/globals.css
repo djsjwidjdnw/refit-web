@@ -205,7 +205,10 @@ a {
   border: 1px solid var(--border);
   background: var(--bg);
   color: var(--text);
-  font-size: 15px;
+  /* 16px is a hard floor: mobile Safari zooms the whole page in on focus for anything
+     smaller and does not zoom back out on blur, which wrecks the signup form on the one
+     device the ad traffic is on. Do not lower this. */
+  font-size: 16px;
 }
 .input:focus {
   outline: none;
@@ -407,6 +410,17 @@ a {
 }
 .hero-cta {
   flex-wrap: wrap;
+}
+@media (max-width: 759px) {
+  .hero-cta {
+    gap: 10px;
+  }
+  .hero-cta .btn {
+    width: 100%;
+    text-align: center;
+    padding: 14px 20px;
+    font-size: 16px;
+  }
 }
 .hero-meta {
   margin-top: 18px;
@@ -1071,12 +1085,15 @@ table.roles td {
 }
 
 /* Phone-only. Hidden at >=760px, where the page is short enough that the nav CTA is
-   never far away. Height is reserved via body padding so it never covers the footer. */
+   never far away. Height is reserved via body padding so it never covers the footer.
+   The reserve is scoped with :has() because <StickyCta /> mounts on the landing page
+   ONLY — an unconditional body rule made /signup, /login, /dashboard and
+   /getting-started reserve 72px for a bar that never renders there. */
 .sticky-cta {
   display: none;
 }
 @media (max-width: 759px) {
-  body {
+  body:has(.sticky-cta) {
     padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
   }
   .sticky-cta {
@@ -1169,4 +1186,30 @@ table.roles td {
     padding: 0;
     border-bottom: none;
   }
+}
+
+/* ── Password field: hint + reveal ────────────────────────────────────────── */
+.pw-wrap {
+  position: relative;
+}
+.pw-wrap .input {
+  padding-right: 68px;
+}
+.pw-toggle {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 8px 10px;
+}
+.field-hint {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
 }

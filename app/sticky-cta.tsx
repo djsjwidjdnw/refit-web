@@ -8,44 +8,40 @@ import { trackFunnel } from '@/lib/analytics';
 // between the hero CTA (~505px) and the pricing CTAs (~7,000px) a visitor can scroll for
 // a very long time with no way to act. This bar fills that gap.
 //
-// It stays out of the way at both ends: hidden until the hero CTA has scrolled off (the
-// hero one is already above the fold, so showing both is just clutter), and hidden again
-// once the closing CTA is on screen so there are never two competing buttons.
+// It stays out of the way wherever the page already offers a button: hidden until the
+// hero CTA has scrolled off (that one is above the fold, so showing both is clutter), and
+// hidden again whenever ANY on-page CTA band is in view — the two mid-page bands and the
+// closing card — so there are never two competing buttons on screen.
 export function StickyCta() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
     const hero = document.querySelector('[data-cta="hero"]');
-    const closer = document.querySelector('[data-sticky-stop]');
     if (!hero) return;
+    const stops = Array.from(document.querySelectorAll('[data-sticky-stop]'));
 
-    const state = { heroVisible: true, closerVisible: false };
-    const apply = () => setShow(!state.heroVisible && !state.closerVisible);
+    let heroVisible = true;
+    const visibleStops = new Set<Element>();
+    const apply = () => setShow(!heroVisible && visibleStops.size === 0);
 
-    const heroObs = new IntersectionObserver(
-      ([e]) => {
-        state.heroVisible = e.isIntersecting;
-        apply();
-      },
-      { rootMargin: '0px' },
-    );
+    const heroObs = new IntersectionObserver(([e]) => {
+      heroVisible = e.isIntersecting;
+      apply();
+    });
     heroObs.observe(hero);
 
-    let closerObs: IntersectionObserver | undefined;
-    if (closer) {
-      closerObs = new IntersectionObserver(
-        ([e]) => {
-          state.closerVisible = e.isIntersecting;
-          apply();
-        },
-        { rootMargin: '0px' },
-      );
-      closerObs.observe(closer);
-    }
+    const stopObs = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) visibleStops.add(e.target);
+        else visibleStops.delete(e.target);
+      }
+      apply();
+    });
+    stops.forEach((s) => stopObs.observe(s));
 
     return () => {
       heroObs.disconnect();
-      closerObs?.disconnect();
+      stopObs.disconnect();
     };
   }, []);
 
@@ -54,7 +50,7 @@ export function StickyCta() {
       <div className="sticky-cta-inner">
         <div className="sticky-cta-copy">
           <strong>14 days free</strong>
-          <span>No credit card</span>
+          <span>Cancel anytime</span>
         </div>
         <Link
           href="/signup?src=sticky"

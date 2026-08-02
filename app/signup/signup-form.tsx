@@ -26,6 +26,8 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
   const [confirmMsg, setConfirmMsg] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [started, setStarted] = useState(false);
+  const [showPw, setShowPw] = useState(false);
+  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
 
   // "signup_started" = first real interaction with a field. Firing on mount instead would
   // just duplicate the /signup pageview and hide the real drop-off between the two.
@@ -56,8 +58,14 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
     });
     if (signUpErr) {
       setBusy(false);
-      setError(signUpErr.message);
-      trackFunnel('signup_failed', { mode: joining ? 'join' : 'create' });
+      const dup = /already registered|already been registered|User already/i.test(signUpErr.message);
+      setAlreadyRegistered(dup);
+      setError(
+        dup
+          ? 'That email already has a ReFit account.'
+          : signUpErr.message,
+      );
+      trackFunnel('signup_failed', { mode: joining ? 'join' : 'create', reason: dup ? 'duplicate' : 'other' });
       return;
     }
 
@@ -99,12 +107,12 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
         <p className="sub">
           {joining
             ? 'Create your account — your shop admin approves you and you’re in.'
-            : '14 days free. No credit card required.'}
+            : '14 days free. Cancel anytime, no charge.'}
         </p>
         {!joining && (
           <ul className="reassure">
             <li>Full access for 14 days — every feature, no limits</li>
-            <li>No card now; you only add payment if you keep going</li>
+            <li>Nothing is charged during the trial</li>
             <li>Cancel anytime. Your records are never deleted</li>
           </ul>
         )}
@@ -166,18 +174,44 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
             </div>
             <div className="field">
               <label htmlFor="password">Password</label>
-              <input
-                id="password"
-                className="input"
-                type="password"
-                autoComplete="new-password"
-                minLength={6}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div className="pw-wrap">
+                <input
+                  id="password"
+                  className="input"
+                  type={showPw ? 'text' : 'password'}
+                  autoComplete="new-password"
+                  minLength={6}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  aria-describedby="pw-hint"
+                />
+                <button
+                  type="button"
+                  className="pw-toggle"
+                  onClick={() => setShowPw((v) => !v)}
+                  aria-label={showPw ? 'Hide password' : 'Show password'}
+                >
+                  {showPw ? 'Hide' : 'Show'}
+                </button>
+              </div>
+              <p id="pw-hint" className="field-hint">
+                At least 6 characters.
+              </p>
             </div>
-            {error && <div className="error">{error}</div>}
+            {error && (
+              <div className="error">
+                {error}
+                {alreadyRegistered && (
+                  <>
+                    {' '}
+                    <Link href="/login" style={{ color: 'var(--accent)', fontWeight: 700 }}>
+                      Sign in instead →
+                    </Link>
+                  </>
+                )}
+              </div>
+            )}
             <button className="btn btn-primary btn-block" type="submit" disabled={busy}>
               {busy
                 ? 'Creating account…'
@@ -187,7 +221,7 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
             </button>
             {!joining && (
               <p className="note" style={{ marginTop: 12 }}>
-                No credit card required. Cancel anytime.
+                Nothing is charged during the 14 days. Cancel anytime.
               </p>
             )}
           </form>

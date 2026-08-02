@@ -107,15 +107,21 @@ const FAQ = [
     a: 'It is a phone app with a camera and a job list. The first capture takes about a minute; there is no implementation project.',
   },
   {
+    q: 'When do you actually charge us?',
+    a: 'We collect a card at signup, but nothing is charged during the 14 days. Cancel before it ends and you pay nothing.',
+  },
+  {
     q: 'What does the trial cost?',
-    a: 'Nothing, and there is no card to enter. You sign up, name your shop and the 14-day trial starts. You only add payment details if you decide to keep going at the end.',
+    a: 'Nothing for 14 days — full access, every feature. You pick a plan when the trial ends, and you can cancel at any point before then without being charged.',
   },
 ];
 
 function Shot({ src, alt, priority = false }: { src: string; alt: string; priority?: boolean }) {
   return (
     <div className="shot">
-      <Image src={src} alt={alt} width={SHOT_W} height={SHOT_H} priority={priority} sizes="(max-width: 760px) 78vw, 330px" />
+      {/* .shot is max-width:300px at every breakpoint, so the slot is a flat 300px —
+          describing it as 78vw made Next pick larger candidates than can ever render. */}
+      <Image src={src} alt={alt} width={SHOT_W} height={SHOT_H} priority={priority} sizes="300px" />
     </div>
   );
 }
@@ -151,14 +157,14 @@ export default async function Home() {
               anyone walks off the job.
             </p>
             <div className="row hero-cta">
-              <CtaLink src="hero">Start 14-day free trial</CtaLink>
+              <CtaLink src="hero">Start your 14-day free trial</CtaLink>
               <Link href="#how" className="btn btn-ghost">
                 See how it works
               </Link>
             </div>
             <div className="hero-trust">
               <span>14 days free</span>
-              <span>No credit card</span>
+              <span>Every feature</span>
               <span>Cancel anytime</span>
             </div>
             <div className="hero-meta">
@@ -190,9 +196,9 @@ export default async function Home() {
               </article>
             ))}
           </div>
-          <div className="mid-cta">
-            <CtaLink src="after-how">Start 14-day free trial</CtaLink>
-            <span className="mid-cta-note">Free for 14 days · no credit card</span>
+          <div className="mid-cta" data-sticky-stop>
+            <CtaLink src="after-how">Start your 14-day free trial</CtaLink>
+            <span className="mid-cta-note">Cancel anytime, no charge</span>
           </div>
         </section>
 
@@ -238,9 +244,9 @@ export default async function Home() {
 
           <h3 className="mini-head">Run your own numbers</h3>
           <RoiCalculator />
-          <div className="mid-cta">
-            <CtaLink src="after-roi">Start 14-day free trial</CtaLink>
-            <span className="mid-cta-note">Free for 14 days · no credit card</span>
+          <div className="mid-cta" data-sticky-stop>
+            <CtaLink src="after-roi">Start your 14-day free trial</CtaLink>
+            <span className="mid-cta-note">Cancel anytime, no charge</span>
           </div>
         </section>
 
@@ -318,7 +324,7 @@ export default async function Home() {
             ))}
           </div>
           <p className="note">
-            14-day free trial — no credit card required. Annual billing is 2 months free. Add-on
+            14-day free trial — cancel anytime, no charge. Annual billing is 2 months free. Add-on
             seats $15/tech. Owner/admin seat is free.
           </p>
         </section>
@@ -340,9 +346,9 @@ export default async function Home() {
         <section className="container">
           <div className="closer card" data-sticky-stop>
             <h2>Start on your next teardown.</h2>
-            <p>Fourteen days free. Cancel inside the trial and you are not charged.</p>
+            <p>Fourteen days free. Cancel before the trial ends and you pay nothing.</p>
             <div className="row hero-cta">
-              <CtaLink src="closer">Start 14-day free trial</CtaLink>
+              <CtaLink src="closer">Start your 14-day free trial</CtaLink>
               <Link href="/login" className="btn btn-ghost">
                 Sign in
               </Link>
