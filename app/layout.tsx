@@ -5,13 +5,18 @@ import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://refit-iq.com'),
-  title: 'ReFit — teardown & reassembly, documented',
+  // The tab title, the social preview and the H1 were telling three different
+  // stories — "teardown & reassembly, documented" in the tab, a paragraph about
+  // shop management in the description, and "Put it back together without
+  // guessing" on the page. Ad traffic sees the preview and the page back to
+  // back, so they now say the same thing, in the page's own words.
+  title: 'ReFit — put it back together without guessing',
   description:
-    'Photograph and voice-note every part of a teardown so it goes back together right. Sign up, manage your shop, and choose a plan.',
+    'Photograph every part as it comes off the boat. Rebuild from the record, not memory. Built for refit and boatyard crews.',
   openGraph: {
     title: 'ReFit — put it back together without guessing',
     description:
-      'ReFit photographs, bags and labels every part as it comes off the boat — searchable by boat, area and component, so the rebuild is exact.',
+      'Photograph every part as it comes off the boat. Rebuild from the record, not memory. Built for refit and boatyard crews.',
     url: 'https://refit-iq.com',
     siteName: 'ReFit',
     type: 'website',
