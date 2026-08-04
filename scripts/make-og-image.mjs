@@ -74,11 +74,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
     <text x="0" y="196" font-family="${FONT}" font-size="26" font-weight="600"
           letter-spacing="3.4" fill="${MUTED}">${esc('FOR REFIT AND BOATYARD CREWS')}</text>
 
-    <!-- Wordmark: "Re" in text, "Fit" in accent — matches .brand / .brand span. -->
-    <text x="0" y="300" font-family="${FONT}" font-size="86" font-weight="900"
-          letter-spacing="-2">
-      <tspan fill="${TEXT}">Re</tspan><tspan fill="${ACCENT}">Fit</tspan>
-    </text>
+    <!-- The wordmark is the real logo art, composited over this SVG below —
+         a typed-out "Re"+"Fit" was how the card ended up off-brand in the first place. -->
 
     <text x="0" y="382" font-family="${FONT}" font-size="52" font-weight="700"
           letter-spacing="-1" fill="${TEXT}">${esc('Put it back together without guessing.')}</text>
@@ -104,7 +101,17 @@ if (DRY) {
 
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
 
+// The logo is real art, not type. It is composited on top of the rendered SVG
+// rather than embedded as a data: URI so the source PNG stays the single copy —
+// regenerate it with make-brand-assets.mjs and this card follows automatically.
+const LOGO = path.join(process.cwd(), 'public', 'brand', 'logo-long.png');
+const LOGO_H = 96; // sits in the band the 86px wordmark used to occupy
+const logoMeta = await sharp(LOGO).metadata();
+const logoW = Math.round((logoMeta.width / logoMeta.height) * LOGO_H);
+const logo = await sharp(LOGO).resize(logoW, LOGO_H).toBuffer();
+
 await sharp(Buffer.from(svg))
+  .composite([{ input: logo, left: 128, top: 228 }])
   .png({ compressionLevel: 9 })
   .toFile(OUT);
 

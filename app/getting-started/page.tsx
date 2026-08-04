@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { BrandMark } from '../brand-mark';
 
 export const metadata: Metadata = {
   title: 'Getting started with ReFit',
@@ -73,9 +74,7 @@ export default function GettingStarted() {
     <>
       <header className="container">
         <nav className="nav">
-          <Link href="/" className="brand" style={{ textDecoration: 'none' }}>
-            Re<span>Fit</span>
-          </Link>
+          <BrandMark lockup="compact" height={26} href="/" className="nav-brand" />
           <div className="row">
             <Link href="/login" className="btn btn-ghost">
               Sign in

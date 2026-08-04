@@ -4,6 +4,7 @@ import { createPublicClient } from '@/lib/supabase/public';
 import RoiCalculator from './roi-calculator';
 import { CtaLink } from './cta-link';
 import { StickyCta } from './sticky-cta';
+import { BrandMark } from './brand-mark';
 
 // ISR rather than force-dynamic. The page renders nothing user-specific, so making every
 // ad click wait on a cookie read plus a Supabase round trip before first byte bought
@@ -138,14 +139,12 @@ export default async function Home() {
     <>
       <header className="container">
         <nav className="nav">
-          <div className="brand">
-            Re<span>Fit</span>
-          </div>
+          <BrandMark lockup="compact" height={26} priority className="nav-brand" />
           <div className="row">
             <Link href="/login" className="btn btn-ghost">
               Sign in
             </Link>
-            <CtaLink src="nav">Start free trial</CtaLink>
+            <CtaLink src="nav" className="btn btn-primary nav-trial">Start free trial</CtaLink>
           </div>
         </nav>
       </header>

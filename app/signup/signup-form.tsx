@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { trackFunnel, ctaSource } from '@/lib/analytics';
+import { BrandMark } from '../brand-mark';
 
 // Two modes, decided by whether an invite code was carried in via /signup?join=<code>
 // (usually because the tech tapped an admin's invite link, which routes through
@@ -100,8 +101,8 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
   return (
     <main className="container">
       <div className="auth-wrap">
-        <div className="brand" style={{ marginBottom: 28 }}>
-          Re<span>Fit</span>
+        <div style={{ marginBottom: 28 }}>
+          <BrandMark height={34} href="/" priority />
         </div>
         <h1>{joining ? 'Join your shop' : 'Start your free trial'}</h1>
         <p className="sub">

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
+import { BrandMark } from '../brand-mark';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -33,8 +34,8 @@ export default function LoginPage() {
   return (
     <main className="container">
       <div className="auth-wrap">
-        <div className="brand" style={{ marginBottom: 28 }}>
-          Re<span>Fit</span>
+        <div style={{ marginBottom: 28 }}>
+          <BrandMark height={34} href="/" priority />
         </div>
         <h1>Sign in</h1>
         <p className="sub">Welcome back — access your shop dashboard.</p>

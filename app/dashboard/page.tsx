@@ -6,6 +6,7 @@ import { SignOutButton } from './sign-out-button';
 import { CreateShop } from './create-shop';
 import { PlanPicker } from './plan-picker';
 import { NextSteps } from './next-steps';
+import { BrandMark } from '../brand-mark';
 
 export const dynamic = 'force-dynamic';
 
@@ -106,9 +107,7 @@ export default async function Dashboard({
     <>
       <header className="container">
         <div className="dash-header">
-          <div className="brand">
-            Re<span>Fit</span>
-          </div>
+          <BrandMark lockup="compact" height={24} href="/" className="nav-brand" />
           <div className="row">
             <span style={{ color: 'var(--text-muted)', fontSize: 14 }}>{user.email}</span>
             <SignOutButton />

@@ -61,6 +61,23 @@ a {
   .brand {
     font-size: 20px;
   }
+  /* A 6.75:1 mark plus BOTH nav buttons does not fit in 342px of content width —
+     the row wrapped to two lines and shoved the hero down. The trial CTA is the
+     one that goes: it is a duplicate of the hero button 300px below it, and it
+     reappears in the sticky bar, the two mid-page bands, pricing, the closer and
+     the footer. "Sign in" has no such second home above the fold, so it stays. */
+  /* .nav .nav-trial, not .nav-trial: a media query adds no specificity, and
+     `.btn { display: inline-block }` is declared LATER in this file, so a bare
+     class tied on 0,1,0 and lost on source order. */
+  .nav .nav-trial {
+    display: none;
+  }
+  /* !important because BrandMark ships its default size as an inline custom
+     property, and an inline declaration outranks a stylesheet one. This is the
+     breakpoint override that inline default exists to allow. */
+  .nav-brand {
+    --brand-h: 22px !important;
+  }
 }
 .brand {
   font-weight: 900;

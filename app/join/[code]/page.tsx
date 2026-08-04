@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import { BrandMark } from '../../brand-mark';
 
 export const dynamic = 'force-dynamic';
 
@@ -43,8 +44,8 @@ export default async function JoinPage({ params }: { params: Promise<{ code: str
   return (
     <main className="container">
       <div className="auth-wrap">
-        <div className="brand" style={{ marginBottom: 28 }}>
-          Re<span>Fit</span>
+        <div style={{ marginBottom: 28 }}>
+          <BrandMark height={34} href="/" priority />
         </div>
 
         {alreadyMember ? (
