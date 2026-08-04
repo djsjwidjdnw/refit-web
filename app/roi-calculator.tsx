@@ -85,7 +85,7 @@ export default function RoiCalculator() {
 
       <div className="roi-out">
         <div className="roi-line">
-          <span>Labour recovered / year</span>
+          <span>Labor recovered / year</span>
           <b>{money(labour)}</b>
         </div>
         <div className="roi-line">
@@ -99,7 +99,7 @@ export default function RoiCalculator() {
       </div>
 
       <p className="roi-foot">
-        {techs} techs × {minutes} min/day × {days} working days × {money(rate)}/hr. Labour only —
+        {techs} techs × {minutes} min/day × {days} working days × {money(rate)}/hr. Labor only —
         it excludes avoided duplicate orders and faster turnaround.
       </p>
     </div>

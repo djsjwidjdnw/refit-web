@@ -43,6 +43,25 @@ a {
   padding: 20px 0;
   border-bottom: 1px solid var(--border);
 }
+/* On a phone the nav was 89.5px of the ~664px first viewport, and its "Start
+   free trial" button duplicates the hero CTA 300px below it — two primaries for
+   the same action before a single argument has been made. Tightened, and the
+   nav button drops to a link-sized control so the hero owns the conversion. */
+@media (max-width: 759px) {
+  .nav {
+    padding: 12px 0;
+  }
+  .nav .row {
+    gap: 10px;
+  }
+  .nav .btn {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+  .brand {
+    font-size: 20px;
+  }
+}
 .brand {
   font-weight: 900;
   font-size: 22px;
@@ -391,8 +410,13 @@ a {
 }
 
 /* ── Hero ─────────────────────────────────────────────────────────────────── */
+/* Everything in this block is tuned around one number: where the product
+   screenshot's top edge lands on a 390px phone. It used to be y≈706px — below
+   the fold on every handset, which meant ad traffic never saw the app on a page
+   whose whole argument is "these are real screens, not mockups". The target is
+   under 480px so a third of a real app screen is visible without scrolling. */
 .hero-split {
-  padding-block: 40px 8px;
+  padding-block: 24px 8px;
 }
 .hero-copy h1 {
   font-size: 38px;
@@ -403,17 +427,32 @@ a {
 }
 .hero-copy > p {
   font-size: 17px;
-  line-height: 1.55;
+  line-height: 1.5;
   color: var(--text-muted);
-  margin: 0 0 26px;
+  margin: 0 0 20px;
   max-width: 52ch;
 }
 .hero-cta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
   flex-wrap: wrap;
+}
+/* The secondary action is a link, not a button — it costs a line instead of a
+   54px block, and it stops competing with the trial CTA for the same tap. */
+.hero-secondary {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+.hero-secondary:hover {
+  color: var(--text);
 }
 @media (max-width: 759px) {
   .hero-cta {
-    gap: 10px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
   }
   .hero-cta .btn {
     width: 100%;
@@ -421,15 +460,19 @@ a {
     padding: 14px 20px;
     font-size: 16px;
   }
+  .hero-secondary {
+    text-align: center;
+  }
 }
 .hero-meta {
-  margin-top: 18px;
+  margin-top: 14px;
   font-size: 13px;
   font-weight: 700;
   color: var(--text-muted);
+  text-align: center;
 }
 .hero-shot {
-  margin-top: 40px;
+  margin-top: 24px;
 }
 
 /* ── Section furniture ────────────────────────────────────────────────────── */
@@ -1049,11 +1092,14 @@ table.roles td {
 }
 
 /* ── Conversion furniture (hero trust row, mid-page CTAs, sticky phone bar) ── */
+/* One line, not three chips. As three it wrapped to two rows on a 390px phone
+   ("14 days free / Every feature" then "Cancel anytime"), which read as a
+   layout bug and cost 50px of fold. Same three claims, 25px. */
 .hero-trust {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 18px;
-  margin-top: 18px;
+  margin-top: 16px;
 }
 .hero-trust span {
   position: relative;

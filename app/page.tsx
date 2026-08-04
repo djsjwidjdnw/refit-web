@@ -61,7 +61,7 @@ const STEPS = [
   },
   {
     n: '02',
-    title: 'Organised by boat, area and component',
+    title: 'Organized by boat, area and component',
     body:
       'Every capture lands under the right boat, area and component — so six months later the record reads like the vessel, not like a camera roll.',
     src: '/shots/job-overview.webp',
@@ -108,7 +108,12 @@ const FAQ = [
   },
   {
     q: 'When do you actually charge us?',
-    a: 'We collect a card at signup, but nothing is charged during the 14 days. Cancel before it ends and you pay nothing.',
+    // Corrected: /signup collects name, shop and email only — no card field
+    // exists on it. The card is collected later, at Stripe checkout, when the
+    // shop actually starts its trial from the dashboard. Saying "at signup"
+    // overstated the commitment at the top of the funnel, which is exactly
+    // where a skeptic goes looking.
+    a: 'Creating the account takes no card — just your name, your shop and an email. The card is collected when you start the trial, and nothing is charged during the 14 days. Cancel before it ends and you pay nothing.',
   },
   {
     q: 'What does the trial cost?',
@@ -151,24 +156,23 @@ export default async function Home() {
           <div className="hero-copy">
             <div className="eyebrow">For refit and boatyard crews</div>
             <h1>Put it back together without guessing.</h1>
-            <p>
-              ReFit photographs, bags and labels every part as it comes off the boat — searchable
-              by boat, area and component — so the rebuild is exact and the record is done before
-              anyone walks off the job.
-            </p>
-            <div className="row hero-cta">
+            {/* Was 191 characters — six lines and 158px on a 390px phone, taller
+                than the headline itself, and it pushed the product screenshot
+                to y≈706px where nobody arriving from an ad ever saw it. Two
+                lines now; the detail it used to carry is the four "How it
+                works" steps, which say it better with pictures. */}
+            <p>Photograph every part as it comes off. Rebuild from the record, not memory.</p>
+            <div className="hero-cta">
               <CtaLink src="hero">Start your 14-day free trial</CtaLink>
-              <Link href="#how" className="btn btn-ghost">
-                See how it works
+              {/* Demoted from a matching full-width button. It is an anchor
+                  jump, not a conversion, and at equal weight it split the
+                  decision at the exact moment the visitor had to make it. */}
+              <Link href="#how" className="hero-secondary">
+                See how it works ↓
               </Link>
             </div>
             <div className="hero-trust">
-              <span>14 days free</span>
-              <span>Every feature</span>
-              <span>Cancel anytime</span>
-            </div>
-            <div className="hero-meta">
-              iPhone · works offline · export anytime
+              <span>14 days free · every feature · cancel anytime</span>
             </div>
           </div>
           <div className="hero-shot">
@@ -177,6 +181,9 @@ export default async function Home() {
               alt="A ReFit capture in progress: a gloved hand holding hardware photographed against the workbench, filed under bag 444."
               priority
             />
+            {/* Moved below the shot, where it reads as the caption it always
+                was — and buys 58px of fold in the process. */}
+            <div className="hero-meta">iPhone · works offline · export anytime</div>
           </div>
         </section>
 
@@ -215,7 +222,7 @@ export default async function Home() {
           <div className="numbers">
             <div className="card num">
               <div className="num-v">$104,000</div>
-              <div className="num-k">Labour recovered / year</div>
+              <div className="num-k">Labor recovered / year</div>
               <div className="num-d">10 techs × 20 min/day × 240 days × $130/hr</div>
             </div>
             <div className="card num">
