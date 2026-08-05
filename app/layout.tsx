@@ -5,18 +5,20 @@ import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://refit-iq.com'),
-  // The tab title, the social preview and the H1 were telling three different
-  // stories — "teardown & reassembly, documented" in the tab, a paragraph about
-  // shop management in the description, and "Put it back together without
-  // guessing" on the page. Ad traffic sees the preview and the page back to
-  // back, so they now say the same thing, in the page's own words.
-  title: 'ReFitIQ — put it back together without guessing',
+  // The tab title, the social preview and the H1 must tell ONE story: 109 of 122
+  // visitors arrive from Facebook or Instagram, so essentially every visitor sees
+  // the preview card and the page back to back inside a second. A mismatch there
+  // is a bounce that looks identical to an ordinary exit in analytics.
+  // These strings, app/opengraph-image.png (regenerate via scripts/make-og-image.mjs)
+  // and the H1 in app/page.tsx are four copies of the same promise — change one,
+  // change all four.
+  title: 'ReFitIQ — you pay for that teardown twice',
   description:
-    'Photograph every part as it comes off the boat. Rebuild from the record, not memory. Built for refit and boatyard crews.',
+    'An iPhone app for boatyard owners. Your techs tag every part as it comes off; anyone free can put it back. Built with Philbrooks Boatyard. 14 days free, no card.',
   openGraph: {
-    title: 'ReFitIQ — put it back together without guessing',
+    title: 'ReFitIQ — you pay for that teardown twice',
     description:
-      'Photograph every part as it comes off the boat. Rebuild from the record, not memory. Built for refit and boatyard crews.',
+      'An iPhone app for boatyard owners. Your techs tag every part as it comes off; anyone free can put it back. Built with Philbrooks Boatyard. 14 days free, no card.',
     url: 'https://refit-iq.com',
     siteName: 'ReFitIQ',
     type: 'website',

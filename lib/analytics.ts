@@ -19,6 +19,11 @@ import { track } from '@vercel/analytics';
 
 export type FunnelEvent =
   | 'cta_click'
+  // A tap that leaves the site on purpose (today: the App Store listing, offered as
+  // proof that the app is real). Tracked because a link that sends paid traffic away
+  // has to be measurable — if it costs more signups than the proof is worth, the
+  // number to justify pulling it should already be in the dashboard.
+  | 'outbound_click'
   | 'signup_started'
   | 'signup_submitted'
   | 'signup_failed'

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { createPublicClient } from '@/lib/supabase/public';
 import RoiCalculator from './roi-calculator';
 import { CtaLink } from './cta-link';
+import { OutboundLink } from './outbound-link';
 import { StickyCta } from './sticky-cta';
 import { BrandMark } from './brand-mark';
 
@@ -11,6 +12,36 @@ import { BrandMark } from './brand-mark';
 // nothing. Pricing is still read from billing_plans — just at most once per window, off
 // the request path.
 export const revalidate = 300;
+
+// ─────────────────────────────────────────────────────────────────────────────────────
+// THIS PAGE IS A DIRECT-RESPONSE PAGE, NOT A BROCHURE.
+//
+// It answers one measurement: 122 visitors in seven days, 121 of them landed here, ONE
+// reached /signup, 91% bounce. 109 came from Facebook or Instagram, on phones. The ad
+// holds attention (43% three-second hold), so nothing upstream is broken — the first
+// screen was.
+//
+// Four things governed every decision below:
+//
+//   1. THE BUYER IS THE OWNER, NOT THE TECH. The page used to promise "put it back
+//      together without guessing" to "refit and boatyard CREWS". That is the problem of
+//      the person in the bilge, sold to the person who signs their cheque. He is not the
+//      one guessing; he is the one paying for the hour it takes.
+//
+//   2. THE FIRST SCREEN HAS 664px AND MUST SPEND THEM ON WHAT / WHO / WHY / WHAT IT
+//      COSTS TO TRY. Every block in the hero is budgeted in px against a 390px phone —
+//      see the comments on each. Adding one line to the H1 costs 40px of screenshot.
+//
+//   3. BELIEF BEFORE ASK. The one real credential (Philbrooks) used to sit at y≈5,467
+//      on an 8,408px page, and the $130,000 arithmetic came before any reason to think
+//      the product existed. Proof now lands immediately after the fold; the numbers come
+//      after the product has been shown.
+//
+//   4. NOTHING ON THIS PAGE MAY OVERSTATE THE PRODUCT — and, just as strictly, nothing
+//      may UNDERSTATE it. The old FAQ said a card is collected when the trial starts.
+//      That was never true (0028_provision_new_shop.sql opens the trial without touching
+//      Stripe) and it threw away the strongest honest offer the business owns.
+// ─────────────────────────────────────────────────────────────────────────────────────
 
 type Tier = {
   plan: string;
@@ -51,42 +82,89 @@ async function getTiers(): Promise<Tier[]> {
 const SHOT_W = 860;
 const SHOT_H = 1713;
 
+// The public listing. Offered as proof, not as a call to action — see OutboundLink.
+const APP_STORE_URL = 'https://apps.apple.com/us/app/refit/id6772761520';
+
+// Four steps, one screen each. The fifth real screen (the job overview) is the hero, so
+// it is not repeated here — a tour that shows the same screen twice is just a longer
+// tour, and length is what put the objections and the calculator out of reach.
+//
+// `pos` is the object-position for each shot. The steps render their screenshots in a
+// 300px window instead of at full 598px height, which takes this section from ~3,200px
+// to ~1,400px; a blanket 'top' would then frame two of these on empty chrome and cut the
+// exact fastener counts step 04 quotes, so each one is aimed at its own payload.
 const STEPS = [
   {
     n: '01',
-    title: 'Capture as you tear down',
+    title: 'Scan a sticker, or let it number the bag',
     body:
-      'Photograph the part while it is still in your hand, bag it, and label the bag with a scanned QR or an auto-generated number. No writing it up later from memory.',
+      'Photograph the part, bag it, then scan a QR code or take the number the app assigns. Nothing to type, and it works with no signal.',
     src: '/shots/capture-identify.webp',
-    alt: 'The ReFitIQ capture screen, choosing how to identify a bag: scan a QR code, auto-number it, or enter a label.',
+    pos: '50% 42%',
+    alt: 'The ReFitIQ capture screen: pick an area, then scan a QR code, auto-number the bag, or type a label.',
   },
   {
     n: '02',
-    title: 'Organized by boat, area and component',
+    title: 'Every bag keeps its photo and its name',
     body:
-      'Every capture lands under the right boat, area and component — so six months later the record reads like the vessel, not like a camera roll.',
-    src: '/shots/job-overview.webp',
-    alt: 'A ReFitIQ job overview for the vessel Castaway showing capture counts and flagged items by area.',
+      'Bag 444, the photo of the part, and the tech who captured it — not a line in a notebook, and not a shot lost in a camera roll.',
+    src: '/shots/fastener-photo.webp',
+    pos: '50% 30%',
+    alt: 'A ReFitIQ capture: a photograph of hardware, labelled Bag 444, captured by Jon Anderson.',
   },
   {
     n: '03',
-    title: 'Reassemble from the record',
+    title: 'Whoever is free can put it back',
     body:
-      'Each part carries its own stage, notes and photos from removal through to reinstall, so the tech doing the rebuild can see what the tech who pulled it saw.',
+      'Scanned, removed, ready for install, installed — every stage with a name and a date against it, and a notes thread for condition. Reassembly stops waiting on the one person who remembers.',
     src: '/shots/part-lifecycle.webp',
-    alt: 'A ReFitIQ part detail screen showing its lifecycle stage and technician notes.',
+    pos: '50% 22%',
+    alt: 'A ReFitIQ part detail screen showing its lifecycle stage, who set it and when, and a notes thread.',
   },
   {
     n: '04',
-    title: 'Export the whole job',
+    title: '348 of one screw. Counted, not guessed',
     body:
-      'Hand the owner, the surveyor or your own files a complete record — Excel, CSV, JSON or PDF, with the photos attached.',
+      '348 #10 oval Phillips in 316 stainless, 207 flat — the counts come off the record, not a guess. Export the job to Excel, CSV, JSON or PDF with the photos attached.',
     src: '/shots/export.webp',
-    alt: 'The ReFitIQ export screen offering Excel, CSV, JSON and PDF formats.',
+    // Framed on the bottom of the screen, where the fastener rows this step quotes
+    // actually are. Higher up it shows only the format buttons, which leaves the
+    // headline's "348" unbacked by the picture beside it.
+    pos: '50% 100%',
+    alt: 'The ReFitIQ export screen over a fastener list: #10 oval Phillips in 316 stainless, 348, and #10 flat, 207.',
   },
 ];
 
+// The three sentences an owner says to the screen before he says yes. All three were
+// answerable already — two of them only inside a collapsed FAQ 7,000px down, which is the
+// same as not answering them. They now sit in the open, where the thought forms.
+const OBJECTIONS = [
+  {
+    q: '“My guys won’t use it.”',
+    a: 'There is nothing to learn and nothing to type to capture a part: photograph it, bag it, then scan the sticker or take the number the app assigns. It works offline below decks and syncs when the phone finds signal. The job at the top of this page is a real one — 417 parts logged that way by the crew who pulled them.',
+  },
+  {
+    q: '“We already have a system.”',
+    a: 'If that system is bags, masking tape and a tech’s memory, this is the same system with the photos attached and the counts kept. If you run something that already survives the tech who tore the boat down leaving mid-refit, you don’t need us.',
+  },
+  {
+    q: '“Too expensive.”',
+    a: 'It is $99 to $299 a month for the whole shop — not per photo, not per boat, not per hull. At $130 an hour that is under one billable hour a month on Lite, and under three on Max. The owner/admin seat is free, and extra techs are $15.',
+  },
+];
+
+// The card question is FIRST and is the one that used to be wrong. A skeptic who opens
+// the FAQ at all is a buyer who was close, and the answer he finds has to be the one that
+// costs us more, not less.
 const FAQ = [
+  {
+    q: 'When do you ask for a card?',
+    a: 'Never during the trial. There is no card field on the signup form — a shop name, a work email and a password, and you’re in. We do not ask for a card at any point in the 14 days. You enter one only if you pick a plan at the end.',
+  },
+  {
+    q: 'How many techs can I add during the trial?',
+    a: 'All of them. Seats are unlimited for the 14 days, so you never have to pick a plan just to try it properly. Afterwards the owner/admin seat is free on every plan.',
+  },
   {
     q: 'Does it work where there is no signal?',
     a: 'Yes. Capture runs offline and syncs when the device is back on a connection, which is the normal case in a shed or below decks.',
@@ -107,27 +185,41 @@ const FAQ = [
     q: 'How long before a crew is actually using it?',
     a: 'It is a phone app with a camera and a job list. The first capture takes about a minute; there is no implementation project.',
   },
-  {
-    q: 'When do you actually charge us?',
-    // Corrected: /signup collects name, shop and email only — no card field
-    // exists on it. The card is collected later, at Stripe checkout, when the
-    // shop actually starts its trial from the dashboard. Saying "at signup"
-    // overstated the commitment at the top of the funnel, which is exactly
-    // where a skeptic goes looking.
-    a: 'Creating the account takes no card — just your name, your shop and an email. The card is collected when you start the trial, and nothing is charged during the 14 days. Cancel before it ends and you pay nothing.',
-  },
-  {
-    q: 'What does the trial cost?',
-    a: 'Nothing for 14 days — full access, every feature. You pick a plan when the trial ends, and you can cancel at any point before then without being charged.',
-  },
 ];
 
-function Shot({ src, alt, priority = false }: { src: string; alt: string; priority?: boolean }) {
+function Shot({
+  src,
+  alt,
+  priority = false,
+  w = SHOT_W,
+  h = SHOT_H,
+  pos,
+}: {
+  src: string;
+  alt: string;
+  priority?: boolean;
+  /** Intrinsic size. Defaults to the full-screen crops; the hero asset is shorter. */
+  w?: number;
+  h?: number;
+  /** object-position, used when CSS crops the shot to a fixed-height window. */
+  pos?: string;
+}) {
   return (
     <div className="shot">
       {/* .shot is max-width:300px at every breakpoint, so the slot is a flat 300px —
-          describing it as 78vw made Next pick larger candidates than can ever render. */}
-      <Image src={src} alt={alt} width={SHOT_W} height={SHOT_H} priority={priority} sizes="300px" />
+          describing it as 78vw made Next pick larger candidates than can ever render.
+          w/h are per-image: handing the 860x1000 hero the 860x1713 default would make
+          Next write the wrong aspect-ratio and the browser would render it stretched,
+          with no build error to catch it. */}
+      <Image
+        src={src}
+        alt={alt}
+        width={w}
+        height={h}
+        priority={priority}
+        sizes="300px"
+        style={pos ? { objectPosition: pos } : undefined}
+      />
     </div>
   );
 }
@@ -141,49 +233,141 @@ export default async function Home() {
         <nav className="nav">
           <BrandMark lockup="compact" height={26} priority className="nav-brand" />
           <div className="row">
-            <Link href="/login" className="btn btn-ghost">
+            {/* Demoted to a plain text link on phones rather than removed. 121 of 122
+                visitors arrive from paid social with no account, and a nav whose only
+                control is a bordered "Sign in" button frames the page as a members'
+                portal before a word has been read. Dropping it to a text link costs a
+                returning customer nothing — the brand mark is 22px, taller than the
+                21px link, so the nav shrinks 62px → 47px either way and the 15px goes
+                straight to the screenshot. */}
+            <Link href="/login" className="btn btn-ghost nav-signin">
               Sign in
             </Link>
-            <CtaLink src="nav" className="btn btn-primary nav-trial">Start free trial</CtaLink>
+            <CtaLink src="nav" className="btn btn-primary nav-trial">
+              Start free trial
+            </CtaLink>
           </div>
         </nav>
       </header>
 
       <main>
-        {/* ── HERO ─────────────────────────────────────────────────────────────── */}
+        {/* ── HERO ─────────────────────────────────────────────────────────────────
+            Budgeted to 438px so the screenshot's top edge clears the fold with 226px of
+            real app screen showing. Running total on a 390px phone:
+              nav 47 · section padding 24 · eyebrow 32 · H1 2×40.3+16 · sub 3×25.5+20 ·
+              button 49 · note 31 · trust 37 · shot margin 24 · border 1  =  438
+            Every line below is sized against that. The H1 must stay under 35 characters
+            or it takes a third line and spends 40px of screenshot on itself. */}
         <section className="container hero-split">
           <div className="hero-copy">
-            <div className="eyebrow">For refit and boatyard crews</div>
-            <h1>Put it back together without guessing.</h1>
-            {/* Was 191 characters — six lines and 158px on a 390px phone, taller
-                than the headline itself, and it pushed the product screenshot
-                to y≈706px where nobody arriving from an ad ever saw it. Two
-                lines now; the detail it used to carry is the four "How it
-                works" steps, which say it better with pictures. */}
-            <p>Photograph every part as it comes off. Rebuild from the record, not memory.</p>
+            {/* The tagline finally renders as text. It is a required brand element and
+                until now appeared nowhere on the site at any size: the nav uses the
+                'compact' lockup, which is the one with the tagline band cropped off. It
+                also happens to state the entire mechanism in three trade verbs, so it
+                earns the eyebrow slot that already existed at zero fold cost. */}
+            <div className="eyebrow">Track. Tag. Reinstall.</div>
+            {/* The owner is not the one guessing at the bulkhead — he is the one paying
+                for the hour it takes, twice: once to take the boat apart, and again to
+                work out what the first payment bought. It is a claim about his own
+                experience, so it needs no proof from us; he supplies it from the last
+                refit that ran long. It also still works when the image hasn't painted,
+                which matters on cellular inside the Facebook browser. */}
+            <h1>You pay for that teardown twice.</h1>
+            {/* Three jobs in three sentences. "An iPhone app" names the category at word
+                two — it used to appear nowhere in the first screen, so you could not tell
+                whether this was software, a label supplier or a consultancy. "for
+                boatyard owners" puts the audience in 17px type where it reads at arm's
+                length, and carries no headcount bound: "5-20 techs" would disqualify the
+                three-tech shop that is a paying Lite customer. The third sentence is the
+                outcome, and it is the best 25px on the page. */}
+            <p>
+              An iPhone app for boatyard owners. Your techs tag every part. Anyone free can put it
+              back.
+            </p>
             <div className="hero-cta">
-              <CtaLink src="hero">Start your 14-day free trial</CtaLink>
-              {/* Demoted from a matching full-width button. It is an anchor
-                  jump, not a conversion, and at equal weight it split the
-                  decision at the exact moment the visitor had to make it. */}
-              <Link href="#how" className="hero-secondary">
-                See how it works ↓
-              </Link>
+              {/* The card fear lives inside the button, because cold social traffic reads
+                  "start your free trial" as "enter your card". This is true without
+                  qualification: the trial opens without Stripe being touched. */}
+              <CtaLink src="hero">Start free — no card</CtaLink>
             </div>
+            {/* A checkable number, not a promise — 417 is printed in the screenshot 60px
+                below it, so the highest-read line of micro-copy on the page verifies
+                itself. (It replaces "Name, shop and email", which described a form that
+                has no name field and does have a password.) */}
+            <div className="hero-note">417 parts off one refit — the screen below.</div>
+            {/* 38 characters. The previous line ran 62 and wrapped to two rows, which is
+                the exact bug the .hero-trust comment in globals.css exists to prevent.
+                Price belongs here: for a trade buyer at this size it qualifies rather
+                than deters, and a page with no number invites the "call us" assumption. */}
             <div className="hero-trust">
-              <span>14 days free · every feature · cancel anytime</span>
+              <span>14 days free · then $99–299/mo per shop</span>
             </div>
           </div>
           <div className="hero-shot">
+            {/* hero-job.webp is a single contiguous extract of job-overview.webp (rows
+                700-1700 — see scripts/make-hero-crop.mjs), never a composite, so the
+                caption below stays literally true. The reason it exists: only the top
+                ~650 source rows of a screenshot clear the fold, and on the uncropped
+                screen those rows are a title bar, two tabs and a search field. The
+                reader was being asked to believe "real screens" while looking at
+                furniture. This crop puts the vessel, the flagged count and the three
+                stat tiles in that band instead. */}
             <Shot
-              src="/shots/fastener-photo.webp"
-              alt="A ReFitIQ capture in progress: a gloved hand holding hardware photographed against the workbench, filed under bag 444."
+              src="/shots/hero-job.webp"
+              alt="A ReFitIQ job screen for the vessel Nordhaven 60': 38 parts flagged for replacement, 417 captures, started 2026-06-08."
+              w={860}
+              h={1000}
               priority
             />
-            {/* Moved below the shot, where it reads as the caption it always
-                was — and buys 58px of fold in the process. */}
+            {/* Where a skeptic looks for it: directly under the screen he is being asked
+                to believe in. */}
+            <div className="shot-caption">Real screens from the app. Not mockups.</div>
             <div className="hero-meta">iPhone · works offline · export anytime</div>
           </div>
+        </section>
+
+        {/* ── PROOF STRIP ──────────────────────────────────────────────────────────
+            The first thing after the fold, before any argument. Philbrooks is the one
+            real third-party credential this product has and it used to be spent as a
+            clause in a body paragraph at y≈5,467 on an 8,408px page. Belief before ask. */}
+        <section className="container">
+          <ul className="proof-strip">
+            <li>
+              <b>Built with a working yard.</b> Developed alongside Philbrooks Boatyard in
+              British Columbia, on real refits.
+            </li>
+            <li>
+              <b>It is on the App Store.</b> A shipping iPhone app with a public listing — the
+              same screens you are looking at here.{' '}
+              <OutboundLink href={APP_STORE_URL} dest="app-store" className="proof-link">
+                See the listing →
+              </OutboundLink>
+            </li>
+            <li>
+              <b>The record stays yours.</b> Export the whole job with the photos attached,
+              whether you keep paying or not. Nothing is deleted if you stop.
+            </li>
+          </ul>
+        </section>
+
+        {/* ── THE PROBLEM ──────────────────────────────────────────────────────────
+            Concrete and short: the scene he has personally paid for, in his own calendar
+            language. Four lines, not four paragraphs — a man reading this in his own shop
+            scans, he does not read. */}
+        <section className="container">
+          <div className="section-label">The problem</div>
+          <h2 className="section-head">That boat goes back together in March.</h2>
+          <ul className="cost-list">
+            <li>The tech who tore it down is on another hull.</li>
+            <li>Two techs at an open bulkhead, sorting bags they didn’t fill.</li>
+            <li>Fasteners ordered a second time because nobody counted the first.</li>
+            <li>A splash date that moves, and a callback you can’t argue from memory.</li>
+          </ul>
+          <p className="section-sub">
+            None of it is logged, so none of it is a line item. It shows up as a job that ran
+            three weeks long and a margin you can’t account for. That is payroll, and none of it
+            goes on the invoice.
+          </p>
         </section>
 
         {/* ── HOW IT WORKS ─────────────────────────────────────────────────────── */}
@@ -198,73 +382,80 @@ export default async function Home() {
                   <h3>{s.title}</h3>
                   <p>{s.body}</p>
                 </div>
-                <Shot src={s.src} alt={s.alt} />
+                <Shot src={s.src} alt={s.alt} pos={s.pos} />
               </article>
             ))}
           </div>
           <div className="mid-cta" data-sticky-stop>
-            <CtaLink src="after-how">Start your 14-day free trial</CtaLink>
-            <span className="mid-cta-note">Cancel anytime, no charge</span>
+            <CtaLink src="after-how">Start free — no card</CtaLink>
+            <span className="mid-cta-note">14 days, every feature, every tech. No card.</span>
           </div>
         </section>
 
-        {/* ── THE NUMBERS ──────────────────────────────────────────────────────── */}
+        {/* ── OBJECTIONS ───────────────────────────────────────────────────────────
+            Answered in the open rather than inside a <details> at 7,000px. A collapsed
+            answer to an unspoken objection is the same as no answer at all. */}
+        <section className="container">
+          <div className="section-label">Straight answers</div>
+          <h2 className="section-head">What you’re probably thinking</h2>
+          <div className="objections">
+            {OBJECTIONS.map((o) => (
+              <div key={o.q} className="obj card">
+                <div className="obj-q">{o.q}</div>
+                <p className="obj-a">{o.a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── THE NUMBERS ──────────────────────────────────────────────────────────
+            Deliberately AFTER the proof and the product. It also lost two thirds of
+            itself on the way here: the old section showed $6,000 of "duplicate orders
+            avoided" and $20,000 of "faster turnaround" beside the labour figure and
+            totalled them into a $130,000+ banner — two numbers nothing supports, and a
+            total 25% larger than what this section's own calculator prints 300px below
+            it. A numerate owner discounts the credible figure along with the invented
+            ones. One assumption, stated, and it matches the calculator exactly. */}
         <section className="container">
           <div className="section-label">The numbers</div>
-          <h2 className="section-head">What the hunting actually costs you</h2>
+          <h2 className="section-head">The part we can actually count</h2>
           <p className="section-sub">
-            The expensive part of a refit is not the documentation — it is a tech standing in
-            front of an open bulkhead trying to remember which bolt went where. Twenty minutes a
-            day, per tech, is a conservative floor.
+            Twenty minutes a tech a day, spent looking for something that came off this boat.
+            That is the only assumption on this page — change it below if it’s wrong. We can’t
+            put a number on the callback you couldn’t argue, so we haven’t tried.
           </p>
-
-          <div className="numbers">
-            <div className="card num">
-              <div className="num-v">$104,000</div>
-              <div className="num-k">Labor recovered / year</div>
-              <div className="num-d">10 techs × 20 min/day × 240 days × $130/hr</div>
-            </div>
-            <div className="card num">
-              <div className="num-v">~$6,000</div>
-              <div className="num-k">Duplicate orders avoided</div>
-              <div className="num-d">Fastener counts come off the record, not a guess</div>
-            </div>
-            <div className="card num">
-              <div className="num-v">~$20,000</div>
-              <div className="num-k">Faster turnaround</div>
-              <div className="num-d">Slips free up sooner when reassembly stops stalling</div>
-            </div>
-          </div>
 
           <div className="bottomline card">
             <div>
-              <div className="bl-k">Conservative floor</div>
-              <div className="bl-v">$130,000+ / year</div>
+              <div className="bl-k">Labor recovered / year</div>
+              <div className="bl-v">$104,000</div>
+              <div className="bl-d">10 techs × 20 min/day × 240 days × $130/hr</div>
             </div>
             <div className="bl-x">against</div>
             <div>
               <div className="bl-k">ReFitIQ, 10 techs</div>
-              <div className="bl-v">$2,148 / year</div>
+              <div className="bl-v">$2,148</div>
+              <div className="bl-d">Pro, $179/mo — two months less if billed annually</div>
             </div>
           </div>
 
           <h3 className="mini-head">Run your own numbers</h3>
           <RoiCalculator />
+          <p className="note">
+            Assumptions, not case-study results — we have no measured customer results to show
+            you. Labour only: it excludes the duplicate orders you stop placing and the slips
+            that free up sooner.
+          </p>
           <div className="mid-cta" data-sticky-stop>
-            <CtaLink src="after-roi">Start your 14-day free trial</CtaLink>
-            <span className="mid-cta-note">Cancel anytime, no charge</span>
+            <CtaLink src="after-roi">Start free — no card</CtaLink>
+            <span className="mid-cta-note">14 days, every feature, every tech. No card.</span>
           </div>
         </section>
 
-        {/* ── WHO IT'S FOR / TRUST ─────────────────────────────────────────────── */}
+        {/* ── WHO IT'S FOR ─────────────────────────────────────────────────────── */}
         <section className="container">
           <div className="section-label">Who it&apos;s for</div>
-          <h2 className="section-head">Built on a working shop floor</h2>
-          <p className="section-sub">
-            ReFitIQ was built alongside Philbrooks Boatyard in British Columbia — on real refits,
-            with the techs doing the work. Every screen on this page is the shipping app, not a
-            mockup.
-          </p>
+          <h2 className="section-head">Shops where boats come apart</h2>
           <ul className="feature-list trust-list">
             <li>
               <b>Refit and repower yards</b> — teardowns that run for months and change hands
@@ -275,12 +466,12 @@ export default async function Home() {
               remembers the last job.
             </li>
             <li>
-              <b>Owners and surveyors</b> — who need a record of what was actually done, with
-              photos.
+              <b>Yards whose customers ask for proof</b> — hand the owner or the surveyor a
+              document, not a story.
             </li>
             <li>
-              <b>Roles &amp; per-boat access</b> — admins, team leads, techs and parts staff, each
-              assigned to the jobs they work.
+              <b>Shops that need it locked down</b> — admins, team leads, techs and parts staff
+              are separate roles, each assigned to the boats they work.
             </li>
           </ul>
         </section>
@@ -289,6 +480,10 @@ export default async function Home() {
         <section className="container">
           <div className="section-label">Plans</div>
           <h2 className="section-head">Priced per shop, not per photo</h2>
+          <p className="section-sub">
+            Every plan starts with the same 14 days free, no card, and every tech on your crew —
+            seats are unlimited until you pick a plan.
+          </p>
           <div className="pricing">
             {tiers.map((t) => (
               <div key={t.plan} className={`card tier${t.plan === 'pro' ? ' tier-featured' : ''}`}>
@@ -315,14 +510,14 @@ export default async function Home() {
                       className="btn btn-ghost btn-block"
                       href="mailto:support@refit-iq.com?subject=ReFitIQ%20Enterprise%20enquiry"
                     >
-                      Contact us
+                      Talk to us
                     </a>
                   ) : (
                     <CtaLink
                       src={`pricing-${t.plan}`}
                       className={`btn btn-block ${t.plan === 'pro' ? 'btn-primary' : 'btn-ghost'}`}
                     >
-                      Start trial
+                      Start free — no card
                     </CtaLink>
                   )}
                 </div>
@@ -330,8 +525,8 @@ export default async function Home() {
             ))}
           </div>
           <p className="note">
-            14-day free trial — cancel anytime, no charge. Annual billing is 2 months free. Add-on
-            seats $15/tech. Owner/admin seat is free.
+            Annual billing is two months free. Add-on seats are $15 a tech. The owner/admin seat
+            is free and doesn’t use one of your paid seats.
           </p>
         </section>
 
@@ -339,8 +534,10 @@ export default async function Home() {
         <section className="container">
           <div className="section-label">Questions</div>
           <div className="faq">
-            {FAQ.map((f) => (
-              <details key={f.q} className="faq-item">
+            {FAQ.map((f, i) => (
+              // The card question is open on arrival. It is the single most common reason
+              // a cold visitor doesn't tap, and it used to be both collapsed and wrong.
+              <details key={f.q} className="faq-item" open={i === 0}>
                 <summary>{f.q}</summary>
                 <p>{f.a}</p>
               </details>
@@ -348,17 +545,25 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ── CLOSING CTA ──────────────────────────────────────────────────────── */}
+        {/* ── CLOSING CTA ──────────────────────────────────────────────────────────
+            One button. The "Sign in" that used to sit beside it was a competing tap at
+            the exact moment of the decision, on traffic that is entirely cold. It is
+            still in the nav and the footer for the people who do have an account. */}
         <section className="container">
           <div className="closer card" data-sticky-stop>
             <h2>Start on your next teardown.</h2>
-            <p>Fourteen days free. Cancel before the trial ends and you pay nothing.</p>
+            <p>
+              No card — not at signup, not on day thirteen. Fourteen days, every feature, and
+              every tech on your crew. If you stop, nothing is deleted: the shop goes read-only
+              and you can still export every job, photos attached, as a file that opens without
+              us.
+            </p>
             <div className="row hero-cta">
-              <CtaLink src="closer">Start your 14-day free trial</CtaLink>
-              <Link href="/login" className="btn btn-ghost">
-                Sign in
-              </Link>
+              <CtaLink src="closer">Start free — no card</CtaLink>
             </div>
+            <p className="closer-note">
+              Signing up takes a shop name, a work email and a password. About a minute.
+            </p>
           </div>
         </section>
       </main>

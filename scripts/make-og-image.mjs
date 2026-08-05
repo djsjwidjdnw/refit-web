@@ -72,16 +72,21 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
 
   <g transform="translate(128, 0)">
     <text x="0" y="196" font-family="${FONT}" font-size="26" font-weight="600"
-          letter-spacing="3.4" fill="${MUTED}">${esc('FOR REFIT AND BOATYARD CREWS')}</text>
+          letter-spacing="3.4" fill="${MUTED}">${esc('FOR BOATYARD OWNERS')}</text>
 
     <!-- The wordmark is the real logo art, composited over this SVG below —
          a typed-out "Re"+"Fit" was how the card ended up off-brand in the first place. -->
 
+    <!-- These two strings and the eyebrow above must match the H1 and subhead in
+         app/page.tsx and the metadata in app/layout.tsx. Paid social shows the card and
+         the page back to back, so a mismatch here is a message break on 100% of the
+         traffic — see the comment in app/layout.tsx. Re-run this script after any
+         headline change. -->
     <text x="0" y="382" font-family="${FONT}" font-size="52" font-weight="700"
-          letter-spacing="-1" fill="${TEXT}">${esc('Put it back together without guessing.')}</text>
+          letter-spacing="-1" fill="${TEXT}">${esc('You pay for that teardown twice.')}</text>
 
     <text x="0" y="440" font-family="${FONT}" font-size="30" font-weight="400"
-          fill="${MUTED}">${esc('Photograph, bag and label every part as it comes off the boat.')}</text>
+          fill="${MUTED}">${esc('An iPhone app. Your techs tag every part. Anyone free can put it back.')}</text>
   </g>
 
   <!-- Footer strip -->
