@@ -139,7 +139,7 @@ export default async function Dashboard({
           ) : (
             // Step-4 guard: signed in but no shop yet → create-shop state (not an error).
             <>
-              <h1 style={{ fontSize: 26, fontWeight: 900, margin: '8px 0 4px' }}>Welcome to ReFit</h1>
+              <h1 style={{ fontSize: 26, fontWeight: 900, margin: '8px 0 4px' }}>Welcome to ReFitIQ</h1>
               <p style={{ color: 'var(--text-muted)', marginTop: 0 }}>
                 You&apos;re signed in — create your shop to start your free trial.
               </p>

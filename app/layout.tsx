@@ -10,15 +10,15 @@ export const metadata: Metadata = {
   // shop management in the description, and "Put it back together without
   // guessing" on the page. Ad traffic sees the preview and the page back to
   // back, so they now say the same thing, in the page's own words.
-  title: 'ReFit — put it back together without guessing',
+  title: 'ReFitIQ — put it back together without guessing',
   description:
     'Photograph every part as it comes off the boat. Rebuild from the record, not memory. Built for refit and boatyard crews.',
   openGraph: {
-    title: 'ReFit — put it back together without guessing',
+    title: 'ReFitIQ — put it back together without guessing',
     description:
       'Photograph every part as it comes off the boat. Rebuild from the record, not memory. Built for refit and boatyard crews.',
     url: 'https://refit-iq.com',
-    siteName: 'ReFit',
+    siteName: 'ReFitIQ',
     type: 'website',
   },
   twitter: { card: 'summary_large_image' },

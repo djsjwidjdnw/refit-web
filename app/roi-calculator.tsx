@@ -89,7 +89,7 @@ export default function RoiCalculator() {
           <b>{money(labour)}</b>
         </div>
         <div className="roi-line">
-          <span>ReFit / year</span>
+          <span>ReFitIQ / year</span>
           <b>{money(subscription)}</b>
         </div>
         <div className="roi-line roi-net">

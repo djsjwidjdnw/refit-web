@@ -63,7 +63,7 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
       setAlreadyRegistered(dup);
       setError(
         dup
-          ? 'That email already has a ReFit account.'
+          ? 'That email already has a ReFitIQ account.'
           : signUpErr.message,
       );
       trackFunnel('signup_failed', { mode: joining ? 'join' : 'create', reason: dup ? 'duplicate' : 'other' });

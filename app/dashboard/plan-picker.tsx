@@ -132,7 +132,7 @@ export function PlanPicker({
         <a
           className="btn btn-ghost plan-opt"
           href={`mailto:${ENTERPRISE_CONTACT_EMAIL}?subject=${encodeURIComponent(
-            'ReFit Enterprise enquiry',
+            'ReFitIQ Enterprise enquiry',
           )}`}
         >
           <span className="po-name">Enterprise</span>

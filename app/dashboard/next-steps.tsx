@@ -15,11 +15,11 @@ export function NextSteps() {
       <h2>Next steps</h2>
       <ol>
         <li>
-          <strong>Get the app.</strong> Download ReFit on the iPhone your crew will use in the
+          <strong>Get the app.</strong> Download ReFitIQ on the iPhone your crew will use in the
           yard and sign in with this account.
           <div className="ns-actions">
             <a className="btn btn-primary" href={APP_STORE_URL} target="_blank" rel="noopener noreferrer">
-              Get ReFit on the App Store →
+              Get ReFitIQ on the App Store →
             </a>
           </div>
         </li>
@@ -38,7 +38,7 @@ export function NextSteps() {
       <p className="ns-foot">
         Full walkthrough:{' '}
         <Link href="/getting-started" style={{ color: 'var(--accent)', fontWeight: 700 }}>
-          Getting started with ReFit →
+          Getting started with ReFitIQ →
         </Link>
       </p>
     </div>

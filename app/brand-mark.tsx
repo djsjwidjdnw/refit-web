@@ -11,7 +11,7 @@ import Link from 'next/link';
 //   'compact' — the same lockup with the tagline band cropped off, 6.75:1. The right
 //               choice for anything nav-sized, because the wordmark gets the whole
 //               height instead of sharing it with two-pixel type.
-//   'mark' — stacked boat over ReFitIQ, 1.67:1. For genuinely tight columns.
+//   'mark'    — stacked boat over ReFitIQ, 2.05:1, no tagline. Tight columns.
 //
 // All three carry an alpha channel — the black they were drawn on is keyed out by
 // scripts/make-brand-assets.mjs — so they sit on --bg (#0e0e10) and on the OG card's
@@ -20,7 +20,7 @@ import Link from 'next/link';
 const ART = {
   long: { src: '/brand/logo-long.png', w: 560, h: 114 },
   compact: { src: '/brand/logo-compact.png', w: 560, h: 83 },
-  mark: { src: '/brand/logo-mark.png', w: 360, h: 215 },
+  mark: { src: '/brand/logo-mark.png', w: 360, h: 176 },
 } as const;
 
 export function BrandMark({

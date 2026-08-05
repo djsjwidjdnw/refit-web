@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { BrandMark } from '../brand-mark';
 
 export const metadata: Metadata = {
-  title: 'Getting started with ReFit',
+  title: 'Getting started with ReFitIQ',
   description:
     'Everything your shop needs in the first 15 minutes: create your shop, get the app, invite your crew, set roles, and start capturing.',
 };
@@ -88,7 +88,7 @@ export default function GettingStarted() {
 
       <main className="container doc">
         <div className="eyebrow">Getting started</div>
-        <h1 className="doc-h1">Getting started with ReFit</h1>
+        <h1 className="doc-h1">Getting started with ReFitIQ</h1>
         <p className="doc-lede">Everything your shop needs in the first 15 minutes.</p>
 
         <nav className="toc" aria-label="On this page">
@@ -129,7 +129,7 @@ export default function GettingStarted() {
             <span className="step-num">2</span> Get the app
           </h2>
           <p>
-            Download <strong>ReFit</strong> from the App Store on the iPhone your crew will use in
+            Download <strong>ReFitIQ</strong> from the App Store on the iPhone your crew will use in
             the yard. Sign in with the account you just created.
           </p>
           <p>
@@ -142,7 +142,7 @@ export default function GettingStarted() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Get ReFit on the App Store →
+            Get ReFitIQ on the App Store →
           </a>
         </section>
 
@@ -166,7 +166,7 @@ export default function GettingStarted() {
             <span className="step-num">4</span> Set everyone&apos;s role
           </h2>
           <p>
-            This is the step most shops skip, and it&apos;s the one that makes ReFit work the way
+            This is the step most shops skip, and it&apos;s the one that makes ReFitIQ work the way
             you want.
           </p>
           <p>
@@ -215,7 +215,7 @@ export default function GettingStarted() {
           <h2>
             <span className="step-num">6</span> Start capturing
           </h2>
-          <p>This is the core of ReFit. As your crew strips the boat down:</p>
+          <p>This is the core of ReFitIQ. As your crew strips the boat down:</p>
           <ol className="steps-ol">
             <li>
               Tap <strong>+</strong> to capture.
@@ -310,7 +310,7 @@ export default function GettingStarted() {
               <a href="mailto:support@refit-iq.com" style={{ color: 'var(--accent)' }}>
                 support@refit-iq.com
               </a>{' '}
-              — a marine mechanic who uses ReFit every day will answer.
+              — a marine mechanic who uses ReFitIQ every day will answer.
             </p>
             <div className="row hero-cta">
               <Link href="/signup?src=gs-footer" className="btn btn-primary">
@@ -332,7 +332,7 @@ export default function GettingStarted() {
             <Link href="/login">Sign in</Link>
             <a href="mailto:support@refit-iq.com">support@refit-iq.com</a>
           </div>
-          <div>© {new Date().getFullYear()} ReFit · refit-iq.com</div>
+          <div>© {new Date().getFullYear()} ReFitIQ · refit-iq.com</div>
         </div>
       </footer>
     </>

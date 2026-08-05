@@ -154,19 +154,28 @@ const BLACK = { r: 0, g: 0, b: 0 };
 // mask; see squareOn().
 await squareOn(SRC_ICON, bIcon, 1024, 0.92, BLACK, path.join(APP, 'assets', 'icon.png'));
 
+// ── Tagline-free stacked mark ────────────────────────────────────────────────
+// logoicon.png carries "TRACK. MANAGE. PERFECT.", but the official tagline is
+// "TRACK. TAG. REINSTALL." (which is what logoiconlong.png says). Rather than ship
+// the wrong words on the splash and the Android icon, crop the stacked mark to its
+// boat + wordmark and let the long lockup be the only place a tagline appears.
+// Measured bands in the 532-tall crop: boat 20-284, wordmark 322-439,
+// tagline 470-490, glow rule 505-529.
+const bMarkNoTag = { ...bMark, top: bMark.top + 14, height: 434 };
+
 // ── Android adaptive foreground ──────────────────────────────────────────────
 // Android crops the foreground to a centre circle/squircle and only guarantees the
 // inner 66%. The stacked mark (no border of its own) at 0.60 sits safely inside
 // that on every OEM mask shape.
-await squareOn(SRC_MARK, bMark, 1024, 0.6, BLACK, path.join(APP, 'assets', 'adaptive-icon.png'));
+await squareOn(SRC_MARK, bMarkNoTag, 1024, 0.62, BLACK, path.join(APP, 'assets', 'adaptive-icon.png'));
 
 // ── Expo splash ──────────────────────────────────────────────────────────────
 // resizeMode 'contain' on a dark background; the stacked mark reads at any size.
-await squareOn(SRC_MARK, bMark, 1024, 0.72, BLACK, path.join(APP, 'assets', 'splash-icon.png'));
+await squareOn(SRC_MARK, bMarkNoTag, 1024, 0.74, BLACK, path.join(APP, 'assets', 'splash-icon.png'));
 
 // ── In-app marks (bundled into the JS update, so these ship OTA) ─────────────
 await wide(SRC_LONG, bLong, 640, BLACK, path.join(APP, 'assets', 'brand-logo-long.png'), true);
-await wide(SRC_MARK, bMark, 512, BLACK, path.join(APP, 'assets', 'brand-logo-mark.png'), true);
+await wide(SRC_MARK, bMarkNoTag, 512, BLACK, path.join(APP, 'assets', 'brand-logo-mark.png'), true);
 
 // ── Compact horizontal lockup ────────────────────────────────────────────────
 // The full lockup carries "TRACK. TAG. REINSTALL." and a glow rule under the
@@ -193,7 +202,7 @@ await squareOn(SRC_ICON, bIcon, 180, 1, BLACK, path.join(WEB, 'app', 'apple-icon
 // 2x of the largest rendered size, so they stay sharp on retina without shipping
 // the full-resolution source.
 await wide(SRC_LONG, bLong, 560, BLACK, path.join(WEB, 'public', 'brand', 'logo-long.png'), true);
-await wide(SRC_MARK, bMark, 360, BLACK, path.join(WEB, 'public', 'brand', 'logo-mark.png'), true);
+await wide(SRC_MARK, bMarkNoTag, 360, BLACK, path.join(WEB, 'public', 'brand', 'logo-mark.png'), true);
 
 console.log('written:');
 for (const w of written) {

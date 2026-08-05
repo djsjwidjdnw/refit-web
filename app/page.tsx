@@ -58,7 +58,7 @@ const STEPS = [
     body:
       'Photograph the part while it is still in your hand, bag it, and label the bag with a scanned QR or an auto-generated number. No writing it up later from memory.',
     src: '/shots/capture-identify.webp',
-    alt: 'The ReFit capture screen, choosing how to identify a bag: scan a QR code, auto-number it, or enter a label.',
+    alt: 'The ReFitIQ capture screen, choosing how to identify a bag: scan a QR code, auto-number it, or enter a label.',
   },
   {
     n: '02',
@@ -66,7 +66,7 @@ const STEPS = [
     body:
       'Every capture lands under the right boat, area and component — so six months later the record reads like the vessel, not like a camera roll.',
     src: '/shots/job-overview.webp',
-    alt: 'A ReFit job overview for the vessel Castaway showing capture counts and flagged items by area.',
+    alt: 'A ReFitIQ job overview for the vessel Castaway showing capture counts and flagged items by area.',
   },
   {
     n: '03',
@@ -74,7 +74,7 @@ const STEPS = [
     body:
       'Each part carries its own stage, notes and photos from removal through to reinstall, so the tech doing the rebuild can see what the tech who pulled it saw.',
     src: '/shots/part-lifecycle.webp',
-    alt: 'A ReFit part detail screen showing its lifecycle stage and technician notes.',
+    alt: 'A ReFitIQ part detail screen showing its lifecycle stage and technician notes.',
   },
   {
     n: '04',
@@ -82,7 +82,7 @@ const STEPS = [
     body:
       'Hand the owner, the surveyor or your own files a complete record — Excel, CSV, JSON or PDF, with the photos attached.',
     src: '/shots/export.webp',
-    alt: 'The ReFit export screen offering Excel, CSV, JSON and PDF formats.',
+    alt: 'The ReFitIQ export screen offering Excel, CSV, JSON and PDF formats.',
   },
 ];
 
@@ -93,7 +93,7 @@ const FAQ = [
   },
   {
     q: 'Do we have to buy QR labels?',
-    a: 'No. You can scan a QR or barcode if you already use them, or let ReFit auto-number each bag. Both work the same way afterwards.',
+    a: 'No. You can scan a QR or barcode if you already use them, or let ReFitIQ auto-number each bag. Both work the same way afterwards.',
   },
   {
     q: 'Can I control who sees which boat?',
@@ -101,7 +101,7 @@ const FAQ = [
   },
   {
     q: 'What happens to the record if we stop paying?',
-    a: 'Nothing is deleted. The shop goes read-only — you can still open and export every job — and you can export the full record, photos included, at any time. The export is a plain file you keep, not a format that needs ReFit to open.',
+    a: 'Nothing is deleted. The shop goes read-only — you can still open and export every job — and you can export the full record, photos included, at any time. The export is a plain file you keep, not a format that needs ReFitIQ to open.',
   },
   {
     q: 'How long before a crew is actually using it?',
@@ -177,7 +177,7 @@ export default async function Home() {
           <div className="hero-shot">
             <Shot
               src="/shots/fastener-photo.webp"
-              alt="A ReFit capture in progress: a gloved hand holding hardware photographed against the workbench, filed under bag 444."
+              alt="A ReFitIQ capture in progress: a gloved hand holding hardware photographed against the workbench, filed under bag 444."
               priority
             />
             {/* Moved below the shot, where it reads as the caption it always
@@ -243,7 +243,7 @@ export default async function Home() {
             </div>
             <div className="bl-x">against</div>
             <div>
-              <div className="bl-k">ReFit, 10 techs</div>
+              <div className="bl-k">ReFitIQ, 10 techs</div>
               <div className="bl-v">$2,148 / year</div>
             </div>
           </div>
@@ -261,7 +261,7 @@ export default async function Home() {
           <div className="section-label">Who it&apos;s for</div>
           <h2 className="section-head">Built on a working shop floor</h2>
           <p className="section-sub">
-            ReFit was built alongside Philbrooks Boatyard in British Columbia — on real refits,
+            ReFitIQ was built alongside Philbrooks Boatyard in British Columbia — on real refits,
             with the techs doing the work. Every screen on this page is the shipping app, not a
             mockup.
           </p>
@@ -313,7 +313,7 @@ export default async function Home() {
                     // says it does. Enterprise is a conversation, so send them to one.
                     <a
                       className="btn btn-ghost btn-block"
-                      href="mailto:support@refit-iq.com?subject=ReFit%20Enterprise%20enquiry"
+                      href="mailto:support@refit-iq.com?subject=ReFitIQ%20Enterprise%20enquiry"
                     >
                       Contact us
                     </a>
@@ -373,7 +373,7 @@ export default async function Home() {
             <Link href="/signup?src=footer">Start free trial</Link>
             <a href="mailto:support@refit-iq.com">support@refit-iq.com</a>
           </div>
-          <div>© {new Date().getFullYear()} ReFit · refit-iq.com</div>
+          <div>© {new Date().getFullYear()} ReFitIQ · refit-iq.com</div>
         </div>
       </footer>
     </>
