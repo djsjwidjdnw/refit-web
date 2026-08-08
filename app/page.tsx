@@ -77,61 +77,82 @@ async function getTiers(): Promise<Tier[]> {
   return FALLBACK_TIERS;
 }
 
-// Every image below is a real screen from the shipping iOS app, cropped out of the App
-// Store assets. Nothing here is a mockup.
-const SHOT_W = 860;
-const SHOT_H = 1713;
+// Every image below is a real screen from the shipping iOS app — raw screenshots with
+// the status bar cropped off, not App Store marketing art and not a mockup. Each one is
+// cut by scripts/crop-screenshots.mjs, which prints the w/h to paste in here.
 
 // The public listing. Offered as proof, not as a call to action — see OutboundLink.
 const APP_STORE_URL = 'https://apps.apple.com/us/app/refit/id6772761520';
 
-// Four steps, one screen each. The fifth real screen (the job overview) is the hero, so
-// it is not repeated here — a tour that shows the same screen twice is just a longer
-// tour, and length is what put the objections and the calculator out of reach.
+// Five steps, one real screen each, in the order the work happens: tag it, find it,
+// read it, order it, hand it over. The boat file is the hero and is not repeated here —
+// a tour that shows the same screen twice is just a longer tour.
 //
-// `pos` is the object-position for each shot. The steps render their screenshots in a
-// 300px window instead of at full 598px height, which takes this section from ~3,200px
-// to ~1,400px; a blanket 'top' would then frame two of these on empty chrome and cut the
-// exact fastener counts step 04 quotes, so each one is aimed at its own payload.
+// `pos` is the object-position. Every tile renders into a 300px-tall window (see
+// `.step .shot img`), and each crop is cut so its payload lands in that window — the
+// numbers in scripts/crop-screenshots.mjs and the values here are one decision made in
+// two files, so change them together. Two of these fit the window whole and still carry
+// a `pos` of 50% 50% for the few px of slack.
 const STEPS = [
   {
     n: '01',
-    title: 'Scan a sticker, or let it number the bag',
+    title: 'The sticker goes on before it comes off',
     body:
-      'Photograph the part, bag it, then scan a QR code or take the number the app assigns. Nothing to type, and it works with no signal.',
-    src: '/shots/capture-identify.webp',
-    pos: '50% 42%',
-    alt: 'The ReFitIQ capture screen: pick an area, then scan a QR code, auto-number the bag, or type a label.',
+      'Photograph the part where it sits and put a QR sticker on it. The photo, the area and the fasteners are on the record there and then — nothing to type, and it works with no signal.',
+    src: '/shots/tag-part.webp',
+    w: 860,
+    h: 984,
+    // Bottom-aligned so the window sits wholly on the photograph. Centred, it catches
+    // the last few px of the search bar and clips the Scan button into an orange
+    // half-disc in the corner, which reads as a rendering fault rather than as chrome.
+    pos: '50% 100%',
+    alt: 'A ReFitIQ capture: a door hinge photographed in place on the boat with a QR sticker on it, tagged FASTENERS.',
   },
   {
     n: '02',
-    title: 'Every bag keeps its photo and its name',
+    title: 'In March, point the camera at it',
     body:
-      'Bag 444, the photo of the part, and the tech who captured it — not a line in a notebook, and not a shot lost in a camera roll.',
-    src: '/shots/fastener-photo.webp',
-    pos: '50% 30%',
-    alt: 'A ReFitIQ capture: a photograph of hardware, labelled Bag 444, captured by Jon Anderson.',
+      '“If found please scan” is on the part itself. Scan the sticker and its file opens — the photograph of where it came off, the notes, the fasteners it takes. No hunting through a job number.',
+    src: '/shots/scan-part.webp',
+    w: 860,
+    h: 866,
+    pos: '50% 50%',
+    alt: 'The ReFitIQ scanner aimed at a chrome fitting wearing an “IF FOUND PLEASE SCAN” QR sticker: “Scan to find hardware”.',
   },
   {
     n: '03',
-    title: 'Whoever is free can put it back',
+    title: 'The spec, not somebody’s memory',
     body:
-      'Scanned, removed, ready for install, installed — every stage with a name and a date against it, and a notes thread for condition. Reassembly stops waiting on the one person who remembers.',
-    src: '/shots/part-lifecycle.webp',
-    pos: '50% 22%',
-    alt: 'A ReFitIQ part detail screen showing its lifecycle stage, who set it and when, and a notes thread.',
+      'Remove and reinstall, or replace. The exact fasteners — 8x, bolt, 12-24, 3/8in, Phillips, 316 stainless. A voice note from whoever pulled it. All of it on the part, all of it searchable.',
+    src: '/shots/part-record.webp',
+    // Aimed at the bottom: the fastener spec line is the payload, and higher up the
+    // window shows only disposition chips.
+    pos: '50% 100%',
+    w: 860,
+    h: 948,
+    alt: 'A ReFitIQ part record: disposition set to Remove & reinstall, and a fastener spec reading 8x, bolt, 12-24, 3/8in, flat, Phillips, 316 stainless.',
   },
   {
     n: '04',
-    title: '348 of one screw. Counted, not guessed',
+    title: '64 to replace, and where every one of them is',
     body:
-      '348 #10 oval Phillips in 316 stainless, 207 flat — the counts come off the record, not a guess. Export the job to Excel, CSV, JSON or PDF with the photos attached.',
-    src: '/shots/export.webp',
-    // Framed on the bottom of the screen, where the fastener rows this step quotes
-    // actually are. Higher up it shows only the format buttons, which leaves the
-    // headline's "348" unbacked by the picture beside it.
-    pos: '50% 100%',
-    alt: 'The ReFitIQ export screen over a fastener list: #10 oval Phillips in 316 stainless, 348, and #10 flat, 207.',
+      'Everything flagged for replacement or refurbishment lands on one list — to order, ordered, received — with tracking against it. Your parts desk stops chasing techs for photographs.',
+    src: '/shots/order-list.webp',
+    w: 860,
+    h: 870,
+    pos: '50% 50%',
+    alt: 'The ReFitIQ replacement list: To Replace (64), To Refurbish (62), filtered by to order, ordered and received, with Add tracking and Mark received on each row.',
+  },
+  {
+    n: '05',
+    title: 'Hand over a document, not a story',
+    body:
+      'The whole job — or just the 183 items flagged for replacement — out to Excel, CSV, JSON, PDF or a web report, photos attached. It goes to the share sheet: email it, or drop it in Files.',
+    src: '/shots/export-job.webp',
+    w: 860,
+    h: 899,
+    pos: '50% 50%',
+    alt: 'The ReFitIQ export sheet: 183 items flagged for replacement, exportable as Excel, CSV, JSON, PDF or a web report.',
   },
 ];
 
@@ -141,7 +162,7 @@ const STEPS = [
 const OBJECTIONS = [
   {
     q: '“My guys won’t use it.”',
-    a: 'There is nothing to learn and nothing to type to capture a part: photograph it, bag it, then scan the sticker or take the number the app assigns. It works offline below decks and syncs when the phone finds signal. The job at the top of this page is a real one — 417 parts logged that way by the crew who pulled them.',
+    a: 'There is nothing to learn and nothing to type to capture a part: photograph it, put a sticker on it, or take the number the app assigns. It works offline below decks and syncs when the phone finds signal. The job at the top of this page is a real one — 458 parts logged that way by the crew who pulled them.',
   },
   {
     q: '“We already have a system.”',
@@ -191,16 +212,22 @@ function Shot({
   src,
   alt,
   priority = false,
-  w = SHOT_W,
-  h = SHOT_H,
+  w,
+  h,
   pos,
 }: {
   src: string;
   alt: string;
   priority?: boolean;
-  /** Intrinsic size. Defaults to the full-screen crops; the hero asset is shorter. */
-  w?: number;
-  h?: number;
+  /**
+   * The file's real intrinsic size — REQUIRED, and required per-image on purpose.
+   * These crops all differ, and a wrong height makes Next write the wrong
+   * aspect-ratio: the browser renders the shot stretched, with no build error and
+   * nothing in the console. A default here would be a default that silently lies,
+   * so there isn't one. scripts/crop-screenshots.mjs prints the correct pair.
+   */
+  w: number;
+  h: number;
   /** object-position, used when CSS crops the shot to a fixed-height window. */
   pos?: string;
 }) {
@@ -290,11 +317,10 @@ export default async function Home() {
                   qualification: the trial opens without Stripe being touched. */}
               <CtaLink src="hero">Start free — no card</CtaLink>
             </div>
-            {/* A checkable number, not a promise — 417 is printed in the screenshot 60px
-                below it, so the highest-read line of micro-copy on the page verifies
-                itself. (It replaces "Name, shop and email", which described a form that
-                has no name field and does have a password.) */}
-            <div className="hero-note">417 parts off one refit — the screen below.</div>
+            {/* A checkable number, not a promise — "All (458)" is printed in the
+                screenshot 60px below it, so the highest-read line of micro-copy on the
+                page verifies itself. */}
+            <div className="hero-note">458 parts off one refit — the screen below.</div>
             {/* 38 characters. The previous line ran 62 and wrapped to two rows, which is
                 the exact bug the .hero-trust comment in globals.css exists to prevent.
                 Price belongs here: for a trade buyer at this size it qualifies rather
@@ -304,19 +330,16 @@ export default async function Home() {
             </div>
           </div>
           <div className="hero-shot">
-            {/* hero-job.webp is a single contiguous extract of job-overview.webp (rows
-                700-1700 — see scripts/make-hero-crop.mjs), never a composite, so the
-                caption below stays literally true. The reason it exists: only the top
-                ~650 source rows of a screenshot clear the fold, and on the uncropped
-                screen those rows are a title bar, two tabs and a search field. The
-                reader was being asked to believe "real screens" while looking at
-                furniture. This crop puts the vessel, the flagged count and the three
-                stat tiles in that band instead. */}
+            {/* A single contiguous extract of one real boat file — never a composite,
+                so the caption below stays literally true. See the crop's own reasoning
+                in scripts/crop-screenshots.mjs: only ~220px of this clears the fold, so
+                the crop is aimed so that band holds counts (64 to replace, 458 captured,
+                82 on the foredeck) rather than a title bar. */}
             <Shot
-              src="/shots/hero-job.webp"
-              alt="A ReFitIQ job screen for the vessel Nordhaven 60': 38 parts flagged for replacement, 417 captures, started 2026-06-08."
+              src="/shots/boat-file.webp"
+              alt="A ReFitIQ boat file mid-refit: 64 parts flagged to replace, 458 captures, 82 of them on the foredeck, with areas for flybridge and the rest of the vessel."
               w={860}
-              h={1000}
+              h={1048}
               priority
             />
             {/* Where a skeptic looks for it: directly under the screen he is being asked
@@ -373,7 +396,7 @@ export default async function Home() {
         {/* ── HOW IT WORKS ─────────────────────────────────────────────────────── */}
         <section id="how" className="container">
           <div className="section-label">How it works</div>
-          <h2 className="section-head">Four steps, done at the bench</h2>
+          <h2 className="section-head">Five steps, done at the boat</h2>
           <div className="steps">
             {STEPS.map((s) => (
               <article key={s.n} className="step">
@@ -382,7 +405,7 @@ export default async function Home() {
                   <h3>{s.title}</h3>
                   <p>{s.body}</p>
                 </div>
-                <Shot src={s.src} alt={s.alt} pos={s.pos} />
+                <Shot src={s.src} alt={s.alt} pos={s.pos} w={s.w} h={s.h} />
               </article>
             ))}
           </div>

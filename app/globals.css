@@ -579,7 +579,19 @@ a {
    untouched. Each step passes its own object-position (see STEPS in page.tsx): a blanket
    `top` frames two of these on empty chrome and cuts the fastener counts step 04
    quotes. */
+/* `width: 100%` is load-bearing, not decoration. `.shot` carries `margin-inline: auto`,
+   and auto margins on a grid item switch off the default `justify-self: stretch` — the
+   item falls back to fit-content. Once the rule below pins the image's HEIGHT, the
+   image's aspect ratio is what determines its width, the fit-content container shrinks
+   to match, and every step tile renders at whatever width its own crop implies. That
+   shipped: at 860x1713 all four tiles came out 151px wide instead of 298px, i.e. half
+   size, with no error anywhere. Pinning the container back to 100% (still capped by
+   `.shot`'s max-width: 300px, still centred by the auto margins) breaks the cycle. */
+.step .shot {
+  width: 100%;
+}
 .step .shot img {
+  width: 100%;
   height: 300px;
   object-fit: cover;
 }
