@@ -50,6 +50,42 @@ const WEBP_QUALITY = 82;
 const STATUS_BAR = 132;
 const HOME_BAR = 2565;
 
+// The orange the app itself fills its chips with, sampled straight out of the "All (458)"
+// pill in IMG_3532 rather than taken from the site palette. The site accent is #ff6a2c and
+// the brand orange is #f26f21; using either would put a subtly wrong orange inside a real
+// screenshot, which is exactly the kind of thing that reads as "edited" without the viewer
+// being able to say why.
+const APP_ORANGE = '#FF8D42';
+// Dark ink on orange, matching how the app sets text inside a filled chip.
+const APP_ORANGE_INK = '#1a1206';
+
+// An opaque rounded chip composited over a crop AFTER the resize, so its coordinates are
+// in OUTPUT space (860 wide), which is also the space you measure in when you open the
+// generated .webp to find something.
+//
+// This exists to keep real people's names off a public marketing page. It is deliberately
+// NOT a grey/black redaction bar and deliberately NOT a fake UI label: a bar reads as
+// censorship, and inventing a plausible-looking value (a role, a different name) would put
+// invented data inside an image the page captions "Real screens from the app. Not
+// mockups.". A filled chip in the app's own orange with "•••" in it matches the chip
+// styling already on screen, and claims nothing.
+function coverChip({ x, y, w, h, text = '•••', fontSize = 26 }) {
+  return {
+    left: x,
+    top: y,
+    input: Buffer.from(
+      `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">` +
+        `<rect width="${w}" height="${h}" rx="${h / 2}" fill="${APP_ORANGE}"/>` +
+        (text
+          ? `<text x="${w / 2}" y="${h / 2 + fontSize * 0.38}" text-anchor="middle" ` +
+            `font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="${fontSize}" ` +
+            `font-weight="800" fill="${APP_ORANGE_INK}">${text}</text>`
+          : '') +
+        `</svg>`,
+    ),
+  };
+}
+
 // One entry per shipped tile. `top`/`bottom` are rows in the SOURCE image.
 //
 // The numbers are deliberate, not "the whole screen minus chrome" — see the note above.
@@ -58,12 +94,13 @@ const HOME_BAR = 2565;
 // the two files can be kept in step.
 const SHOTS = [
   {
-    // NOT 'hero-job' — that name already shipped with different pixels behind it, and
-    // both Next's optimiser and Vercel's CDN key their cache on the source URL. Reusing
-    // the path served the OLD screenshot from cache against the NEW copy, so the page
-    // claimed 458 parts beside an image reading 417. Renaming is the cache bust; any
-    // future re-crop of this tile needs a new name too.
-    name: 'boat-file',
+    // The trailing number is a cache generation, and it MUST be bumped every time the
+    // pixels behind this name change. Next's optimiser and Vercel's CDN both key on the
+    // source URL, so re-cutting a tile in place serves the OLD picture from cache against
+    // the NEW copy — that has already happened once here, with the page claiming 458 parts
+    // beside a screenshot reading 417. '-2' is the generation that covers the technician
+    // name; '-1' would have been 'boat-file'.
+    name: 'boat-file-2',
     src: 'IMG_3532.PNG',
     // The boat file for Castaway-6469, framed on the counts rather than on the title.
     // Only ~220px of this clears the fold on a 390px phone, so that band has to carry
@@ -77,6 +114,19 @@ const SHOTS = [
     // continues rather than a shell that stops.
     top: 430,
     bottom: 1900,
+    // The one capture row that survives this crop is credited to a real technician by
+    // name, and this is a public ad landing page. The chip covers the NAME only: the
+    // "Captured by" label stays, so the row still demonstrates that every capture is
+    // attributed to a person, which is the part that matters to a buyer.
+    //
+    // Measured in the generated file: the name occupies x 397-514, y 1011-1031. The chip
+    // starts at 393 rather than hugging the glyphs, because "by" ends at x 387 and a chip
+    // butted straight against it reads as a collision. Centred on the text's own midline
+    // (y 1021) at a 34px height, which is the app's chip proportion for 21px text.
+    //
+    // The second capture row — "Captured by arenmoen" — is not in this crop at all; it
+    // sits at roughly source row 2157, well past the 1900 cut.
+    covers: [{ x: 393, y: 1004, w: 131, h: 34 }],
     note: 'hero — renders whole, no pos',
   },
   {
@@ -165,11 +215,11 @@ for (const shot of SHOTS) {
     continue;
   }
 
-  const out = await sharp(file)
-    .extract({ left: 0, top, width: meta.width, height })
-    .resize(OUT_WIDTH)
-    .webp({ quality: WEBP_QUALITY })
-    .toFile(dest);
+  // composite() runs after resize() in sharp's pipeline, which is why cover coordinates
+  // are in output space.
+  let pipeline = sharp(file).extract({ left: 0, top, width: meta.width, height }).resize(OUT_WIDTH);
+  if (shot.covers?.length) pipeline = pipeline.composite(shot.covers.map(coverChip));
+  const out = await pipeline.webp({ quality: WEBP_QUALITY }).toFile(dest);
 
   const kb = (fs.statSync(dest).size / 1024).toFixed(0);
   const fits = out.height <= WINDOW_ROWS ? 'fits window' : `needs pos (${out.height} > ${WINDOW_ROWS})`;

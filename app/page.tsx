@@ -336,7 +336,7 @@ export default async function Home() {
                 the crop is aimed so that band holds counts (64 to replace, 458 captured,
                 82 on the foredeck) rather than a title bar. */}
             <Shot
-              src="/shots/boat-file.webp"
+              src="/shots/boat-file-2.webp"
               alt="A ReFitIQ boat file mid-refit: 64 parts flagged to replace, 458 captures, 82 of them on the foredeck, with areas for flybridge and the rest of the vessel."
               w={860}
               h={1048}
