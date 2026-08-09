@@ -88,48 +88,40 @@ const APP_STORE_URL = 'https://apps.apple.com/us/app/refit/id6772761520';
 // read it, order it, hand it over. The boat file is the hero and is not repeated here —
 // a tour that shows the same screen twice is just a longer tour.
 //
-// `pos` is the object-position. Every tile renders into a 300px-tall window (see
-// `.step .shot img`), and each crop is cut so its payload lands in that window — the
-// numbers in scripts/crop-screenshots.mjs and the values here are one decision made in
-// two files, so change them together. Two of these fit the window whole and still carry
-// a `pos` of 50% 50% for the few px of slack.
+// These render whole. They used to be clipped to a 300px-tall window by `.step .shot img`
+// and aimed with a per-step `object-position`, which meant every tile showed a fragment
+// and which fragment was decided in a different file from the crop. Both are gone: the
+// crop in scripts/crop-screenshots.mjs is now the framing, and the only thing that has to
+// agree between the two files is the intrinsic w/h below, which that script prints.
 const STEPS = [
   {
     n: '01',
     title: 'The sticker goes on before it comes off',
     body:
       'Photograph the part where it sits and put a QR sticker on it. The photo, the area and the fasteners are on the record there and then — nothing to type, and it works with no signal.',
-    src: '/shots/tag-part.webp',
-    w: 860,
-    h: 984,
-    // Bottom-aligned so the window sits wholly on the photograph. Centred, it catches
-    // the last few px of the search bar and clips the Scan button into an orange
-    // half-disc in the corner, which reads as a rendering fault rather than as chrome.
-    pos: '50% 100%',
-    alt: 'A ReFitIQ capture: a door hinge photographed in place on the boat with a QR sticker on it, tagged FASTENERS.',
+    src: '/shots/tag-part-2.webp',
+    w: 1206,
+    h: 2415,
+    alt: 'A ReFitIQ capture: a door hinge photographed in place on the boat with a QR sticker on it, tagged FASTENERS, with its label reading Top hinge, QR setyl.it/3DWQGD and Area House/PH.',
   },
   {
     n: '02',
     title: 'In March, point the camera at it',
     body:
       '“If found please scan” is on the part itself. Scan the sticker and its file opens — the photograph of where it came off, the notes, the fasteners it takes. No hunting through a job number.',
-    src: '/shots/scan-part.webp',
-    w: 860,
-    h: 866,
-    pos: '50% 50%',
-    alt: 'The ReFitIQ scanner aimed at a chrome fitting wearing an “IF FOUND PLEASE SCAN” QR sticker: “Scan to find hardware”.',
+    src: '/shots/scan-part-2.webp',
+    w: 1206,
+    h: 2010,
+    alt: 'The ReFitIQ scanner aimed at a chrome fitting wearing an “IF FOUND PLEASE SCAN” QR sticker: “Scan to find hardware”, “Point at any captured QR sticker”.',
   },
   {
     n: '03',
     title: 'The spec, not somebody’s memory',
     body:
       'Remove and reinstall, or replace. The exact fasteners — 8x, bolt, 12-24, 3/8in, Phillips, 316 stainless. A voice note from whoever pulled it. All of it on the part, all of it searchable.',
-    src: '/shots/part-record.webp',
-    // Aimed at the bottom: the fastener spec line is the payload, and higher up the
-    // window shows only disposition chips.
-    pos: '50% 100%',
-    w: 860,
-    h: 948,
+    src: '/shots/part-record-2.webp',
+    w: 1206,
+    h: 2415,
     alt: 'A ReFitIQ part record: disposition set to Remove & reinstall, and a fastener spec reading 8x, bolt, 12-24, 3/8in, flat, Phillips, 316 stainless.',
   },
   {
@@ -137,10 +129,9 @@ const STEPS = [
     title: '64 to replace, and where every one of them is',
     body:
       'Everything flagged for replacement or refurbishment lands on one list — to order, ordered, received — with tracking against it. Your parts desk stops chasing techs for photographs.',
-    src: '/shots/order-list.webp',
-    w: 860,
-    h: 870,
-    pos: '50% 50%',
+    src: '/shots/order-list-2.webp',
+    w: 1206,
+    h: 2415,
     alt: 'The ReFitIQ replacement list: To Replace (64), To Refurbish (62), filtered by to order, ordered and received, with Add tracking and Mark received on each row.',
   },
   {
@@ -148,10 +139,9 @@ const STEPS = [
     title: 'Hand over a document, not a story',
     body:
       'The whole job — or just the 183 items flagged for replacement — out to Excel, CSV, JSON, PDF or a web report, photos attached. It goes to the share sheet: email it, or drop it in Files.',
-    src: '/shots/export-job.webp',
-    w: 860,
-    h: 899,
-    pos: '50% 50%',
+    src: '/shots/export-job-2.webp',
+    w: 1206,
+    h: 2180,
     alt: 'The ReFitIQ export sheet: 183 items flagged for replacement, exportable as Excel, CSV, JSON, PDF or a web report.',
   },
 ];
@@ -214,7 +204,6 @@ function Shot({
   priority = false,
   w,
   h,
-  pos,
 }: {
   src: string;
   alt: string;
@@ -228,24 +217,24 @@ function Shot({
    */
   w: number;
   h: number;
-  /** object-position, used when CSS crops the shot to a fixed-height window. */
-  pos?: string;
 }) {
   return (
     <div className="shot">
-      {/* .shot is max-width:300px at every breakpoint, so the slot is a flat 300px —
-          describing it as 78vw made Next pick larger candidates than can ever render.
-          w/h are per-image: handing the 860x1000 hero the 860x1713 default would make
-          Next write the wrong aspect-ratio and the browser would render it stretched,
-          with no build error to catch it. */}
+      {/* `sizes` has to track `.shot`'s max-width in globals.css: 340px is the cap below
+          760px (a 390px phone renders these 338px wide) and 380px is the cap above it.
+          Both are stated as flat px rather than as `100vw` on purpose — 100vw is true of
+          the column, not of the tile, and it made a DPR-3 phone pull the 1200px
+          derivative of the hero for a 338px slot. w/h are per-image: handing the
+          1206x2010 scanner the 1206x2415 shape would make Next write the wrong
+          aspect-ratio and the browser would render it stretched, with no build error to
+          catch it. */}
       <Image
         src={src}
         alt={alt}
         width={w}
         height={h}
         priority={priority}
-        sizes="300px"
-        style={pos ? { objectPosition: pos } : undefined}
+        sizes="(min-width: 760px) 380px, 340px"
       />
     </div>
   );
@@ -331,15 +320,16 @@ export default async function Home() {
           </div>
           <div className="hero-shot">
             {/* A single contiguous extract of one real boat file — never a composite,
-                so the caption below stays literally true. See the crop's own reasoning
-                in scripts/crop-screenshots.mjs: only ~220px of this clears the fold, so
-                the crop is aimed so that band holds counts (64 to replace, 458 captured,
-                82 on the foredeck) rather than a title bar. */}
+                so the caption below stays literally true. The whole screen, top to
+                bottom: the vessel number heads it, and the counts the copy cites (64 to
+                replace, 458 captured, 82 on the foredeck) sit ~200px into it. Only the
+                first band clears the fold on a 390px phone; see the crop's own reasoning
+                in scripts/crop-screenshots.mjs for why that band is now the header. */}
             <Shot
-              src="/shots/boat-file-2.webp"
-              alt="A ReFitIQ boat file mid-refit: 64 parts flagged to replace, 458 captures, 82 of them on the foredeck, with areas for flybridge and the rest of the vessel."
-              w={860}
-              h={1048}
+              src="/shots/boat-file-3.webp"
+              alt="A ReFitIQ boat file mid-refit for Castaway-6469: 64 parts flagged to replace, 458 captures, 82 of them on the foredeck, with areas for flybridge and the rest of the vessel."
+              w={1206}
+              h={2415}
               priority
             />
             {/* Where a skeptic looks for it: directly under the screen he is being asked
@@ -405,7 +395,7 @@ export default async function Home() {
                   <h3>{s.title}</h3>
                   <p>{s.body}</p>
                 </div>
-                <Shot src={s.src} alt={s.alt} pos={s.pos} w={s.w} h={s.h} />
+                <Shot src={s.src} alt={s.alt} w={s.w} h={s.h} />
               </article>
             ))}
           </div>
