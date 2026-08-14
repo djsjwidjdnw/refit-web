@@ -81,11 +81,22 @@ export async function GET(request: NextRequest) {
       ? `${request.headers.get('x-forwarded-proto') ?? 'https'}://${forwardedHost}`
       : origin;
 
+  // Every response out of this route carries Set-Cookie for the session, or is a step on
+  // the way to one, so none of it may be stored by a CDN or a shared proxy.
+  // @supabase/ssr only started passing cache headers to setAll automatically in 0.10.0
+  // and this project is on 0.5.2, so per Supabase's own advanced guide it has to be set
+  // by hand on any route that handles authentication.
+  const send = (url: URL) => {
+    const res = NextResponse.redirect(url);
+    res.headers.set('Cache-Control', 'private, no-store');
+    return res;
+  };
+
   const fail = (reason: string, description?: string | null) => {
     const url = new URL('/auth/auth-code-error', base);
     url.searchParams.set('reason', reason);
     if (description) url.searchParams.set('description', description);
-    return NextResponse.redirect(url);
+    return send(url);
   };
 
   // Supabase reports a dead link by redirecting HERE with error params rather than by
@@ -118,5 +129,5 @@ export async function GET(request: NextRequest) {
   const next = safeNext(searchParams.get('next'));
   const dest = next ?? (await postAuthPath(supabase));
 
-  return NextResponse.redirect(new URL(dest, base));
+  return send(new URL(dest, base));
 }
