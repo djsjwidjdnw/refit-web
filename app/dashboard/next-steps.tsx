@@ -28,8 +28,8 @@ export function NextSteps() {
           get a link and QR code. Approve them under <em>Pending</em>.
         </li>
         <li>
-          <strong>Set everyone&apos;s role.</strong> Admin, team lead, tech or parts — this is the
-          step most shops skip, and it decides who sees which boats.
+          <strong>Set everyone&apos;s role.</strong> Admin, team lead, tech or parts. Most shops
+          skip this step. It decides who sees which boats.
         </li>
         <li>
           <strong>Create your first job</strong> and start capturing as you tear down.

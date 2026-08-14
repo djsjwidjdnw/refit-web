@@ -36,7 +36,7 @@ export async function POST(request: Request) {
   const customerId = (ent?.stripe_customer_id as string | null) ?? null;
   if (!customerId) {
     return NextResponse.json(
-      { error: 'No billing account yet — choose a plan first.' },
+      { error: 'No billing account yet. Choose a plan first.' },
       { status: 400 },
     );
   }

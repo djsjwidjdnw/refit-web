@@ -92,8 +92,8 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
       setBusy(false);
       setConfirmMsg(
         joining
-          ? "Check your email to confirm your account, then sign in — we'll send your join request to the shop for approval."
-          : "Check your email to confirm your account, then sign in — we'll finish setting up your shop.",
+          ? "Check your email to confirm your account, then sign in. We'll send your join request to the shop for approval."
+          : "Check your email to confirm your account, then sign in. We'll finish setting up your shop.",
       );
     }
   }
@@ -107,14 +107,18 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
         <h1>{joining ? 'Join your shop' : 'Start your free trial'}</h1>
         <p className="sub">
           {joining
-            ? 'Create your account — your shop admin approves you and you’re in.'
+            ? 'Create your account. Your shop admin approves you and you’re in.'
             : '14 days free. Cancel anytime, no charge.'}
         </p>
+        {/* Two lines, not three. The old set was a list of three in rhythm, each with a ✓
+            glyph in front of it, which is the shape of a generated pricing page. These
+            two also answer the two things a cold visitor is actually weighing at the
+            moment he looks at a form: what does it cost me to try, and are you about to
+            ask for my card. */}
         {!joining && (
           <ul className="reassure">
-            <li>Full access for 14 days — every feature, no limits</li>
-            <li>Nothing is charged during the trial</li>
-            <li>Cancel anytime. Your records are never deleted</li>
+            <li>Every feature for 14 days, with no limit on how many techs you add.</li>
+            <li>No card. There is no card field on this form and we don’t ask during the trial.</li>
           </ul>
         )}
         {confirmMsg ? (

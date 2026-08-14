@@ -12,13 +12,16 @@ export const metadata: Metadata = {
   // These strings, app/opengraph-image.png (regenerate via scripts/make-og-image.mjs)
   // and the H1 in app/page.tsx are four copies of the same promise — change one,
   // change all four.
-  title: 'ReFitIQ — you pay for that teardown twice',
+  // No dashes in either string. Both used to open "ReFitIQ — you pay for…", and an
+  // em-dash in the tab title and the social card is the first thing a reader who has
+  // decided the site was machine-written sees.
+  title: 'ReFitIQ. You pay for that teardown twice.',
   description:
-    'An iPhone app for boatyard owners. Your techs tag every part as it comes off; anyone free can put it back. Built with Philbrooks Boatyard. 14 days free, no card.',
+    'An iPhone app for boatyard owners. Your techs tag every part as it comes off, so anyone free can put it back. Built at Philbrook’s Boatyard in Sidney, BC. 14 days free, no card.',
   openGraph: {
-    title: 'ReFitIQ — you pay for that teardown twice',
+    title: 'ReFitIQ. You pay for that teardown twice.',
     description:
-      'An iPhone app for boatyard owners. Your techs tag every part as it comes off; anyone free can put it back. Built with Philbrooks Boatyard. 14 days free, no card.',
+      'An iPhone app for boatyard owners. Your techs tag every part as it comes off, so anyone free can put it back. Built at Philbrook’s Boatyard in Sidney, BC. 14 days free, no card.',
     url: 'https://refit-iq.com',
     siteName: 'ReFitIQ',
     type: 'website',

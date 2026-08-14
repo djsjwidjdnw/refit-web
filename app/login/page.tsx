@@ -38,7 +38,7 @@ export default function LoginPage() {
           <BrandMark height={34} href="/" priority />
         </div>
         <h1>Sign in</h1>
-        <p className="sub">Welcome back — access your shop dashboard.</p>
+        <p className="sub">Billing and seats live here. The work happens in the app.</p>
         <form onSubmit={onSubmit}>
           <div className="field">
             <label htmlFor="email">Email</label>

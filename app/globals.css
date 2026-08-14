@@ -161,32 +161,79 @@ a {
   margin: 0 auto 32px;
 }
 
+/* The uppercase kicker. It used to sit above EVERY section head on the landing page and
+   carry the 56px that pushed each section off the last one, so the page was eight
+   identical units of [kicker · centred head · centred sub], evenly spaced. That shape is
+   the single loudest "this came out of a template" signal on the site. One kicker is left
+   (the FAQ), the sections now own their own spacing, and it is no longer centred. */
 .section-label {
-  text-align: center;
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 2px;
   color: var(--text-muted);
   text-transform: uppercase;
-  margin: 56px 0 24px;
+  margin: 0 0 20px;
 }
 
+/* Section rhythm, set per section rather than by one repeated value. Proof sits close
+   under the hero because it is finishing the hero's argument; the problem sits close
+   under proof for the same reason; pricing gets real air before it because that is the
+   moment the reader is being asked to change activity. Do not flatten these back to one
+   number. */
+.s-proof {
+  margin-top: 30px;
+}
+.s-problem {
+  margin-top: 44px;
+}
+.s-how {
+  margin-top: 76px;
+}
+.s-obj {
+  margin-top: 62px;
+}
+.s-numbers {
+  margin-top: 78px;
+}
+.s-who {
+  margin-top: 50px;
+}
+.s-pricing {
+  margin-top: 92px;
+}
+.s-faq {
+  margin-top: 58px;
+}
+.s-closer {
+  margin-top: 74px;
+}
+/* Left, like the rest of the page now is. Centred body copy inside a section that is
+   already centred on the viewport is a deck slide, not a page. */
+.s-pricing .note,
+.s-numbers .note {
+  text-align: left;
+}
+
+/* Three self-serve tiers, not four boxes. Enterprise came out of the grid (see
+   .tier-enterprise) because it cannot be bought from here, and a fourth identical card
+   that dead-ends in an email link is exactly the even-weighted grid this page had too
+   many of. The columns are deliberately unequal: Pro is the one most shops buy, so it is
+   wider and taller than the two beside it. */
 .pricing {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+@media (min-width: 700px) {
+  .pricing {
+    grid-template-columns: 1fr 1.12fr 1fr;
+    gap: 16px;
+    align-items: start;
+  }
 }
 @media (max-width: 860px) {
-  .pricing {
-    grid-template-columns: repeat(2, 1fr);
-  }
   .hero h1 {
     font-size: 40px;
-  }
-}
-@media (max-width: 520px) {
-  .pricing {
-    grid-template-columns: 1fr;
   }
 }
 .card {
@@ -222,7 +269,6 @@ a {
   padding: 0;
   margin: 22px 0 0;
   max-width: 560px;
-  margin-inline: auto;
 }
 .feature-list li {
   padding: 8px 0;
@@ -520,28 +566,29 @@ a {
   margin-top: 24px;
 }
 
-/* ── Section furniture ────────────────────────────────────────────────────── */
+/* ── Section furniture ──────────────────────────────────────────────────────
+   All left. Every heading, every standfirst and every list on this page used to be
+   centred inside a centred container, which reads as a pitch deck exported to HTML.
+   The only things still centred are the ones that are genuinely a single object on the
+   line: the screenshots, the arithmetic card, the two CTA bands and the closer. */
 .section-head {
   font-size: 27px;
   line-height: 1.15;
   letter-spacing: -0.02em;
   font-weight: 900;
   margin: 0 0 14px;
-  text-align: center;
 }
 .section-sub {
   color: var(--text-muted);
   font-size: 16px;
   line-height: 1.55;
   max-width: 60ch;
-  margin: 0 auto 32px;
-  text-align: center;
+  margin: 0 0 32px;
 }
 .mini-head {
   font-size: 18px;
   font-weight: 900;
   margin: 40px 0 14px;
-  text-align: center;
 }
 
 /* ── How it works ─────────────────────────────────────────────────────────── */
@@ -550,10 +597,13 @@ a {
   gap: 56px;
   margin-top: 34px;
 }
+/* `start`, not `center`. A caption centred against a 700px-tall phone screen floats in
+   the middle of an empty column and gives every one of the five rows the same dead-centre
+   balance. Top-aligned, the copy hangs off the top edge of the screen it describes. */
 .step {
   display: grid;
   gap: 26px;
-  align-items: center;
+  align-items: start;
 }
 .step-n {
   font-size: 13px;
@@ -594,6 +644,10 @@ a {
    max-width, still centred by the auto margins) breaks the cycle. */
 .step .shot {
   width: 100%;
+  /* The hero screenshot keeps its drop shadow because it is the one image on the page
+     doing lifting. Repeating the identical 44px shadow on five more tiles down the page
+     turned them into a set of matching product cards. Border only here. */
+  box-shadow: none;
 }
 
 /* ── The numbers ──────────────────────────────────────────────────────────── */
@@ -720,8 +774,25 @@ a {
 .tier {
   position: relative;
 }
+/* Wider (see .pricing's column ratio) AND taller. Three boxes of exactly equal weight
+   with one of them merely outlined in orange is the stock pricing table; giving the tier
+   most shops buy real physical size is the cheapest honest way out of it. */
 .tier-featured {
   border-color: var(--accent);
+  padding: 30px 24px 28px;
+}
+/* Enterprise, demoted out of the grid to a line of text. It is a conversation, not a
+   plan you can start from this page, and it used to be a fourth identical card whose
+   button dead-ended in a mailto. */
+.tier-enterprise {
+  margin: 18px 0 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+.tier-enterprise a {
+  color: var(--accent);
+  font-weight: 700;
 }
 .tier-flag {
   position: absolute;
@@ -842,12 +913,19 @@ a {
     font-size: 34px;
   }
 
+  /* Uneven on purpose. A 50/50 split repeated five times reads as a grid the page was
+     poured into; 1.18/0.82 reads as a column of text with a photograph beside it. The
+     ratio flips with the order swap below so the copy column is the wide one in both
+     directions. */
   .step {
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
+    grid-template-columns: 1.18fr 0.82fr;
+    gap: 44px;
   }
   /* Alternate which side the phone sits on so the eye zig-zags down the page
      instead of running down one rail. */
+  .step:nth-child(even) {
+    grid-template-columns: 0.82fr 1.18fr;
+  }
   .step:nth-child(even) .step-copy {
     order: 2;
   }
@@ -871,8 +949,8 @@ a {
   .trust-list {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 34px;
-    max-width: none;
+    column-gap: 44px;
+    max-width: 860px;
   }
 
   .closer {
@@ -1053,6 +1131,12 @@ table.roles td {
   line-height: 1.55;
 }
 
+/* .section-label no longer carries the 56px that used to push this section off the
+   block above it (see its rule near the top of this file), so the section owns it. */
+.doc #questions {
+  margin-top: 48px;
+}
+
 .callout {
   background: var(--bg-elev2);
   border-left: 3px solid var(--accent);
@@ -1175,18 +1259,21 @@ table.roles td {
 }
 .reassure li {
   position: relative;
-  padding-left: 24px;
+  padding-left: 20px;
   color: var(--text-muted);
   font-size: 14px;
   line-height: 1.5;
 }
+/* Drawn, not typed — same reason as .cost-list li::before. */
 .reassure li::before {
-  content: '✓';
+  content: '';
   position: absolute;
   left: 0;
-  top: 0;
-  color: var(--accent);
-  font-weight: 900;
+  top: 7px;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--accent);
 }
 
 /* ── Conversion furniture (hero trust row, mid-page CTAs, sticky phone bar) ── */
@@ -1212,27 +1299,62 @@ table.roles td {
   color: var(--text-muted);
 }
 
-/* Proof strip — the first thing after the fold. Three short credentials before
-   any argument, because belief has to be bought before the ask. Single column on
-   a phone; three across once there is room. */
-.proof-strip {
+/* Proof — the first thing after the fold, before any argument.
+   This was three matching cards in a repeat(3, 1fr) grid with an identical orange
+   left-rule on each. Two problems with that: it is the layout every generated landing
+   page reaches for, and it gave the one real credential the product owns exactly as much
+   weight as a bullet about file formats. The yard is now the block, with its own mark on
+   it, and the other two credentials are plain text beside it at a deliberately smaller
+   1fr against 1.25fr. */
+.proof {
+  display: grid;
+  gap: 30px;
+  margin-top: 6px;
+}
+/* Philbrook's own mark, on its own white ground. It is somebody else's logo: it does not
+   get inverted, recoloured or keyed out to suit a dark page, so it sits on a white plate
+   the way it does on their signage. The plate is also the only white object on the site,
+   which is the point — it reads as a borrowed artefact rather than as page furniture. */
+.yard-plate {
+  background: #fff;
+  border-radius: 10px;
+  padding: 13px 17px;
+  width: max-content;
+  max-width: 100%;
+}
+.yard-plate img {
+  display: block;
+  width: 200px;
+  height: auto;
+}
+.yard-head {
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 900;
+  margin: 20px 0 8px;
+}
+.yard-body {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 53ch;
+}
+.proof-lines {
   list-style: none;
   padding: 0;
-  margin: 34px 0 0;
+  margin: 0;
   display: grid;
-  gap: 12px;
+  gap: 20px;
+  align-content: start;
 }
-.proof-strip li {
-  background: var(--bg-elev);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
-  border-radius: 12px;
-  padding: 14px 16px;
+.proof-lines li {
   font-size: 15px;
-  line-height: 1.5;
+  line-height: 1.55;
   color: var(--text-muted);
 }
-.proof-strip li b {
+.proof-lines li b {
   color: var(--text);
   display: block;
   margin-bottom: 2px;
@@ -1245,7 +1367,7 @@ table.roles td {
   white-space: nowrap;
 }
 
-/* The cost-of-the-moment list. Three concrete lines instead of a paragraph —
+/* The cost-of-the-moment list. Four concrete lines instead of a paragraph —
    a man reading this in his own shop scans, he does not read. */
 .cost-list {
   list-style: none;
@@ -1261,20 +1383,36 @@ table.roles td {
   line-height: 1.5;
   color: var(--text);
 }
+/* Was `content: '—'`. An em-dash is the one character this site is not allowed to print,
+   and using a text glyph as a bullet system (this, plus ✓ in two other places) is its own
+   generated-template tell. Drawn, not typed. */
 .cost-list li::before {
-  content: '—';
+  content: '';
   position: absolute;
   left: 0;
-  color: var(--accent);
-  font-weight: 900;
+  top: 11px;
+  width: 11px;
+  height: 2px;
+  background: var(--accent);
 }
 
-/* Objection cards. These answer the three things he says to the screen, in the
-   open. The same answers existed inside a collapsed <details> at ~7,000px, where
-   they were answering questions he had already bounced on. */
+/* The three things he says to the screen, answered in the open rather than inside a
+   collapsed <details> at ~7,000px. They were three matching cards across a
+   repeat(3, 1fr) grid — the third such grid on one page — which also squeezed each
+   answer into a third of the width. Now: rows, one hairline between them, no card
+   chrome, and a readable measure. */
 .objections {
   display: grid;
-  gap: 14px;
+  gap: 0;
+  max-width: 74ch;
+}
+.obj {
+  padding: 22px 0;
+  border-top: 1px solid var(--border);
+}
+.obj:first-child {
+  border-top: none;
+  padding-top: 2px;
 }
 .obj-q {
   font-size: 18px;
@@ -1289,12 +1427,13 @@ table.roles td {
   line-height: 1.6;
 }
 @media (min-width: 760px) {
-  .proof-strip {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+  .proof {
+    grid-template-columns: 1.25fr 1fr;
+    gap: 52px;
+    align-items: start;
   }
-  .objections {
-    grid-template-columns: repeat(3, 1fr);
+  .yard-plate img {
+    width: 232px;
   }
 }
 
@@ -1307,19 +1446,13 @@ table.roles td {
   gap: 8px 18px;
   margin-top: 16px;
 }
+/* No tick. The ✓ glyph was doing decorative work in three separate places on this site,
+   which is a costume, not an icon system — and here it also ate 20px of a line that has
+   to stay on one row on a 390px phone. */
 .hero-trust span {
-  position: relative;
-  padding-left: 20px;
   font-size: 14px;
   font-weight: 700;
   color: var(--text-muted);
-}
-.hero-trust span::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
-  color: var(--accent);
-  font-weight: 900;
 }
 
 .mid-cta {

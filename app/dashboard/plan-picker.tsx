@@ -139,14 +139,18 @@ export function PlanPicker({
           <span className="po-price" style={{ fontSize: 18 }}>
             Custom
           </span>
-          <span className="po-seats">Contact us →</span>
+          <span className="po-seats">Email us</span>
         </a>
       </div>
 
       {error && <div className="error" style={{ marginTop: 12 }}>{error}</div>}
+      {/* This used to open "We collect a card at signup", which was never true:
+          0028_provision_new_shop.sql starts the trial without touching Stripe and there is
+          no card field on the signup form. The card is entered here, at the end, and only
+          if a plan is picked. */}
       <p className="note" style={{ textAlign: 'left', marginTop: 12 }}>
-        We collect a card at signup, but nothing is charged during the 14 days. Cancel before it
-        ends and you pay nothing.{' '}
+        No card was taken at signup. Picking a plan here is where you enter one, and nothing is
+        charged until the 14 days are up.{' '}
         {interval === 'year' ? 'Billed yearly after the trial.' : 'Billed monthly after the trial.'}{' '}
         Add-on seats $15/tech.
       </p>

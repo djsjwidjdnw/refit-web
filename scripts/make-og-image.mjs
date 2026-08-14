@@ -85,8 +85,13 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
     <text x="0" y="382" font-family="${FONT}" font-size="52" font-weight="700"
           letter-spacing="-1" fill="${TEXT}">${esc('You pay for that teardown twice.')}</text>
 
-    <text x="0" y="440" font-family="${FONT}" font-size="30" font-weight="400"
-          fill="${MUTED}">${esc('An iPhone app. Your techs tag every part. Anyone free can put it back.')}</text>
+    <!-- Two lines, and two sentences of different lengths. It was three short sentences
+         of the same shape on one line, which is the cadence a reader clocks as
+         machine-written before he has finished reading it. -->
+    <text x="0" y="438" font-family="${FONT}" font-size="30" font-weight="400"
+          fill="${MUTED}">${esc('An iPhone app. Your techs tag every part as it comes off.')}</text>
+    <text x="0" y="480" font-family="${FONT}" font-size="30" font-weight="400"
+          fill="${MUTED}">${esc('Anyone free can put it back.')}</text>
   </g>
 
   <!-- Footer strip -->
@@ -94,7 +99,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
   <text x="88" y="566" font-family="${FONT}" font-size="28" font-weight="600"
         fill="${TEXT}">refit-iq.com</text>
   <text x="1112" y="566" text-anchor="end" font-family="${FONT}" font-size="28"
-        font-weight="400" fill="${MUTED}">${esc('iPhone · works offline · export anytime')}</text>
+        font-weight="400" fill="${MUTED}">${esc('14 days free. No card.')}</text>
   <rect x="88" y="596" width="360" height="4" rx="2" fill="url(#rule)"/>
 </svg>`;
 

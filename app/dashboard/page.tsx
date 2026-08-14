@@ -33,7 +33,7 @@ function graceDaysLeft(ent: Entitlement | undefined): number | null {
 
 function shopName(m: MemberRow): string {
   const s = m.shops;
-  return (Array.isArray(s) ? s[0]?.name : s?.name) ?? '—';
+  return (Array.isArray(s) ? s[0]?.name : s?.name) ?? 'Unnamed shop';
 }
 function trialDaysLeft(iso: string | null): number | null {
   if (!iso) return null;
@@ -123,7 +123,7 @@ export default async function Dashboard({
               <h1 style={{ fontSize: 26, fontWeight: 900, margin: '8px 0 4px' }}>Request sent</h1>
               <p style={{ color: 'var(--text-muted)', marginTop: 0 }}>
                 Waiting for an admin at <strong>{pendingJoin.shop_name}</strong> to approve you.
-                You&apos;ll get access as soon as they do — nothing else is needed.
+                You&apos;ll get access as soon as they do. Nothing else is needed.
               </p>
             </>
           ) : invitedButUnresolved ? (
@@ -139,9 +139,9 @@ export default async function Dashboard({
           ) : (
             // Step-4 guard: signed in but no shop yet → create-shop state (not an error).
             <>
-              <h1 style={{ fontSize: 26, fontWeight: 900, margin: '8px 0 4px' }}>Welcome to ReFitIQ</h1>
+              <h1 style={{ fontSize: 26, fontWeight: 900, margin: '8px 0 4px' }}>Create your shop</h1>
               <p style={{ color: 'var(--text-muted)', marginTop: 0 }}>
-                You&apos;re signed in — create your shop to start your free trial.
+                You&apos;re signed in. Name your shop and the 14-day trial starts.
               </p>
               <CreateShop defaultName={shopNameHint} />
             </>
@@ -150,17 +150,17 @@ export default async function Dashboard({
           <>
             <h1 style={{ fontSize: 26, fontWeight: 900, margin: '8px 0 4px' }}>Your shop</h1>
             <p style={{ color: 'var(--text-muted)', marginTop: 0 }}>
-              Manage your plan, seats, and billing below.
+              Plan, seats and billing. The work itself happens in the app.
             </p>
             {anyTrialing && <NextSteps />}
             {checkout === 'success' && (
               <div className="trial-banner" style={{ marginTop: 12 }}>
-                Thanks — your plan is being activated. It may take a moment to appear here.
+                Your plan is being activated. It may take a moment to appear here.
               </div>
             )}
             {checkout === 'cancelled' && (
               <p className="note" style={{ textAlign: 'left', marginTop: 8 }}>
-                Checkout cancelled — your trial is unchanged.
+                Checkout cancelled. Your trial is unchanged.
               </p>
             )}
             <div style={{ display: 'grid', gap: 16, marginTop: 16 }}>
@@ -179,22 +179,22 @@ export default async function Dashboard({
                     {trialing && (
                       <div className="trial-banner">
                         {days != null && days > 0
-                          ? `Trial — ${days} day${days === 1 ? '' : 's'} left`
-                          : 'Trial ended — choose a plan to keep going'}
+                          ? `${days} day${days === 1 ? '' : 's'} left in your trial`
+                          : 'Trial ended. Choose a plan to keep going'}
                       </div>
                     )}
                     {status === 'past_due' && (
                       <div className="trial-banner">
                         {pastDueReadOnly
-                          ? 'Payment failed — your shop is now read-only. Update your card below to restore full access.'
-                          : `Payment failed — update your card${
+                          ? 'Payment failed. Your shop is read-only. Update your card below to restore full access.'
+                          : `Payment failed. Update your card${
                               graceLeft && graceLeft > 0 ? ` within ${graceLeft} day${graceLeft === 1 ? '' : 's'}` : ''
                             } to keep full access.`}
                       </div>
                     )}
                     {status === 'canceled' && (
                       <div className="trial-banner">
-                        Subscription canceled — your shop is read-only. Reactivate below to restore
+                        Subscription canceled. Your shop is read-only. Reactivate below to restore
                         full access.
                       </div>
                     )}
@@ -232,7 +232,7 @@ export default async function Dashboard({
                             "0 / 0" reads as "you cannot invite anyone" — which is not what
                             it means. Show the count without a misleading denominator. */}
                         {!ent
-                          ? '—'
+                          ? 'Not set'
                           : totalSeats && totalSeats > 0
                             ? `${ent.seats_used} / ${totalSeats}`
                             : `${ent.seats_used} (unlimited during the trial)`}

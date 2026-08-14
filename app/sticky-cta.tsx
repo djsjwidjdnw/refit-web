@@ -53,7 +53,7 @@ export function StickyCta() {
           <span>No card</span>
         </div>
         {/* Same label as every other CTA on the page. It used to read "Start free trial"
-            while the rest said "Start free — no card", which re-introduced the exact card
+            while the rest said "Start free, no card", which re-introduced the exact card
             anxiety the other buttons exist to remove. */}
         <Link
           href="/signup?src=sticky"
@@ -61,7 +61,7 @@ export function StickyCta() {
           tabIndex={show ? undefined : -1}
           onClick={() => trackFunnel('cta_click', { src: 'sticky' })}
         >
-          Start free — no card
+          Start free, no card
         </Link>
       </div>
     </div>

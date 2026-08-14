@@ -32,7 +32,7 @@ export const revalidate = 300;
 //      COSTS TO TRY. Every block in the hero is budgeted in px against a 390px phone —
 //      see the comments on each. Adding one line to the H1 costs 40px of screenshot.
 //
-//   3. BELIEF BEFORE ASK. The one real credential (Philbrooks) used to sit at y≈5,467
+//   3. BELIEF BEFORE ASK. The one real credential (Philbrook's) used to sit at y≈5,467
 //      on an 8,408px page, and the $130,000 arithmetic came before any reason to think
 //      the product existed. Proof now lands immediately after the fold; the numbers come
 //      after the product has been shown.
@@ -41,6 +41,20 @@ export const revalidate = 300;
 //      may UNDERSTATE it. The old FAQ said a card is collected when the trial starts.
 //      That was never true (0028_provision_new_shop.sql opens the trial without touching
 //      Stripe) and it threw away the strongest honest offer the business owns.
+//
+// ── HOUSE STYLE FOR EVERY USER-VISIBLE STRING ON THIS SITE ──────────────────────────
+// The reader is a boatyard owner in his fifties. He can smell copy that was generated,
+// and the site took real backlash for exactly that. So:
+//
+//   • NO em-dashes or en-dashes in rendered text. Full stops and commas only. (These
+//     code comments are not rendered, so they still use them.)
+//   • No "here's the thing", "actually", "no more guessing", "seamlessly", "streamline",
+//     "empower", "unlock", "elevate", "game-changer", and no "it isn't just X, it's Y".
+//   • No lists of three in rhythm. Two things, or four, or a sentence.
+//   • No rhetorical questions as headings.
+//   • Short declarative sentences. Trade words. Real numbers and real parts.
+//   • And do not overcorrect into fake yard-talk. He spots forced folksiness as fast as
+//     he spots a language model. Neutral, direct, unpolished but competent.
 // ─────────────────────────────────────────────────────────────────────────────────────
 
 type Tier = {
@@ -98,7 +112,7 @@ const STEPS = [
     n: '01',
     title: 'The sticker goes on before it comes off',
     body:
-      'Photograph the part where it sits and put a QR sticker on it. The photo, the area and the fasteners are on the record there and then — nothing to type, and it works with no signal.',
+      'Photograph the part where it sits and put a QR sticker on it. The photo, the area and the fasteners land on the record there and then. Nothing to type, and it works with no signal.',
     src: '/shots/tag-part-2.webp',
     w: 1206,
     h: 2415,
@@ -108,7 +122,7 @@ const STEPS = [
     n: '02',
     title: 'In March, point the camera at it',
     body:
-      '“If found please scan” is on the part itself. Scan the sticker and its file opens — the photograph of where it came off, the notes, the fasteners it takes. No hunting through a job number.',
+      '“If found please scan” is printed on the sticker. Scan it and the part’s file opens, with the photograph of where it came off and the fasteners it takes. Nobody has to work out which job number it was filed under.',
     src: '/shots/scan-part-2.webp',
     w: 1206,
     h: 2010,
@@ -116,9 +130,9 @@ const STEPS = [
   },
   {
     n: '03',
-    title: 'The spec, not somebody’s memory',
+    title: 'Every fastener, written down',
     body:
-      'Remove and reinstall, or replace. The exact fasteners — 8x, bolt, 12-24, 3/8in, Phillips, 316 stainless. A voice note from whoever pulled it. All of it on the part, all of it searchable.',
+      'Remove and reinstall, or replace. The fasteners are written out in full: 8x, bolt, 12-24, 3/8in, Phillips, 316 stainless. Whoever pulled it can leave a voice note. All of it stays on the part and all of it is searchable.',
     src: '/shots/part-record-2.webp',
     w: 1206,
     h: 2415,
@@ -128,7 +142,7 @@ const STEPS = [
     n: '04',
     title: '64 to replace, and where every one of them is',
     body:
-      'Everything flagged for replacement or refurbishment lands on one list — to order, ordered, received — with tracking against it. Your parts desk stops chasing techs for photographs.',
+      'Everything flagged for replacement or refurbishment lands on one list, filtered by to order, ordered and received, with tracking numbers against it. Your parts desk stops chasing techs for photographs.',
     src: '/shots/order-list-2.webp',
     w: 1206,
     h: 2415,
@@ -136,9 +150,9 @@ const STEPS = [
   },
   {
     n: '05',
-    title: 'Hand over a document, not a story',
+    title: 'The customer gets a file',
     body:
-      'The whole job — or just the 183 items flagged for replacement — out to Excel, CSV, JSON, PDF or a web report, photos attached. It goes to the share sheet: email it, or drop it in Files.',
+      'Send out the whole job, or just the 183 items flagged for replacement. Excel, CSV, JSON, PDF or a web report, photos attached. It goes to the share sheet, so you email it or drop it in Files.',
     src: '/shots/export-job-2.webp',
     w: 1206,
     h: 2180,
@@ -152,15 +166,15 @@ const STEPS = [
 const OBJECTIONS = [
   {
     q: '“My guys won’t use it.”',
-    a: 'There is nothing to learn and nothing to type to capture a part: photograph it, put a sticker on it, or take the number the app assigns. It works offline below decks and syncs when the phone finds signal. The job at the top of this page is a real one — 458 parts logged that way by the crew who pulled them.',
+    a: 'Capturing a part is a photograph and a sticker. If you have no stickers the app numbers the bag for you. There is nothing to type. It runs offline below decks and syncs when the phone finds signal. The job at the top of this page is a real one: 458 parts logged that way by the crew who pulled them.',
   },
   {
     q: '“We already have a system.”',
-    a: 'If that system is bags, masking tape and a tech’s memory, this is the same system with the photos attached and the counts kept. If you run something that already survives the tech who tore the boat down leaving mid-refit, you don’t need us.',
+    a: 'If that system is bags and masking tape, this is the same thing with the photographs attached and the counts kept. If you already run something that survives the tech who tore the boat down leaving mid-refit, you don’t need us.',
   },
   {
     q: '“Too expensive.”',
-    a: 'It is $99 to $299 a month for the whole shop — not per photo, not per boat, not per hull. At $130 an hour that is under one billable hour a month on Lite, and under three on Max. The owner/admin seat is free, and extra techs are $15.',
+    a: 'It is $99 to $299 a month for the whole shop, not per photo and not per boat. At $130 an hour that is under one billable hour a month on Lite and under three on Max. The owner or admin seat is free. Extra techs are $15.',
   },
 ];
 
@@ -170,11 +184,11 @@ const OBJECTIONS = [
 const FAQ = [
   {
     q: 'When do you ask for a card?',
-    a: 'Never during the trial. There is no card field on the signup form — a shop name, a work email and a password, and you’re in. We do not ask for a card at any point in the 14 days. You enter one only if you pick a plan at the end.',
+    a: 'Never during the trial. The signup form asks for a shop name, a work email and a password. There is no card field on it, and we do not ask for a card at any point in the 14 days. You enter one only if you pick a plan at the end.',
   },
   {
     q: 'How many techs can I add during the trial?',
-    a: 'All of them. Seats are unlimited for the 14 days, so you never have to pick a plan just to try it properly. Afterwards the owner/admin seat is free on every plan.',
+    a: 'All of them. Seats are unlimited for the 14 days, so you never have to pick a plan just to try it properly. Afterwards the owner or admin seat is free on every plan.',
   },
   {
     q: 'Does it work where there is no signal?',
@@ -190,11 +204,11 @@ const FAQ = [
   },
   {
     q: 'What happens to the record if we stop paying?',
-    a: 'Nothing is deleted. The shop goes read-only — you can still open and export every job — and you can export the full record, photos included, at any time. The export is a plain file you keep, not a format that needs ReFitIQ to open.',
+    a: 'Nothing is deleted. The shop goes read-only, and you can still open and export every job with the photos attached. The export is a plain file you keep. It opens without ReFitIQ.',
   },
   {
-    q: 'How long before a crew is actually using it?',
-    a: 'It is a phone app with a camera and a job list. The first capture takes about a minute; there is no implementation project.',
+    q: 'How long before the crew is using it?',
+    a: 'It is a phone app with a camera and a job list. The first capture takes about a minute. There is no implementation project.',
   },
 ];
 
@@ -242,6 +256,11 @@ function Shot({
 
 export default async function Home() {
   const tiers = await getTiers();
+  // Enterprise is a conversation, not a self-serve tier, and rendering it as a fourth
+  // identical card was the single most template-looking thing on the page: four evenly
+  // weighted boxes, one of which cannot be bought. It comes out of the grid and becomes a
+  // line of text underneath, which is also what it honestly is.
+  const selfServe = tiers.filter((t) => t.plan !== 'enterprise');
 
   return (
     <>
@@ -276,11 +295,10 @@ export default async function Home() {
             or it takes a third line and spends 40px of screenshot on itself. */}
         <section className="container hero-split">
           <div className="hero-copy">
-            {/* The tagline finally renders as text. It is a required brand element and
-                until now appeared nowhere on the site at any size: the nav uses the
-                'compact' lockup, which is the one with the tagline band cropped off. It
-                also happens to state the entire mechanism in three trade verbs, so it
-                earns the eyebrow slot that already existed at zero fold cost. */}
+            {/* The company's own tagline, set as the eyebrow. It survives the no-lists-of-
+                three rule because it is not copy: it is the strapline printed on the
+                'long' logo lockup, which the nav crops off. Rewriting it here would put
+                the site out of step with the app icon and the App Store listing. */}
             <div className="eyebrow">Track. Tag. Reinstall.</div>
             {/* The owner is not the one guessing at the bulkhead — he is the one paying
                 for the hour it takes, twice: once to take the boat apart, and again to
@@ -289,33 +307,35 @@ export default async function Home() {
                 refit that ran long. It also still works when the image hasn't painted,
                 which matters on cellular inside the Facebook browser. */}
             <h1>You pay for that teardown twice.</h1>
-            {/* Three jobs in three sentences. "An iPhone app" names the category at word
-                two — it used to appear nowhere in the first screen, so you could not tell
-                whether this was software, a label supplier or a consultancy. "for
-                boatyard owners" puts the audience in 17px type where it reads at arm's
-                length, and carries no headcount bound: "5-20 techs" would disqualify the
-                three-tech shop that is a paying Lite customer. The third sentence is the
-                outcome, and it is the best 25px on the page. */}
+            {/* "An iPhone app" names the category at word two — it used to appear nowhere
+                in the first screen, so you could not tell whether this was software, a
+                label supplier or a consultancy. "for boatyard owners" puts the audience in
+                17px type where it reads at arm's length, and carries no headcount bound:
+                "5-20 techs" would disqualify the three-tech shop that is a paying Lite
+                customer. It was three short sentences of identical shape, which is the
+                rhythm the reader recognises as machine-written; it is now two, of
+                different lengths, saying the same thing. It also has to stay under about
+                110 characters: a fourth line here costs 25px of screenshot below the fold,
+                measured, not computed. */}
             <p>
-              An iPhone app for boatyard owners. Your techs tag every part. Anyone free can put it
-              back.
+              An iPhone app for boatyard owners. Your techs tag every part as it comes off, so
+              anyone free can put it back.
             </p>
             <div className="hero-cta">
               {/* The card fear lives inside the button, because cold social traffic reads
                   "start your free trial" as "enter your card". This is true without
                   qualification: the trial opens without Stripe being touched. */}
-              <CtaLink src="hero">Start free — no card</CtaLink>
+              <CtaLink src="hero">Start free, no card</CtaLink>
             </div>
             {/* A checkable number, not a promise — "All (458)" is printed in the
                 screenshot 60px below it, so the highest-read line of micro-copy on the
                 page verifies itself. */}
-            <div className="hero-note">458 parts off one refit — the screen below.</div>
-            {/* 38 characters. The previous line ran 62 and wrapped to two rows, which is
-                the exact bug the .hero-trust comment in globals.css exists to prevent.
-                Price belongs here: for a trade buyer at this size it qualifies rather
-                than deters, and a page with no number invites the "call us" assumption. */}
+            <div className="hero-note">458 parts off one refit, on the screen below.</div>
+            {/* 38 characters, and it has to stay under about 45: the previous line ran 62,
+                wrapped to two rows, and cost 50px of fold. "per shop" is deliberately not
+                here — it is stated four times further down, and it does not fit. */}
             <div className="hero-trust">
-              <span>14 days free · then $99–299/mo per shop</span>
+              <span>14 days free, then $99 to $299 a month.</span>
             </div>
           </div>
           <div className="hero-shot">
@@ -335,40 +355,71 @@ export default async function Home() {
             {/* Where a skeptic looks for it: directly under the screen he is being asked
                 to believe in. */}
             <div className="shot-caption">Real screens from the app. Not mockups.</div>
-            <div className="hero-meta">iPhone · works offline · export anytime</div>
+            <div className="hero-meta">iPhone. Works below decks with no signal.</div>
           </div>
         </section>
 
-        {/* ── PROOF STRIP ──────────────────────────────────────────────────────────
-            The first thing after the fold, before any argument. Philbrooks is the one
+        {/* ── PROOF ────────────────────────────────────────────────────────────────
+            The first thing after the fold, before any argument. Philbrook's is the one
             real third-party credential this product has and it used to be spent as a
-            clause in a body paragraph at y≈5,467 on an 8,408px page. Belief before ask. */}
-        <section className="container">
-          <ul className="proof-strip">
-            <li>
-              <b>Built with a working yard.</b> Developed alongside Philbrooks Boatyard in
-              British Columbia, on real refits.
-            </li>
-            <li>
-              <b>It is on the App Store.</b> A shipping iPhone app with a public listing — the
-              same screens you are looking at here.{' '}
-              <OutboundLink href={APP_STORE_URL} dest="app-store" className="proof-link">
-                See the listing →
-              </OutboundLink>
-            </li>
-            <li>
-              <b>The record stays yours.</b> Export the whole job with the photos attached,
-              whether you keep paying or not. Nothing is deleted if you stop.
-            </li>
-          </ul>
+            clause in a body paragraph at y≈5,467 on an 8,408px page. Belief before ask.
+
+            It used to be one of three matching cards in a repeat(3, 1fr) grid, which is
+            the layout every generated landing page reaches for and which also gave the
+            yard exactly as much weight as a bullet about file formats. It is now the
+            block, with their mark on it, and the other two credentials are two plain
+            lines beside it. Deliberately uneven: 1.25fr against 1fr.
+
+            WORDING IS LOAD-BEARING. Philbrook's is not an investor, a reseller or a
+            partner, and nothing here may read as an endorsement. It says where the work
+            was done and who it was done with, and then says plainly what they are not.
+            Do not "tighten" that last sentence out. */}
+        <section className="container s-proof">
+          <div className="proof">
+            <div className="proof-yard">
+              <div className="yard-plate">
+                {/* Their mark, on its own white ground. It is somebody else's logo, so it
+                    does not get inverted, recoloured or keyed out to suit a dark page.
+                    Cut by scripts/make-philbrooks-logo.mjs from the app repo's
+                    assets/philbrooks-logo.jpeg, which prints the w/h below. */}
+                <Image
+                  src="/brand/philbrooks.png"
+                  alt="Philbrook’s Boatyard Ltd."
+                  width={460}
+                  height={172}
+                  sizes="(min-width: 760px) 230px, 200px"
+                />
+              </div>
+              <h2 className="yard-head">Built in a working yard.</h2>
+              <p className="yard-body">
+                ReFitIQ was built at Philbrook&apos;s Boatyard in Sidney, BC, on refits their crew
+                was running at the time. The technicians who use it are the ones who said what it
+                had to do. Their name is here because that is where the work happened. They do not
+                sell it and have no stake in the company.
+              </p>
+            </div>
+            <ul className="proof-lines">
+              <li>
+                <b>It is on the App Store.</b> The listing is public, and the screens on this page
+                come out of it.{' '}
+                <OutboundLink href={APP_STORE_URL} dest="app-store" className="proof-link">
+                  See the listing
+                </OutboundLink>
+              </li>
+              <li>
+                <b>The record stays yours.</b> Export the whole job with the photos attached,
+                whether you keep paying or not. Nothing is deleted if you stop.
+              </li>
+            </ul>
+          </div>
         </section>
 
         {/* ── THE PROBLEM ──────────────────────────────────────────────────────────
             Concrete and short: the scene he has personally paid for, in his own calendar
             language. Four lines, not four paragraphs — a man reading this in his own shop
-            scans, he does not read. */}
-        <section className="container">
-          <div className="section-label">The problem</div>
+            scans, he does not read. Sits tight under the proof block on purpose; the
+            uniform 56px between every section was part of what read as generated. */}
+        <section className="container s-problem">
           <h2 className="section-head">That boat goes back together in March.</h2>
           <ul className="cost-list">
             <li>The tech who tore it down is on another hull.</li>
@@ -384,8 +435,7 @@ export default async function Home() {
         </section>
 
         {/* ── HOW IT WORKS ─────────────────────────────────────────────────────── */}
-        <section id="how" className="container">
-          <div className="section-label">How it works</div>
+        <section id="how" className="container s-how">
           <h2 className="section-head">Five steps, done at the boat</h2>
           <div className="steps">
             {STEPS.map((s) => (
@@ -400,20 +450,25 @@ export default async function Home() {
             ))}
           </div>
           <div className="mid-cta" data-sticky-stop>
-            <CtaLink src="after-how">Start free — no card</CtaLink>
-            <span className="mid-cta-note">14 days, every feature, every tech. No card.</span>
+            <CtaLink src="after-how">Start free, no card</CtaLink>
+            <span className="mid-cta-note">
+              14 days with every feature and every tech on your crew. No card.
+            </span>
           </div>
         </section>
 
         {/* ── OBJECTIONS ───────────────────────────────────────────────────────────
             Answered in the open rather than inside a <details> at 7,000px. A collapsed
-            answer to an unspoken objection is the same as no answer at all. */}
-        <section className="container">
-          <div className="section-label">Straight answers</div>
+            answer to an unspoken objection is the same as no answer at all.
+
+            Three matching cards in a repeat(3, 1fr) grid became three rows separated by a
+            hairline. Same words, one less identical grid on the page, and the answers get
+            a readable measure instead of a third of the width each. */}
+        <section className="container s-obj">
           <h2 className="section-head">What you’re probably thinking</h2>
           <div className="objections">
             {OBJECTIONS.map((o) => (
-              <div key={o.q} className="obj card">
+              <div key={o.q} className="obj">
                 <div className="obj-q">{o.q}</div>
                 <p className="obj-a">{o.a}</p>
               </div>
@@ -429,13 +484,12 @@ export default async function Home() {
             total 25% larger than what this section's own calculator prints 300px below
             it. A numerate owner discounts the credible figure along with the invented
             ones. One assumption, stated, and it matches the calculator exactly. */}
-        <section className="container">
-          <div className="section-label">The numbers</div>
-          <h2 className="section-head">The part we can actually count</h2>
+        <section className="container s-numbers">
+          <h2 className="section-head">The part we can count</h2>
           <p className="section-sub">
             Twenty minutes a tech a day, spent looking for something that came off this boat.
-            That is the only assumption on this page — change it below if it’s wrong. We can’t
-            put a number on the callback you couldn’t argue, so we haven’t tried.
+            That is the only assumption on this page. Change it below if it is wrong. We have not
+            tried to put a number on the callback you couldn’t argue.
           </p>
 
           <div className="bottomline card">
@@ -448,57 +502,57 @@ export default async function Home() {
             <div>
               <div className="bl-k">ReFitIQ, 10 techs</div>
               <div className="bl-v">$2,148</div>
-              <div className="bl-d">Pro, $179/mo — two months less if billed annually</div>
+              <div className="bl-d">Pro at $179 a month. Two months less billed annually.</div>
             </div>
           </div>
 
           <h3 className="mini-head">Run your own numbers</h3>
           <RoiCalculator />
           <p className="note">
-            Assumptions, not case-study results — we have no measured customer results to show
-            you. Labour only: it excludes the duplicate orders you stop placing and the slips
+            These are assumptions. We have no measured customer results to show you. The figure
+            is labour only. It leaves out the duplicate orders you stop placing and the slips
             that free up sooner.
           </p>
           <div className="mid-cta" data-sticky-stop>
-            <CtaLink src="after-roi">Start free — no card</CtaLink>
-            <span className="mid-cta-note">14 days, every feature, every tech. No card.</span>
+            <CtaLink src="after-roi">Start free, no card</CtaLink>
+            <span className="mid-cta-note">
+              14 days with every feature and every tech on your crew. No card.
+            </span>
           </div>
         </section>
 
         {/* ── WHO IT'S FOR ─────────────────────────────────────────────────────── */}
-        <section className="container">
-          <div className="section-label">Who it&apos;s for</div>
+        <section className="container s-who">
           <h2 className="section-head">Shops where boats come apart</h2>
           <ul className="feature-list trust-list">
             <li>
-              <b>Refit and repower yards</b> — teardowns that run for months and change hands
+              <b>Refit and repower yards.</b> Teardowns that run for months and change hands
               between techs.
             </li>
             <li>
-              <b>Service departments</b> — where the same boat comes back next season and nobody
+              <b>Service departments.</b> The same boat comes back next season and nobody
               remembers the last job.
             </li>
             <li>
-              <b>Yards whose customers ask for proof</b> — hand the owner or the surveyor a
-              document, not a story.
+              <b>Yards whose customers ask for proof.</b> The owner or the surveyor gets a file
+              with the photographs in it.
             </li>
             <li>
-              <b>Shops that need it locked down</b> — admins, team leads, techs and parts staff
+              <b>Shops that need it locked down.</b> Admins, team leads, techs and parts staff
               are separate roles, each assigned to the boats they work.
             </li>
           </ul>
         </section>
 
         {/* ── PRICING ──────────────────────────────────────────────────────────── */}
-        <section className="container">
-          <div className="section-label">Plans</div>
-          <h2 className="section-head">Priced per shop, not per photo</h2>
+        <section className="container s-pricing">
+          <h2 className="section-head">One price for the whole shop</h2>
           <p className="section-sub">
-            Every plan starts with the same 14 days free, no card, and every tech on your crew —
-            seats are unlimited until you pick a plan.
+            Every plan starts with the same 14 days free. No card, and every tech on your crew.
+            Seats are unlimited until you pick a plan.
           </p>
           <div className="pricing">
-            {tiers.map((t) => (
+            {selfServe.map((t) => (
               <div key={t.plan} className={`card tier${t.plan === 'pro' ? ' tier-featured' : ''}`}>
                 {t.plan === 'pro' && <div className="tier-flag">Most shops</div>}
                 <div className="tier-name">{t.display_name}</div>
@@ -516,35 +570,33 @@ export default async function Home() {
                   {t.seats_included != null ? `${t.seats_included} techs included` : 'Custom seats'}
                 </div>
                 <div style={{ marginTop: 18 }}>
-                  {t.plan === 'enterprise' ? (
-                    // "Contact us" used to land on the signup form, which is not what it
-                    // says it does. Enterprise is a conversation, so send them to one.
-                    <a
-                      className="btn btn-ghost btn-block"
-                      href="mailto:support@refit-iq.com?subject=ReFitIQ%20Enterprise%20enquiry"
-                    >
-                      Talk to us
-                    </a>
-                  ) : (
-                    <CtaLink
-                      src={`pricing-${t.plan}`}
-                      className={`btn btn-block ${t.plan === 'pro' ? 'btn-primary' : 'btn-ghost'}`}
-                    >
-                      Start free — no card
-                    </CtaLink>
-                  )}
+                  <CtaLink
+                    src={`pricing-${t.plan}`}
+                    className={`btn btn-block ${t.plan === 'pro' ? 'btn-primary' : 'btn-ghost'}`}
+                  >
+                    Start free, no card
+                  </CtaLink>
                 </div>
               </div>
             ))}
           </div>
+          {/* Enterprise, out of the grid. "Contact us" used to land on the signup form,
+              which is not what it says it does. */}
+          <p className="tier-enterprise">
+            More than 20 techs, or more than one location. Email{' '}
+            <a href="mailto:support@refit-iq.com?subject=ReFitIQ%20Enterprise%20enquiry">
+              support@refit-iq.com
+            </a>{' '}
+            and we will price it.
+          </p>
           <p className="note">
-            Annual billing is two months free. Add-on seats are $15 a tech. The owner/admin seat
-            is free and doesn’t use one of your paid seats.
+            Annual billing is two months free and add-on seats are $15 a tech. The owner or admin
+            seat is free and doesn’t use one of your paid seats.
           </p>
         </section>
 
         {/* ── FAQ ──────────────────────────────────────────────────────────────── */}
-        <section className="container">
+        <section className="container s-faq">
           <div className="section-label">Questions</div>
           <div className="faq">
             {FAQ.map((f, i) => (
@@ -561,18 +613,20 @@ export default async function Home() {
         {/* ── CLOSING CTA ──────────────────────────────────────────────────────────
             One button. The "Sign in" that used to sit beside it was a competing tap at
             the exact moment of the decision, on traffic that is entirely cold. It is
-            still in the nav and the footer for the people who do have an account. */}
-        <section className="container">
+            still in the nav and the footer for the people who do have an account.
+            This is the one block on the page that is still centred, and it is the only
+            one that should be. */}
+        <section className="container s-closer">
           <div className="closer card" data-sticky-stop>
             <h2>Start on your next teardown.</h2>
             <p>
-              No card — not at signup, not on day thirteen. Fourteen days, every feature, and
-              every tech on your crew. If you stop, nothing is deleted: the shop goes read-only
-              and you can still export every job, photos attached, as a file that opens without
-              us.
+              No card at signup and no card on day thirteen. Fourteen days with every feature and
+              every tech on your crew. If you stop, nothing is deleted. The shop goes read-only
+              and you can still export every job with the photos attached, as a file that opens
+              without us.
             </p>
             <div className="row hero-cta">
-              <CtaLink src="closer">Start free — no card</CtaLink>
+              <CtaLink src="closer">Start free, no card</CtaLink>
             </div>
             <p className="closer-note">
               Signing up takes a shop name, a work email and a password. About a minute.

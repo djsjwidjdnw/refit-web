@@ -69,7 +69,7 @@ export async function POST(request: Request) {
   // trialing shop (plan 'none', no subscription yet) can still check out.
   if (ent?.stripe_subscription_id) {
     return NextResponse.json(
-      { error: 'This shop already has a subscription — use Manage billing to change plans.' },
+      { error: 'This shop already has a subscription. Use Manage billing to change plans.' },
       { status: 409 },
     );
   }

@@ -80,7 +80,7 @@ export default async function JoinPage({ params }: { params: Promise<{ code: str
             <div className="card">
               <p style={{ margin: 0 }}>
                 You’ll get access to <strong>{req.shop_name}</strong> as soon as an admin approves
-                you in the ReFitIQ app. You can close this page — nothing else is needed.
+                you in the ReFitIQ app. You can close this page. Nothing else is needed.
               </p>
             </div>
           </>

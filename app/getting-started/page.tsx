@@ -5,12 +5,18 @@ import { BrandMark } from '../brand-mark';
 export const metadata: Metadata = {
   title: 'Getting started with ReFitIQ',
   description:
-    'Everything your shop needs in the first 15 minutes: create your shop, get the app, invite your crew, set roles, and start capturing.',
+    'What to do in the first 15 minutes. Create the shop, get the app on a phone, invite your crew, set their roles, then start capturing on the boat.',
 };
 
 // Source of truth for this page is ReFit_Getting_Started.md — substance is unchanged,
 // only the formatting is adapted for the web (numbered step cards, a real roles table,
 // collapsible questions). Keep the two in sync if either changes.
+//
+// Copy rules for every rendered string here are the ones written out at the top of
+// app/page.tsx: no em-dashes, no lists of three in rhythm, no rhetorical headings, plain
+// declarative sentences. Step 1 in particular used to say "We collect a card at signup",
+// which was never true — 0028_provision_new_shop.sql opens the trial without touching
+// Stripe and there is no card field on the form. Do not let that claim back in.
 
 // The iOS listing is live and free; verified against the iTunes lookup API. There is no
 // Google Play listing yet, so this page says iPhone and nothing else.
@@ -19,7 +25,7 @@ const APP_STORE_URL = 'https://apps.apple.com/us/app/refit/id6772761520';
 const ROLES = [
   {
     role: 'Admin',
-    can: 'Everything — approves requests, manages the shop and billing',
+    can: 'Everything. Approves requests, manages the shop and handles billing',
   },
   {
     role: 'Team Lead',
@@ -42,11 +48,11 @@ const QUESTIONS = [
   },
   {
     q: 'Can two people work the same boat at once?',
-    a: "Yes. Assign the boat to whoever's on it — everyone's captures land in the same record.",
+    a: "Yes. Assign the boat to whoever is on it. Everyone's captures land in the same record.",
   },
   {
     q: 'What happens when the trial ends?',
-    a: 'Pick a plan on refit-iq.com. If a payment fails you get 14 days’ grace, then the app goes read-only — you can still view and export everything, you just can’t add new work until it’s sorted. Your records are never deleted.',
+    a: 'Pick a plan on refit-iq.com. If a payment fails you get 14 days’ grace, then the app goes read-only. You can still view and export everything, you just can’t add new work until it’s sorted. Your records are never deleted.',
   },
   {
     q: 'What if a tech leaves?',
@@ -65,7 +71,7 @@ const STEPS = [
   { n: 4, title: "Set everyone's role", id: 'set-roles' },
   { n: 5, title: 'Create your first job', id: 'first-job' },
   { n: 6, title: 'Start capturing', id: 'start-capturing' },
-  { n: 7, title: 'Reassembly — the payoff', id: 'reassembly' },
+  { n: 7, title: 'Reassembly', id: 'reassembly' },
   { n: 8, title: 'Export the record', id: 'export' },
 ];
 
@@ -89,7 +95,7 @@ export default function GettingStarted() {
       <main className="container doc">
         <div className="eyebrow">Getting started</div>
         <h1 className="doc-h1">Getting started with ReFitIQ</h1>
-        <p className="doc-lede">Everything your shop needs in the first 15 minutes.</p>
+        <p className="doc-lede">What to do in the first 15 minutes.</p>
 
         <nav className="toc" aria-label="On this page">
           <div className="toc-label">On this page</div>
@@ -110,14 +116,14 @@ export default function GettingStarted() {
             <span className="step-num">1</span> Create your shop
           </h2>
           <p>
-            Sign up at <strong>refit-iq.com</strong> with your email and shop name. That creates
-            your shop and starts your <strong>14-day free trial</strong> — full access, every
-            feature, cancel anytime. We collect a card at signup, but nothing is charged during
-            the 14 days. Cancel before it ends and you pay nothing.
+            Sign up at <strong>refit-iq.com</strong> with your shop name, a work email and a
+            password. That creates your shop and starts a <strong>14-day free trial</strong> with
+            every feature switched on. There is no card field on the form and we do not ask for a
+            card at any point in the 14 days.
           </p>
           <p>
-            The person who signs up becomes the <strong>Admin</strong> (that&apos;s you — the owner
-            or manager). Admins don&apos;t take up a paid seat.
+            The person who signs up becomes the <strong>Admin</strong>. That is you, the owner or
+            the manager. An admin doesn&apos;t take up a paid seat.
           </p>
           <Link href="/signup?src=gs-step1" className="btn btn-primary">
             Start your free trial
@@ -151,13 +157,12 @@ export default function GettingStarted() {
             <span className="step-num">3</span> Invite your crew
           </h2>
           <p>
-            In the app, open <strong>Team</strong>. Tap <strong>Invite</strong> — you&apos;ll get a
-            link and a QR code.
+            In the app, open <strong>Team</strong> and tap <strong>Invite</strong>. You get a link
+            and a QR code.
           </p>
           <p>
-            Send the link to a tech (text, email, whatever) or let them scan the QR. They sign up,
-            and you&apos;ll see them under <strong>Pending</strong> — tap <strong>Approve</strong>{' '}
-            and they&apos;re in.
+            Send the link to a tech, or let them scan the QR. When they sign up they show up under{' '}
+            <strong>Pending</strong>. Tap <strong>Approve</strong> and they are in.
           </p>
         </section>
 
@@ -165,10 +170,7 @@ export default function GettingStarted() {
           <h2>
             <span className="step-num">4</span> Set everyone&apos;s role
           </h2>
-          <p>
-            This is the step most shops skip, and it&apos;s the one that makes ReFitIQ work the way
-            you want.
-          </p>
+          <p>Most shops skip this step. It decides who sees which boats.</p>
           <p>
             In <strong>Team</strong>, set each person&apos;s role:
           </p>
@@ -191,8 +193,8 @@ export default function GettingStarted() {
             </table>
           </div>
           <p>
-            New people default to <strong>Tech</strong>. Change it any time — search the list, tap
-            the role.
+            New people default to <strong>Tech</strong>. To change it, search the list and tap the
+            role.
           </p>
         </section>
 
@@ -201,12 +203,12 @@ export default function GettingStarted() {
             <span className="step-num">5</span> Create your first job
           </h2>
           <p>
-            Tap <strong>+</strong> to add a boat. Give it a name, vessel type, and a note about the
-            work (e.g. <em>&ldquo;Insurance job — repair fire damage, full paint&rdquo;</em>).
+            Tap <strong>+</strong> to add a boat. Give it a name, a vessel type and a note about
+            the work (e.g. <em>&ldquo;Insurance job, repair fire damage and full paint&rdquo;</em>).
           </p>
           <p>
-            Add your <strong>areas</strong> — foredeck, cockpit, flybridge, hull, whatever fits the
-            boat. This is how everything gets organized, and it&apos;s what makes reassembly fast
+            Add your <strong>areas</strong>: foredeck, cockpit, flybridge, hull, whatever fits the
+            boat. Everything you capture files under an area, which is what makes reassembly fast
             later.
           </p>
         </section>
@@ -222,34 +224,35 @@ export default function GettingStarted() {
             </li>
             <li>
               Choose <strong>Single item</strong> (one piece plus its fasteners) or{' '}
-              <strong>Component</strong> (a door or window holding several pieces — each gets its
+              <strong>Component</strong> (a door or window holding several pieces, each with its
               own code).
             </li>
-            <li>Label it — scan a QR sticker, let the app auto-number it, or type your own.</li>
+            <li>Label it. Scan a QR sticker, let the app auto-number it, or type your own.</li>
             <li>
               <strong>Photograph it.</strong> Close up, fill the frame, get any markings.
             </li>
             <li>
-              Add the <strong>fasteners</strong> — size, type, material, quantity. Add{' '}
-              <strong>gaskets</strong> the same way.
+              Add the <strong>fasteners</strong>: size, type, material, quantity.{' '}
+              <strong>Gaskets</strong> go in the same way.
             </li>
             <li>
               Add a <strong>voice note</strong> if there&apos;s something the photos won&apos;t say.
             </li>
           </ol>
           <p>
-            Flag anything that needs replacing as you go. Do it once, properly, and reassembly takes
-            care of itself.
+            Flag anything that needs replacing as you go. Done properly on the way out, reassembly
+            reads straight off the record.
           </p>
         </section>
 
         <section className="step-block" id="reassembly">
           <h2>
-            <span className="step-num">7</span> Reassembly — the payoff
+            <span className="step-num">7</span> Reassembly
           </h2>
           <p>
-            Open the job and work the record in reverse. Every part, every fastener, every photo,
-            organized by area and component. No guessing which bolt went where.
+            Open the job and work the record in reverse. Every part is filed under its area and its
+            component, with the fasteners and the photographs on it. Nobody has to remember which
+            bolt went where.
           </p>
           <p>
             Use the <strong>fastener totals</strong> (broken out by area) to order what you need,
@@ -266,14 +269,15 @@ export default function GettingStarted() {
           </p>
           <ul className="feature-list doc-list">
             <li>
-              <b>Excel / CSV / JSON / PDF</b> — the full job record
+              <b>Excel, CSV, JSON or PDF.</b> The full job record.
             </li>
             <li>
-              <b>All photos (.zip)</b> — every photo, in folders by area and part
+              <b>All photos (.zip).</b> Every photo, in folders by area and part.
             </li>
           </ul>
           <p>
-            Save it to your own system, email it to the customer, or file it for the insurance job.
+            Save it to your own system or email it to the customer. It is the document an insurer
+            asks for.
           </p>
           <div className="callout">
             <strong>One tip:</strong> if you&apos;re saving the photo zip to SharePoint or OneDrive,{' '}
@@ -304,13 +308,13 @@ export default function GettingStarted() {
 
         <section>
           <div className="closer card">
-            <h2>Need help?</h2>
+            <h2>If you get stuck</h2>
             <p>
               Email{' '}
               <a href="mailto:support@refit-iq.com" style={{ color: 'var(--accent)' }}>
                 support@refit-iq.com
-              </a>{' '}
-              — a marine mechanic who uses ReFitIQ every day will answer.
+              </a>
+              . A marine mechanic who uses ReFitIQ every day will answer.
             </p>
             <div className="row hero-cta">
               <Link href="/signup?src=gs-footer" className="btn btn-primary">
