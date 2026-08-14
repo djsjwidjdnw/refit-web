@@ -191,7 +191,7 @@ const OBJECTIONS = [
 const FAQ = [
   {
     q: 'What does the trial cost?',
-    a: 'Nothing. Fourteen days with every feature switched on and every tech on your crew. You are not billed during it, and you are not billed after it unless you pick a plan. Signing up takes a shop name, a work email and a password, and that is all it takes.',
+    a: 'Nothing. Fourteen days with every feature switched on and every tech on your crew. You are not billed during it, and you are not billed after it unless you pick a plan. Signing up takes a shop name, a work email and a password.',
   },
   {
     q: 'How many techs can I add during the trial?',
@@ -286,7 +286,7 @@ export default async function Home() {
               Sign in
             </Link>
             <CtaLink src="nav" className="btn btn-primary nav-trial">
-              Start free trial
+              Start your free trial
             </CtaLink>
           </div>
         </nav>
@@ -307,7 +307,7 @@ export default async function Home() {
                 'long' logo lockup, which the nav crops off. Rewriting it here would put
                 the site out of step with the app icon and the App Store listing. */}
             <div className="eyebrow">Track. Tag. Reinstall.</div>
-            {/* The owner is not the one guessing at the bulkhead — he is the one paying
+            {/* The owner is not the one at the bulkhead — he is the one paying
                 for the hour it takes, twice: once to take the boat apart, and again to
                 work out what the first payment bought. It is a claim about his own
                 experience, so it needs no proof from us; he supplies it from the last
@@ -684,7 +684,7 @@ export default async function Home() {
           <div className="footer-links">
             <Link href="/getting-started">Getting started</Link>
             <Link href="/login">Sign in</Link>
-            <Link href="/signup?src=footer">Start free trial</Link>
+            <Link href="/signup?src=footer">Start your free trial</Link>
             <a href="mailto:support@refit-iq.com">support@refit-iq.com</a>
           </div>
           <div>© {new Date().getFullYear()} ReFitIQ · refit-iq.com</div>

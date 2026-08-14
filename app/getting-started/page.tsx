@@ -88,7 +88,7 @@ export default function GettingStarted() {
               Sign in
             </Link>
             <Link href="/signup?src=gs-nav" className="btn btn-primary">
-              Start free trial
+              Start your free trial
             </Link>
           </div>
         </nav>

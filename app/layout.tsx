@@ -15,13 +15,21 @@ export const metadata: Metadata = {
   // No dashes in either string. Both used to open "ReFitIQ — you pay for…", and an
   // em-dash in the tab title and the social card is the first thing a reader who has
   // decided the site was machine-written sees.
+  //
+  // The two descriptions are NOT the same string, and the difference is deliberate.
+  // `description` is what Google prints, and it truncates around 160 characters: at 194
+  // the Philbrook's credit was cut mid-phrase and "14 days free" fell off the end of the
+  // snippet entirely, so the search result carried no offer at all. This one is 163 and
+  // the offer survives the cut. openGraph.description is what Facebook and iMessage
+  // render, they allow 200-300, and that is where 109 of 122 visitors come from, so it
+  // keeps the fuller credit. Measure before lengthening either.
   title: 'ReFitIQ. You pay for that teardown twice.',
   description:
-    'An iPhone app for boatyard owners. Your techs tag every part as it comes off, so whoever puts it back has what he needs. Built at Philbrook’s Boatyard with the technicians who use it. 14 days free.',
+    'An iPhone app for boatyard owners. Your techs tag every part as it comes off, so whoever puts it back has what he needs. Built at Philbrook’s Boatyard. 14 days free.',
   openGraph: {
     title: 'ReFitIQ. You pay for that teardown twice.',
     description:
-      'An iPhone app for boatyard owners. Your techs tag every part as it comes off, so whoever puts it back has what he needs. Built at Philbrook’s Boatyard with the technicians who use it. 14 days free.',
+      'An iPhone app for boatyard owners. Your techs tag every part as it comes off, so whoever puts it back has what he needs. Built at Philbrook’s Boatyard in Sidney, BC, with the technicians who use it. 14 days free.',
     url: 'https://refit-iq.com',
     siteName: 'ReFitIQ',
     type: 'website',
