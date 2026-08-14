@@ -55,7 +55,17 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
     const { data, error: signUpErr } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: meta },
+      options: {
+        data: meta,
+        // Where the confirmation link comes back to. Omitting this falls back to the
+        // project's Site URL, which is the bare domain, so the link would land on the
+        // marketing page with an unexchanged code in the query string and the account
+        // would never activate. Inert today: confirmation is OFF, so no mail is sent and
+        // signUp returns a session in the same tick (see the data.session branch below).
+        // `window.location.origin` rather than a constant so Vercel preview deployments
+        // come back to themselves instead of to production.
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
     });
     if (signUpErr) {
       setBusy(false);

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
+import { postAuthPath } from '@/lib/auth/post-auth-path';
 import { BrandMark } from '../brand-mark';
 
 export default function LoginPage() {
@@ -25,9 +26,10 @@ export default function LoginPage() {
       return;
     }
     // Route platform operators to their cockpit; everyone else to the customer dashboard.
-    // is_platform_operator is DB-gated and evaluated for the just-signed-in session's uid.
-    const { data: isOperator } = await supabase.rpc('is_platform_operator');
-    router.push(isOperator === true ? '/ops' : '/dashboard');
+    // Shared with app/auth/callback/route.ts so a password sign-in and an email-link
+    // sign-in land in the same place. is_platform_operator is DB-gated and evaluated for
+    // the just-signed-in session's uid.
+    router.push(await postAuthPath(supabase));
     router.refresh();
   }
 
