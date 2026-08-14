@@ -304,6 +304,29 @@ a {
   color: var(--text-muted);
   margin-bottom: 6px;
 }
+/* Label on the left, "Forgot your password?" on the right, sharing the line the label
+   already occupied. Baseline-aligned rather than centred because the label is 13px and
+   the link is 13px but they are different weights, and centring made the link sit a
+   pixel high. Costs no vertical space at all, which is the point: the reset link has to
+   be next to the field the reader is stuck on, not below the button. */
+.field-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.field-row label {
+  margin-bottom: 6px;
+}
+.field-link {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.field-link:hover {
+  opacity: 0.85;
+}
 .input {
   width: 100%;
   padding: 12px 14px;

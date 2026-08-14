@@ -6,16 +6,16 @@ import { postAuthPath, safeNext } from '@/lib/auth/post-auth-path';
 // ─────────────────────────────────────────────────────────────────────────────────────
 // THE ROUTE EVERY SUPABASE EMAIL LINK LANDS ON.
 //
-// WHY IT EXISTS EVEN THOUGH NOTHING USES IT TODAY.
-// Email confirmation is currently OFF on the project (mailer_autoconfirm: true), so
-// supabase.auth.signUp() returns a session in the same tick and no mail is ever sent.
-// That is the only reason signups work. Turning that one switch on in the Supabase
-// dashboard sends every new user a link, and until this file existed that link landed on
-// a 404: no session, no shop, no error anybody could see. Not a degraded signup, a
-// silently total one. This route is the thing that makes that switch safe to flip.
+// WHAT USES IT.
+// PASSWORD RECOVERY, today, for real: /forgot-password sends people here and this route
+// hands them to /reset-password with a live session. That is the live traffic.
 //
-// It is inert while confirmation is off. Nothing calls it, and the signup path is
-// untouched.
+// EMAIL CONFIRMATION, not yet. Confirmation is OFF on the project
+// (mailer_autoconfirm: true), so signUp() returns a session in the same tick and no mail
+// is sent. That is the only reason signups work. Turning that one switch on sends every
+// new user a link, and before this file existed that link landed on a 404: no session, no
+// shop, no error anybody could see. Not a degraded signup, a silently total one. This
+// route is what makes that switch safe to flip.
 //
 // TWO LINK SHAPES, ONE ROUTE.
 // Which parameters actually arrive depends on the email template, which is a dashboard
@@ -37,9 +37,12 @@ import { postAuthPath, safeNext } from '@/lib/auth/post-auth-path';
 // reads cookies through lib/supabase/server.ts, so exchangeCodeForSession can see it.
 // That is also why the exchange has to happen server-side here and not on a page.
 //
-// MIDDLEWARE. middleware.ts DOES run on this path (the matcher only excludes static
-// assets), but updateSession only ever redirects an unauthenticated request away from
-// /dashboard and /ops, so it passes this through untouched. Do not add /auth to a guard.
+// MIDDLEWARE. `auth/` is EXCLUDED from the matcher in middleware.ts, and must stay
+// excluded. updateSession calls getUser(), and on a stale session cookie that deletes the
+// PKCE code verifier out of the very request this handler is about to read. The reasoning
+// is written out in full at the matcher itself. Do not add /auth back to it, and do not
+// put a gate in front of this route: an unauthenticated visitor is exactly who arrives
+// here.
 // ─────────────────────────────────────────────────────────────────────────────────────
 
 // Supabase's own list, so a template using any of them resolves. Anything else is
@@ -118,11 +121,31 @@ export async function GET(request: NextRequest) {
   // lib/supabase/server.ts. In a Route Handler that store is writable, so the Set-Cookie
   // headers ride out on the redirect below. (The try/catch in that file is there for
   // Server Components, where it is not.)
-  const { error } = code
+  const { data, error } = code
     ? await supabase.auth.exchangeCodeForSession(code)
     : await supabase.auth.verifyOtp({ type: type as EmailOtpType, token_hash: tokenHash! });
 
   if (error) return fail(error.code ?? 'exchange_failed', error.message);
+
+  // A recovery link has to end on the form that sets a new password, never on the
+  // dashboard: the whole reason the reader is here is that they cannot produce a
+  // password, and dropping them into the app signed-in leaves them one refresh away from
+  // being locked out again.
+  //
+  // Detected two ways because the two link shapes carry it differently, and only one of
+  // them is a query parameter we control:
+  //   token_hash flow  ?type=recovery is right there in the URL.
+  //   PKCE ?code= flow  no type in the URL at all. auth-js stores the flow's intent
+  //                     alongside the code verifier and hands it back as `redirectType`
+  //                     on the exchange result. It is real at runtime but absent from the
+  //                     published types, hence the cast.
+  // The ?next= that app/forgot-password writes would usually cover this on its own. This
+  // does not depend on it, so the flow still lands correctly if that query is ever
+  // dropped between here and GoTrue.
+  const isRecovery =
+    type === 'recovery' ||
+    (data as { redirectType?: string | null } | null)?.redirectType === 'recovery';
+  if (isRecovery) return send(new URL('/reset-password', base));
 
   // Same destination logic as the password form at /login, deliberately shared so the two
   // doors cannot drift. `next` is sanitised against open redirects; see safeNext.
