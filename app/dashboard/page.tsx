@@ -186,8 +186,8 @@ export default async function Dashboard({
                     {status === 'past_due' && (
                       <div className="trial-banner">
                         {pastDueReadOnly
-                          ? 'Payment failed. Your shop is read-only. Update your card below to restore full access.'
-                          : `Payment failed. Update your card${
+                          ? 'Payment failed. Your shop is read-only. Update your billing below to restore full access.'
+                          : `Payment failed. Update your billing${
                               graceLeft && graceLeft > 0 ? ` within ${graceLeft} day${graceLeft === 1 ? '' : 's'}` : ''
                             } to keep full access.`}
                       </div>

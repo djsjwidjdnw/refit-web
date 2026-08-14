@@ -14,9 +14,11 @@ export const metadata: Metadata = {
 //
 // Copy rules for every rendered string here are the ones written out at the top of
 // app/page.tsx: no em-dashes, no lists of three in rhythm, no rhetorical headings, plain
-// declarative sentences. Step 1 in particular used to say "We collect a card at signup",
-// which was never true — 0028_provision_new_shop.sql opens the trial without touching
-// Stripe and there is no card field on the form. Do not let that claim back in.
+// declarative sentences, and NO MENTION OF PAYMENT CARDS in either direction. Step 1 used
+// to say "We collect a card at signup", which was never true — 0028_provision_new_shop.sql
+// opens the trial without touching Stripe. The correction that replaced it leaned the
+// other way ("there is no card field on the form"), which reads as defensive. Say what the
+// trial is instead: 14 days, every feature, you only pay if you pick a plan.
 
 // The iOS listing is live and free; verified against the iTunes lookup API. There is no
 // Google Play listing yet, so this page says iPhone and nothing else.
@@ -118,8 +120,8 @@ export default function GettingStarted() {
           <p>
             Sign up at <strong>refit-iq.com</strong> with your shop name, a work email and a
             password. That creates your shop and starts a <strong>14-day free trial</strong> with
-            every feature switched on. There is no card field on the form and we do not ask for a
-            card at any point in the 14 days.
+            every feature switched on. Nothing is billed during the 14 days, and you only pay if
+            you pick a plan at the end.
           </p>
           <p>
             The person who signs up becomes the <strong>Admin</strong>. That is you, the owner or
@@ -170,7 +172,7 @@ export default function GettingStarted() {
           <h2>
             <span className="step-num">4</span> Set everyone&apos;s role
           </h2>
-          <p>Most shops skip this step. It decides who sees which boats.</p>
+          <p>This is the step that decides who sees which boats. It takes about a minute.</p>
           <p>
             In <strong>Team</strong>, set each person&apos;s role:
           </p>
@@ -240,7 +242,7 @@ export default function GettingStarted() {
             </li>
           </ol>
           <p>
-            Flag anything that needs replacing as you go. Done properly on the way out, reassembly
+            Flag anything that needs replacing as you go. Capture it on the way out and reassembly
             reads straight off the record.
           </p>
         </section>

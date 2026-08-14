@@ -112,13 +112,13 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
         </p>
         {/* Two lines, not three. The old set was a list of three in rhythm, each with a ✓
             glyph in front of it, which is the shape of a generated pricing page. These
-            two also answer the two things a cold visitor is actually weighing at the
-            moment he looks at a form: what does it cost me to try, and are you about to
-            ask for my card. */}
+            two answer what a cold visitor is weighing at the moment he looks at a form:
+            what the 14 days give him, and when money is ever involved. Say the second one
+            as the offer, never as a denial — see the house-style block in app/page.tsx. */}
         {!joining && (
           <ul className="reassure">
             <li>Every feature for 14 days, with no limit on how many techs you add.</li>
-            <li>No card. There is no card field on this form and we don’t ask during the trial.</li>
+            <li>You only pay if you pick a plan at the end. Cancel before then and that is that.</li>
           </ul>
         )}
         {confirmMsg ? (

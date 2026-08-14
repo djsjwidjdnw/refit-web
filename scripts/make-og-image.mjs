@@ -91,7 +91,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
     <text x="0" y="438" font-family="${FONT}" font-size="30" font-weight="400"
           fill="${MUTED}">${esc('An iPhone app. Your techs tag every part as it comes off.')}</text>
     <text x="0" y="480" font-family="${FONT}" font-size="30" font-weight="400"
-          fill="${MUTED}">${esc('Anyone free can put it back.')}</text>
+          fill="${MUTED}">${esc('Whoever puts it back has what he needs.')}</text>
   </g>
 
   <!-- Footer strip -->
@@ -99,7 +99,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
   <text x="88" y="566" font-family="${FONT}" font-size="28" font-weight="600"
         fill="${TEXT}">refit-iq.com</text>
   <text x="1112" y="566" text-anchor="end" font-family="${FONT}" font-size="28"
-        font-weight="400" fill="${MUTED}">${esc('14 days free. No card.')}</text>
+        font-weight="400" fill="${MUTED}">${esc('14 days free. Cancel anytime.')}</text>
   <rect x="88" y="596" width="360" height="4" rx="2" fill="url(#rule)"/>
 </svg>`;
 

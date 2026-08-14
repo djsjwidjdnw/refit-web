@@ -179,7 +179,9 @@ a {
    under the hero because it is finishing the hero's argument; the problem sits close
    under proof for the same reason; pricing gets real air before it because that is the
    moment the reader is being asked to change activity. Do not flatten these back to one
-   number. */
+   number. .s-proof is the smallest because it sits under the Philbrook's band, which
+   supplies its own 54-80px of bottom padding; it only needs the gap between that rule
+   and the first line of text. */
 .s-proof {
   margin-top: 30px;
 }
@@ -1299,48 +1301,96 @@ table.roles td {
   color: var(--text-muted);
 }
 
-/* Proof — the first thing after the fold, before any argument.
-   This was three matching cards in a repeat(3, 1fr) grid with an identical orange
-   left-rule on each. Two problems with that: it is the layout every generated landing
-   page reaches for, and it gave the one real credential the product owns exactly as much
-   weight as a bullet about file formats. The yard is now the block, with its own mark on
-   it, and the other two credentials are plain text beside it at a deliberately smaller
-   1fr against 1.25fr. */
-.proof {
+/* ── Philbrook's ────────────────────────────────────────────────────────────────
+   The one banded section on the page, and the only full-bleed element anywhere in it.
+   That is what makes it a section rather than a paragraph: it has its own ground, its
+   own rules top and bottom, and its own generous padding, so the eye stops at it on the
+   way past. It earns that because it carries the only third-party name on the site.
+
+   It was a 1.25fr column of a three-up grid, sharing the row with a bullet about file
+   formats. Everything here is bigger than it was: the mark went 200px → 300px, the
+   heading 22px → 34px (the same size as every other section head, because it IS one
+   now), and the section has 80px of air under it instead of 30. */
+.yard-band {
+  margin-top: 34px;
+  padding: 52px 0 54px;
+  background: var(--bg-elev);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.yard {
   display: grid;
-  gap: 30px;
-  margin-top: 6px;
+  gap: 28px;
+  align-items: start;
 }
 /* Philbrook's own mark, on its own white ground. It is somebody else's logo: it does not
    get inverted, recoloured or keyed out to suit a dark page, so it sits on a white plate
    the way it does on their signage. The plate is also the only white object on the site,
-   which is the point — it reads as a borrowed artefact rather than as page furniture. */
+   which is the point — it reads as a borrowed artefact rather than as page furniture.
+   `width: max-content` keeps the plate wrapped to the art instead of stretching across
+   the grid column, and the max-width stops it overflowing a 342px phone container. */
 .yard-plate {
   background: #fff;
-  border-radius: 10px;
-  padding: 13px 17px;
+  border-radius: 12px;
+  padding: 18px 22px;
   width: max-content;
   max-width: 100%;
 }
 .yard-plate img {
   display: block;
-  width: 200px;
+  width: 244px;
+  max-width: 100%;
   height: auto;
 }
 .yard-head {
-  font-size: 22px;
-  line-height: 1.2;
+  font-size: 27px;
+  line-height: 1.15;
   letter-spacing: -0.02em;
   font-weight: 900;
-  margin: 20px 0 8px;
+  margin: 0 0 14px;
 }
-.yard-body {
-  margin: 0;
+.yard-copy p {
   color: var(--text-muted);
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.6;
-  max-width: 53ch;
+  margin: 0 0 14px;
+  max-width: 58ch;
 }
+.yard-copy p:last-child {
+  margin-bottom: 0;
+}
+/* 0,2,0 beats `.yard-copy p` at 0,1,1, so these win without !important. Two lines get
+   full-brightness text: the one that says where it was built, and the one that ties the
+   screenshot at the top of the page to a real job of theirs. The middle paragraph, which
+   is the detail, sits back in muted. */
+.yard-copy .yard-lede {
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1.55;
+  max-width: 52ch;
+}
+.yard-copy .yard-close {
+  color: var(--text);
+}
+@media (min-width: 760px) {
+  .yard-band {
+    margin-top: 44px;
+    padding: 76px 0 80px;
+  }
+  /* `auto 1fr`, not two fractions: the mark is a fixed object and should take exactly
+     its own width, with every remaining pixel going to the copy. */
+  .yard {
+    grid-template-columns: auto 1fr;
+    gap: 60px;
+  }
+  .yard-plate img {
+    width: 300px;
+  }
+  .yard-head {
+    font-size: 34px;
+  }
+}
+
 .proof-lines {
   list-style: none;
   padding: 0;
@@ -1368,7 +1418,8 @@ table.roles td {
 }
 
 /* The cost-of-the-moment list. Four concrete lines instead of a paragraph —
-   a man reading this in his own shop scans, he does not read. */
+   a man reading this in his own shop is scanning for
+   the line that applies to him. */
 .cost-list {
   list-style: none;
   padding: 0;
@@ -1427,13 +1478,11 @@ table.roles td {
   line-height: 1.6;
 }
 @media (min-width: 760px) {
-  .proof {
-    grid-template-columns: 1.25fr 1fr;
-    gap: 52px;
-    align-items: start;
-  }
-  .yard-plate img {
-    width: 232px;
+  /* The two remaining credentials, side by side under the Philbrook's band. They are
+     subordinate to it on purpose, so they get no chrome and no accent rule. */
+  .proof-lines {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
   }
 }
 

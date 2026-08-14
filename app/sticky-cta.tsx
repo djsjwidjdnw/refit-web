@@ -50,18 +50,18 @@ export function StickyCta() {
       <div className="sticky-cta-inner">
         <div className="sticky-cta-copy">
           <strong>14 days free</strong>
-          <span>No card</span>
+          <span>Cancel anytime</span>
         </div>
-        {/* Same label as every other CTA on the page. It used to read "Start free trial"
-            while the rest said "Start free, no card", which re-introduced the exact card
-            anxiety the other buttons exist to remove. */}
+        {/* Must stay identical to the CTA label on the page itself. A bar that follows
+            the reader down 12,000px saying something different from the buttons beside it
+            reads as two different offers. */}
         <Link
           href="/signup?src=sticky"
           className="btn btn-primary"
           tabIndex={show ? undefined : -1}
           onClick={() => trackFunnel('cta_click', { src: 'sticky' })}
         >
-          Start free, no card
+          Start your free trial
         </Link>
       </div>
     </div>
