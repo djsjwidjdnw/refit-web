@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { MetaPixel } from './meta-pixel';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -52,6 +53,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             the custom funnel events in lib/analytics.ts need Pro. */}
         <Analytics />
         <SpeedInsights />
+        {/* NOT cookieless (sets _fbp) — see app/meta-pixel.tsx. */}
+        <MetaPixel />
       </body>
     </html>
   );

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { trackMeta } from '../meta-pixel';
 
 // Shown on /dashboard when a signed-in user has no shop yet (fresh signup, or email
 // confirmation was required so provisioning didn't run at signup). Calls the same
@@ -23,6 +24,9 @@ export function CreateShop({ defaultName }: { defaultName?: string }) {
       setError(error.message);
       return;
     }
+    // The other half of the signup conversion (see signup-form.tsx): this card only exists
+    // when provisioning didn't run at signup, so firing here can never double-count.
+    trackMeta('CompleteRegistration');
     router.refresh();
   }
 

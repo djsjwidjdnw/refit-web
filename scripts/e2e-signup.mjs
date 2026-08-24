@@ -158,12 +158,21 @@ async function teardown() {
 }
 
 // ── The run ───────────────────────────────────────────────────────────────────────────
+// Headed, no --enable-automation, webdriver masked: fbevents.js (app/meta-pixel.tsx)
+// detects automation (navigator.webdriver, HeadlessChrome UA, selenium globals) and then
+// silently drops every send — events still count in fbq.getState() but nothing reaches
+// facebook.com/tr — so the pixel assertions below only mean something with the mask on.
 const b = await chromium.launch({
+  headless: false,
+  ignoreDefaultArgs: ['--enable-automation'],
   executablePath:
     process.env.PLAYWRIGHT_CHROMIUM ||
     'C:/Users/chase/AppData/Local/ms-playwright/chromium-1223/chrome-win64/chrome.exe',
 });
 const page = await b.newPage({ viewport: { width: 390, height: 844 } });
+await page.addInitScript(() => {
+  Object.defineProperty(Object.getPrototypeOf(navigator), 'webdriver', { get: () => false });
+});
 
 const steps = [];
 const mark = (s) => {
@@ -179,6 +188,24 @@ const failedReqs = [];
 page.on('response', (r) => {
   if (r.status() >= 400 && !r.url().includes('favicon')) failedReqs.push(`${r.status()} ${r.url().slice(0, 110)}`);
 });
+// Meta Pixel hits (app/meta-pixel.tsx). fbevents.js sends GET image requests or POST
+// beacons to facebook.com/tr depending on payload size, so check both places for `ev`.
+// Only meaningful against the live host — the pixel is hostname-gated off elsewhere.
+const PIXEL_HOST = /(^|\.)refit-iq\.com$/.test(new URL(BASE).hostname);
+const fbEvents = [];
+page.on('request', (req) => {
+  if (!/facebook\.com\/tr/.test(req.url())) return;
+  const fromUrl = new URL(req.url()).searchParams.get('ev');
+  const fromBody = req.postData() ? new URLSearchParams(req.postData()).get('ev') : null;
+  fbEvents.push(fromUrl || fromBody || '(unknown)');
+});
+// Observe, never deliver: a test signup must not mint a real conversion in the
+// production pixel dataset — Meta has no way to retract an event, and at this site's
+// signup volume each fake CompleteRegistration is a visible distortion of the signal
+// campaigns optimize on. Playwright still emits page.on('request') for aborted routes,
+// so the exactly-once assertion below keeps working. (The aborts show up as noise in
+// the console-errors line; they never reach `failedReqs`, which needs a response.)
+await page.route(/facebook\.com\/tr/, (route) => route.abort());
 
 console.log(`\nE2E against ${BASE}`);
 console.log(`throwaway email: ${EMAIL}`);
@@ -257,6 +284,15 @@ try {
   console.log(`app store link      : ${result.hasAppStoreLink}`);
   console.log(`console errors      : ${consoleErrors.length ? consoleErrors.slice(0, 5).join(' ;; ') : 'none'}`);
   console.log(`failed requests     : ${failedReqs.length ? failedReqs.slice(0, 5).join(' ;; ') : 'none'}`);
+  const regs = fbEvents.filter((e) => e === 'CompleteRegistration').length;
+  if (PIXEL_HOST) {
+    console.log(`meta pixel events   : ${fbEvents.join(', ') || 'NONE'} (delivery aborted, attempts only)`);
+    console.log(`CompleteRegistration: ${regs} ${regs === 1 ? '✓ (exactly once)' : '!! expected exactly 1'}`);
+    if (regs !== 1) process.exitCode = 1;
+  } else {
+    console.log(`meta pixel events   : gated off on ${new URL(BASE).hostname} (expected none; saw ${fbEvents.length ? fbEvents.join(', ') : 'none'})`);
+    if (fbEvents.length) process.exitCode = 1;
+  }
 
   await page.screenshot({ path: `e2e-dashboard-${STAMP}.png`, fullPage: true });
 } finally {

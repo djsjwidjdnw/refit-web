@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { trackFunnel, ctaSource } from '@/lib/analytics';
+import { trackMeta } from '../meta-pixel';
 import { BrandMark } from '../brand-mark';
 
 // Two modes, decided by whether an invite code was carried in via /signup?join=<code>
@@ -94,7 +95,15 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
         // The trial starts inside provision_new_shop, so a clean return is the moment the
         // funnel actually converts. On failure the dashboard's CreateShop card recovers it.
         trackFunnel(provisionErr ? 'signup_failed' : 'shop_created', { src: ctaSource() });
-        if (!provisionErr) trackFunnel('trial_active', { src: ctaSource() });
+        // Meta gets the conversion at the same moment — a provisioned shop, not a submitted
+        // form. Not fired in JOIN mode (a tech joining an existing shop is not a new trial),
+        // and not on failure: the CreateShop recovery card on /dashboard fires it instead,
+        // and a user only ever reaches that card when this fire didn't happen, so each
+        // converted signup registers exactly once.
+        if (!provisionErr) {
+          trackFunnel('trial_active', { src: ctaSource() });
+          trackMeta('CompleteRegistration');
+        }
         router.push('/dashboard');
       }
       router.refresh();
