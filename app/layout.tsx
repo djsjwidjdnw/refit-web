@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'ReFitIQ. You pay for that teardown twice.',
     description:
-      'An iPhone app for shop owners. Your techs tag every part as it comes off, so whoever puts it back has what he needs. Built at Philbrook’s Boatyard in Sidney, BC, with the technicians who use it. 14 days free.',
+      'An iPhone app for shop owners. Your techs tag every part as it comes off, so whoever puts it back has what he needs. Built at Philbrook’s Boatyard, and used in marine, automotive, heavy equipment and aviation shops. 14 days free.',
     url: 'https://refit-iq.com',
     siteName: 'ReFitIQ',
     type: 'website',

@@ -69,10 +69,12 @@ export const revalidate = 300;
 //     the Philbrook's credit, the screenshots, the alt text describing them, the boat in
 //     the logo. Those are photographs of a real job at a real yard, and neutering them
 //     would trade the one checkable thing on the page for nothing.
-//   • DO NOT CLAIM CUSTOMERS IN TRADES WE DO NOT HAVE. The product was built in a
-//     boatyard and every shop on it today is marine. The page may say the method is not
-//     specific to boats, because that is true. It may not say it is in use in car or
-//     aircraft shops, because that is not.
+//   • THE FOUR TRADES ARE A STATEMENT OF FACT, NOT A TARGET LIST. ReFitIQ is in use in
+//     marine, automotive, heavy equipment and aviation shops, so the page says so plainly
+//     and without hedging. Note that shops.industry will NOT corroborate this: it only
+//     records what a shop picked at signup, the picker shipped after most of them were
+//     created, and it defaults every pre-0048 row to marine. Do not "correct" this copy
+//     from a query against that column. If the mix ever changes, change the sentence.
 // ─────────────────────────────────────────────────────────────────────────────────────
 
 type Tier = {
@@ -461,9 +463,9 @@ export default async function Home() {
         <section className="container s-proof">
           <ul className="proof-lines">
             <li>
-              <b>It was built on boats. It is not about boats.</b> A teardown is a teardown.
-              The part came off something, it has to go back on, and the man who takes it off
-              is not always the man who puts it back.
+              <b>Built in a boatyard. Used in shops across marine, automotive, heavy equipment
+              and aviation.</b> A teardown is a teardown. The part came off something, it has to
+              go back on, and the man who takes it off is not always the man who puts it back.
             </li>
             <li>
               <b>It is on the App Store.</b> The listing is public, and the screens on this page
@@ -594,11 +596,15 @@ export default async function Home() {
             the house style forbids a list of three in rhythm — and four is also how many
             trades there are.
 
-            Each bullet is written from that trade's own calendar, in its own nouns. None
-            of them claims a customer: they describe the work, which is a claim about the
-            reader's shop, not about ours. */}
+            Each bullet is written from that trade's own calendar, in its own nouns, and the
+            section is in the present tense throughout: these are trades ReFitIQ is running in,
+            not trades it would suit. */}
         <section className="container s-who">
-          <h2 className="section-head">Shops where things come apart</h2>
+          <h2 className="section-head">The trades it runs in</h2>
+          <p className="section-sub">
+            Four of them. The teardown is the same job in all four, and so is the part nobody
+            can find in March.
+          </p>
           <ul className="feature-list trust-list">
             <li>
               <b>Boatyards.</b> Refits and repowers that run past the season and change hands
@@ -606,14 +612,14 @@ export default async function Home() {
             </li>
             <li>
               <b>Restoration and body shops.</b> A car goes on the rotisserie in one year and
-              comes off it in another, and the trim that came off it is in bags on a shelf.
+              comes off it in another, and the trim is in bags on a shelf the whole time.
             </li>
             <li>
-              <b>Heavy equipment.</b> An excavator stripped to the frame, where every pin and
-              shim has to go back exactly where it came from.
+              <b>Heavy equipment yards.</b> An excavator stripped to the frame, where every pin
+              and shim goes back exactly where it came from.
             </li>
             <li>
-              <b>Aircraft maintenance.</b> Work that has to be evidenced afterwards, with a
+              <b>Aircraft maintenance.</b> Work that gets evidenced afterwards, with a
               photograph of the part in place and the fasteners it took.
             </li>
           </ul>
