@@ -43,8 +43,10 @@ export const revalidate = 300;
 //      Stripe.
 //
 // ── HOUSE STYLE FOR EVERY USER-VISIBLE STRING ON THIS SITE ──────────────────────────
-// The reader is a boatyard owner in his fifties. He can smell copy that was generated,
-// and the site took real backlash for exactly that. So:
+// The reader is a tradesman in his fifties who owns the shop: a boatyard, a restoration
+// or body shop, a heavy-equipment yard, an aircraft maintenance outfit. Same man in all
+// four. He can smell copy that was generated, and the site took real backlash for exactly
+// that. So:
 //
 //   • NO em-dashes or en-dashes in rendered text. Full stops and commas only. (These
 //     code comments are not rendered, so they still use them.)
@@ -61,6 +63,16 @@ export const revalidate = 300;
 //   • Short declarative sentences. Trade words. Real numbers and real parts.
 //   • And do not overcorrect into fake yard-talk. He spots forced folksiness as fast as
 //     he spots a language model. Neutral, direct, unpolished but competent.
+//   • TRADE-NEUTRAL IN THE COPY, MARINE IN THE PROOF. Every claim is written so a car
+//     restorer, an excavator shop and an aircraft outfit read themselves into it: job,
+//     teardown, part, fastener, shop. But every PROOF asset stays exactly what it is —
+//     the Philbrook's credit, the screenshots, the alt text describing them, the boat in
+//     the logo. Those are photographs of a real job at a real yard, and neutering them
+//     would trade the one checkable thing on the page for nothing.
+//   • DO NOT CLAIM CUSTOMERS IN TRADES WE DO NOT HAVE. The product was built in a
+//     boatyard and every shop on it today is marine. The page may say the method is not
+//     specific to boats, because that is true. It may not say it is in use in car or
+//     aircraft shops, because that is not.
 // ─────────────────────────────────────────────────────────────────────────────────────
 
 type Tier = {
@@ -172,15 +184,15 @@ const STEPS = [
 const OBJECTIONS = [
   {
     q: '“One more thing for my crew to do.”',
-    a: 'Capturing a part is a photograph and a sticker. If you have no stickers the app numbers the bag for you. There is nothing to type. It runs offline below decks and syncs when the phone finds signal. The job at the top of this page is a real one: 458 parts logged that way by the crew who pulled them.',
+    a: 'Capturing a part is a photograph and a sticker. If you have no stickers the app numbers the bag for you. There is nothing to type. It runs offline anywhere in the shop and syncs when the phone finds signal. The job at the top of this page is a real one: 458 parts logged that way by the crew who pulled them.',
   },
   {
     q: '“We already have a system.”',
-    a: 'Bags and masking tape work. This is the same method with the photographs attached and the counts kept, so it survives the tech who tore the boat down leaving mid-refit. If what you run already does that, you don’t need us.',
+    a: 'Bags and masking tape work. This is the same method with the photographs attached and the counts kept, so it survives the tech who tore it down leaving mid-job. If what you run already does that, you don’t need us.',
   },
   {
     q: '“Too expensive.”',
-    a: 'It is $99 to $299 a month for the whole shop, not per photo and not per boat. At $130 an hour that is under one billable hour a month on Lite and under three on Max. The owner or admin seat is free. Extra techs are $15.',
+    a: 'It is $99 to $299 a month for the whole shop, not per photo and not per job. At $130 an hour that is under one billable hour a month on Lite and under three on Max. The owner or admin seat is free. Extra techs are $15.',
   },
 ];
 
@@ -199,15 +211,15 @@ const FAQ = [
   },
   {
     q: 'Does it work where there is no signal?',
-    a: 'Yes. Capture runs offline and syncs when the device is back on a connection, which is the normal case in a shed or below decks.',
+    a: 'Yes. Capture runs offline and syncs when the device is back on a connection, which is the normal case in a shed, in a back bay or under a hull.',
   },
   {
     q: 'Do we have to buy QR labels?',
     a: 'No. You can scan a QR or barcode if you already use them, or let ReFitIQ auto-number each bag. Both work the same way afterwards.',
   },
   {
-    q: 'Can I control who sees which boat?',
-    a: 'Yes. Admins, team leads, techs and parts staff are separate roles, and techs and team leads only see the boats they are assigned to.',
+    q: 'Can I control who sees which job?',
+    a: 'Yes. Admins, team leads, techs and parts staff are separate roles, and techs and team leads only see the jobs they are assigned to.',
   },
   {
     q: 'What happens to the record if we stop paying?',
@@ -316,7 +328,7 @@ export default async function Home() {
             <h1>You pay for that teardown twice.</h1>
             {/* "An iPhone app" names the category at word two — it used to appear nowhere
                 in the first screen, so you could not tell whether this was software, a
-                label supplier or a consultancy. "for boatyard owners" puts the audience in
+                label supplier or a consultancy. "for shop owners" puts the audience in
                 17px type where it reads at arm's length, and carries no headcount bound:
                 "5-20 techs" would disqualify the three-tech shop that is a paying Lite
                 customer. It was three short sentences of identical shape, which is the
@@ -325,7 +337,9 @@ export default async function Home() {
                 120 characters: a fourth line here costs 25px of screenshot below the fold,
                 measured, not computed. (Measured at 390x664: 109, 118 and 123 characters all
                 render three lines and leave the screenshot's top edge at 443px, so there was
-                no fold cost to fixing the line below.)
+                no fold cost to fixing the line below. "boatyard owners" became "shop owners"
+                when the page opened to other trades: 124 characters down to 115, still three
+                lines, so the fold is unchanged and the screenshot did not move.)
 
                 It used to end "so anyone free can put it back". That is a claim about
                 scheduling, but it reads as a claim about skill: any spare body can do a
@@ -334,7 +348,7 @@ export default async function Home() {
                 unskilled. The benefit is the same either way and it is the information that
                 moves, not the man. */}
             <p>
-              An iPhone app for boatyard owners. Your techs tag every part as it comes off, so
+              An iPhone app for shop owners. Your techs tag every part as it comes off, so
               whoever puts it back has what he needs.
             </p>
             <div className="hero-cta">
@@ -349,7 +363,7 @@ export default async function Home() {
             {/* A checkable number, not a promise — "All (458)" is printed in the
                 screenshot 60px below it, so the highest-read line of micro-copy on the
                 page verifies itself. */}
-            <div className="hero-note">458 parts off one refit, on the screen below.</div>
+            <div className="hero-note">458 parts off one teardown, on the screen below.</div>
             {/* 38 characters, and it has to stay under about 45: the previous line ran 62,
                 wrapped to two rows, and cost 50px of fold. "per shop" is deliberately not
                 here — it is stated four times further down, and it does not fit. */}
@@ -374,7 +388,7 @@ export default async function Home() {
             {/* Where a skeptic looks for it: directly under the screen he is being asked
                 to believe in. */}
             <div className="shot-caption">Real screens from the app. Not mockups.</div>
-            <div className="hero-meta">iPhone. Works below decks with no signal.</div>
+            <div className="hero-meta">iPhone. Works with no signal.</div>
           </div>
         </section>
 
@@ -438,9 +452,19 @@ export default async function Home() {
 
         {/* The other two credentials. They used to share a grid with the yard, which gave
             a bullet about file formats the same weight as the one real third-party name on
-            the site. They keep their words and their styling; they just stopped competing. */}
+            the site. They keep their words and their styling; they just stopped competing.
+
+            The first line is the bridge from the marine credit above to the other trades
+            this page now sells to. It is worded as a claim about the METHOD, not about an
+            installed base: every shop on the product today is marine, and saying otherwise
+            would be the one thing the house style forbids outright. */}
         <section className="container s-proof">
           <ul className="proof-lines">
+            <li>
+              <b>It was built on boats. It is not about boats.</b> A teardown is a teardown.
+              The part came off something, it has to go back on, and the man who takes it off
+              is not always the man who puts it back.
+            </li>
             <li>
               <b>It is on the App Store.</b> The listing is public, and the screens on this page
               come out of it.{' '}
@@ -461,12 +485,12 @@ export default async function Home() {
             scanning for the line that applies to him. Sits tight under the proof block on purpose; the
             uniform 56px between every section was part of what read as generated. */}
         <section className="container s-problem">
-          <h2 className="section-head">That boat goes back together in March.</h2>
+          <h2 className="section-head">It all goes back together in March.</h2>
           <ul className="cost-list">
-            <li>The tech who tore it down is on another hull.</li>
-            <li>Two techs at an open bulkhead, sorting bags they didn’t fill.</li>
+            <li>The tech who tore it down is on another job.</li>
+            <li>Two techs standing at the bench, sorting bags they didn’t fill.</li>
             <li>Fasteners ordered a second time because the first count was never written down.</li>
-            <li>A splash date that moves, and a callback you can’t argue from memory.</li>
+            <li>A delivery date that moves, and a callback you can’t argue from memory.</li>
           </ul>
           <p className="section-sub">
             None of it is logged, so none of it is a line item. It shows up as a job that ran
@@ -477,7 +501,7 @@ export default async function Home() {
 
         {/* ── HOW IT WORKS ─────────────────────────────────────────────────────── */}
         <section id="how" className="container s-how">
-          <h2 className="section-head">Five steps, done at the boat</h2>
+          <h2 className="section-head">Five steps, done at the job</h2>
           <div className="steps">
             {STEPS.map((s) => (
               <article key={s.n} className="step">
@@ -528,7 +552,7 @@ export default async function Home() {
         <section className="container s-numbers">
           <h2 className="section-head">The part we can count</h2>
           <p className="section-sub">
-            Twenty minutes a tech a day, spent looking for something that came off this boat.
+            Twenty minutes a tech a day, spent looking for something that came off this job.
             That is the only assumption on this page. Change it below if it is wrong. We have not
             tried to put a number on the callback you couldn’t argue.
           </p>
@@ -551,8 +575,8 @@ export default async function Home() {
           <RoiCalculator />
           <p className="note">
             These are assumptions. We have no measured customer results to show you. The figure
-            is labour only. It leaves out the duplicate orders you stop placing and the slips
-            that free up sooner.
+            is labour only. It leaves out the duplicate orders you stop placing and the bay that
+            frees up sooner.
           </p>
           <div className="mid-cta" data-sticky-stop>
             <CtaLink src="after-roi">Start your free trial</CtaLink>
@@ -562,27 +586,41 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ── WHO IT'S FOR ─────────────────────────────────────────────────────── */}
+        {/* ── WHO IT'S FOR ───────────────────────────────────────────────────────
+            This is the section that has to do the multi-trade work, and it does it by
+            NAMING the trades rather than by finding a word that covers all of them. A car
+            restorer does not read himself into "asset-intensive maintenance"; he reads
+            himself into "a car comes in on a rotisserie". Four bullets, not three, because
+            the house style forbids a list of three in rhythm — and four is also how many
+            trades there are.
+
+            Each bullet is written from that trade's own calendar, in its own nouns. None
+            of them claims a customer: they describe the work, which is a claim about the
+            reader's shop, not about ours. */}
         <section className="container s-who">
-          <h2 className="section-head">Shops where boats come apart</h2>
+          <h2 className="section-head">Shops where things come apart</h2>
           <ul className="feature-list trust-list">
             <li>
-              <b>Refit and repower yards.</b> Teardowns that run for months and change hands
-              between techs.
+              <b>Boatyards.</b> Refits and repowers that run past the season and change hands
+              between techs while the boat sits open.
             </li>
             <li>
-              <b>Service departments.</b> The same boat comes back next season and the last
-              job on it is a year old.
+              <b>Restoration and body shops.</b> A car goes on the rotisserie in one year and
+              comes off it in another, and the trim that came off it is in bags on a shelf.
             </li>
             <li>
-              <b>Yards whose customers ask for proof.</b> The owner or the surveyor gets a file
-              with the photographs in it.
+              <b>Heavy equipment.</b> An excavator stripped to the frame, where every pin and
+              shim has to go back exactly where it came from.
             </li>
             <li>
-              <b>Shops that need it locked down.</b> Admins, team leads, techs and parts staff
-              are separate roles, each assigned to the boats they work.
+              <b>Aircraft maintenance.</b> Work that has to be evidenced afterwards, with a
+              photograph of the part in place and the fasteners it took.
             </li>
           </ul>
+          <p className="section-sub">
+            Whatever you run, the roles are separate: admins, team leads, techs and parts
+            staff, each assigned to the jobs they work.
+          </p>
         </section>
 
         {/* ── PRICING ──────────────────────────────────────────────────────────── */}

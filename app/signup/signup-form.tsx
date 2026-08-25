@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/client';
 import { trackFunnel, ctaSource } from '@/lib/analytics';
 import { trackMeta } from '../meta-pixel';
 import { BrandMark } from '../brand-mark';
+import { DEFAULT_INDUSTRY, INDUSTRY_OPTIONS, industryOption, type IndustryValue } from '@/lib/industries';
 
 // Two modes, decided by whether an invite code was carried in via /signup?join=<code>
 // (usually because the tech tapped an admin's invite link, which routes through
@@ -21,6 +22,10 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
   const joining = joinCode != null;
 
   const [shopName, setShopName] = useState('');
+  // Which trade's vocabulary the new shop gets. Only trades with a finished app pack are
+  // offered (see lib/industries) — a picker that ran ahead of the packs would let someone
+  // choose a trade and then land in a boat glossary.
+  const [industry, setIndustry] = useState<IndustryValue>(DEFAULT_INDUSTRY);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -51,7 +56,7 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
           pending_join_code: joinCode!.toUpperCase(),
           ...(name.trim() ? { display_name: name.trim() } : {}),
         }
-      : { shop_name: shopName.trim() };
+      : { shop_name: shopName.trim(), shop_industry: industry };
 
     const { data, error: signUpErr } = await supabase.auth.signUp({
       email,
@@ -89,8 +94,13 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
         trackFunnel('join_requested');
         router.push('/dashboard');
       } else {
-        const { error: provisionErr } = await supabase.rpc('provision_new_shop', {
+        // v2, not v1. A defaulted second parameter on the original would give PostgREST
+        // two candidates for the same {_shop_name} body and break signup outright, so
+        // migration 0048 ships a distinctly-named function instead. v1 stays callable so
+        // the previously-deployed build keeps working until this one is live.
+        const { error: provisionErr } = await supabase.rpc('provision_new_shop_v2', {
           _shop_name: shopName.trim(),
+          _industry: industry,
         });
         // The trial starts inside provision_new_shop, so a clean return is the moment the
         // funnel actually converts. On failure the dashboard's CreateShop card recovers it.
@@ -176,12 +186,35 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
                   id="shop"
                   className="input"
                   type="text"
-                  placeholder="e.g. Bradshaw Marine"
+                  placeholder={industryOption(industry).shopExample}
                   autoComplete="organization"
                   value={shopName}
                   onChange={(e) => setShopName(e.target.value)}
                   required
                 />
+              </div>
+            )}
+            {/* CREATE mode only. A tech joining an existing shop inherits that shop's
+                trade, so asking him would be asking a question his answer cannot change. */}
+            {!joining && (
+              <div className="field">
+                <label htmlFor="industry">What does your shop work on?</label>
+                <select
+                  id="industry"
+                  className="input"
+                  value={industry}
+                  onChange={(e) => setIndustry(e.target.value as IndustryValue)}
+                  required
+                >
+                  {INDUSTRY_OPTIONS.map((o) => (
+                    <option key={o.value} value={o.value}>
+                      {o.label}
+                    </option>
+                  ))}
+                </select>
+                <p className="note" style={{ textAlign: 'left', marginTop: 6 }}>
+                  {industryOption(industry).hint}
+                </p>
               </div>
             )}
             <div className="field">

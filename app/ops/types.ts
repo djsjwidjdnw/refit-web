@@ -21,6 +21,9 @@ export type OpsShop = {
   member_count: number;
   last_activity: string | null;
   mrr: number;
+  // Appended LAST by migration 0048 to match the RPC's returns-table order. Optional so
+  // the panel still renders against a database where 0048 has not been applied.
+  industry?: string | null;
 };
 
 export type OpsMetrics = {

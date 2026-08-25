@@ -12,7 +12,9 @@ export const metadata: Metadata = {
   // is a bounce that looks identical to an ordinary exit in analytics.
   // These strings, app/opengraph-image.png (regenerate via scripts/make-og-image.mjs)
   // and the H1 in app/page.tsx are four copies of the same promise — change one,
-  // change all four.
+  // change all four. All four moved from "boatyard owners" to "shop owners" when the
+  // page opened to automotive, heavy equipment and aviation; the OG png was regenerated,
+  // not hand-edited, so its eyebrow tracks scripts/make-og-image.mjs.
   // No dashes in either string. Both used to open "ReFitIQ — you pay for…", and an
   // em-dash in the tab title and the social card is the first thing a reader who has
   // decided the site was machine-written sees.
@@ -26,11 +28,11 @@ export const metadata: Metadata = {
   // keeps the fuller credit. Measure before lengthening either.
   title: 'ReFitIQ. You pay for that teardown twice.',
   description:
-    'An iPhone app for boatyard owners. Your techs tag every part as it comes off, so whoever puts it back has what he needs. Built at Philbrook’s Boatyard. 14 days free.',
+    'An iPhone app for shop owners. Your techs tag every part as it comes off, so whoever puts it back has what he needs. Built at Philbrook’s Boatyard. 14 days free.',
   openGraph: {
     title: 'ReFitIQ. You pay for that teardown twice.',
     description:
-      'An iPhone app for boatyard owners. Your techs tag every part as it comes off, so whoever puts it back has what he needs. Built at Philbrook’s Boatyard in Sidney, BC, with the technicians who use it. 14 days free.',
+      'An iPhone app for shop owners. Your techs tag every part as it comes off, so whoever puts it back has what he needs. Built at Philbrook’s Boatyard in Sidney, BC, with the technicians who use it. 14 days free.',
     url: 'https://refit-iq.com',
     siteName: 'ReFitIQ',
     type: 'website',

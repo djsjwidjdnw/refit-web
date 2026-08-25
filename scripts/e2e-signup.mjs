@@ -224,11 +224,15 @@ try {
   await page.waitForURL('**/signup**', { timeout: 20000 });
   mark(`click CTA -> ${new URL(page.url()).pathname}${new URL(page.url()).search}`);
 
-  // Count the fields the user must actually fill.
+  // Count the fields the user must actually fill. `input, select` rather than `input`:
+  // the trade picker is a <select> and would otherwise be invisible to this census, which
+  // is the one place the signup form's real shape gets written down on every run. It is
+  // left on its default (Marine) deliberately, so this test never creates a shop in a
+  // trade nobody is watching.
   const fields = await page.evaluate(() =>
-    [...document.querySelectorAll('form input')].map((i) => ({
+    [...document.querySelectorAll('form input, form select')].map((i) => ({
       id: i.id,
-      type: i.type,
+      type: i.type ?? i.tagName.toLowerCase(),
       required: i.required,
       autocomplete: i.autocomplete,
     })),

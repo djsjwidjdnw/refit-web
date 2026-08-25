@@ -97,7 +97,11 @@ export default async function Dashboard({
     for (const e of (entData ?? []) as Entitlement[]) entMap.set(e.shop_id, e);
   }
 
-  const shopNameHint = (user.user_metadata as { shop_name?: string } | null)?.shop_name;
+  const signupMeta = user.user_metadata as { shop_name?: string; shop_industry?: string } | null;
+  const shopNameHint = signupMeta?.shop_name;
+  // Replayed for the same reason as the name: a user who picked Automotive at signup and
+  // then hit the email-confirmation gap must not come back through this card as marine.
+  const shopIndustryHint = signupMeta?.shop_industry;
 
   // A shop still on trial has almost certainly not got the crew into the app yet — that,
   // not billing, is the next thing they need from this page.
@@ -143,7 +147,7 @@ export default async function Dashboard({
               <p style={{ color: 'var(--text-muted)', marginTop: 0 }}>
                 You&apos;re signed in. Name your shop and the 14-day trial starts.
               </p>
-              <CreateShop defaultName={shopNameHint} />
+              <CreateShop defaultName={shopNameHint} defaultIndustry={shopIndustryHint} />
             </>
           )
         ) : (

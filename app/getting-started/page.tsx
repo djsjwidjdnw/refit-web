@@ -5,7 +5,7 @@ import { BrandMark } from '../brand-mark';
 export const metadata: Metadata = {
   title: 'Getting started with ReFitIQ',
   description:
-    'What to do in the first 15 minutes. Create the shop, get the app on a phone, invite your crew, set their roles, then start capturing on the boat.',
+    'What to do in the first 15 minutes. Create the shop, get the app on a phone, invite your crew, set their roles, then start capturing on the job.',
 };
 
 // Source of truth for this page is ReFit_Getting_Started.md — substance is unchanged,
@@ -31,15 +31,15 @@ const ROLES = [
   },
   {
     role: 'Team Lead',
-    can: 'Their assigned boats. Requests replace/refurbish, marks parts ordered/received, assigns tasks',
+    can: 'Their assigned jobs. Requests replace/refurbish, marks parts ordered/received, assigns tasks',
   },
   {
     role: 'Tech',
-    can: 'Their assigned boats. Captures and edits, requests replace/refurbish (admin approves)',
+    can: 'Their assigned jobs. Captures and edits, requests replace/refurbish (admin approves)',
   },
   {
     role: 'Parts',
-    can: 'Sees all boats read-only. Adds notes, QR codes, marks ordered/received, adds tracking numbers',
+    can: 'Sees all jobs read-only. Adds notes, QR codes, marks ordered/received, adds tracking numbers',
   },
 ];
 
@@ -49,8 +49,8 @@ const QUESTIONS = [
     a: 'No. The app can auto-number ("Label 1, Label 2…") or you can type your own labels. QR stickers are just faster to scan and harder to mix up.',
   },
   {
-    q: 'Can two people work the same boat at once?',
-    a: "Yes. Assign the boat to whoever is on it. Everyone's captures land in the same record.",
+    q: 'Can two people work the same job at once?',
+    a: "Yes. Assign the job to whoever is on it. Everyone's captures land in the same record.",
   },
   {
     q: 'What happens when the trial ends?',
@@ -172,7 +172,7 @@ export default function GettingStarted() {
           <h2>
             <span className="step-num">4</span> Set everyone&apos;s role
           </h2>
-          <p>This is the step that decides who sees which boats. It takes about a minute.</p>
+          <p>This is the step that decides who sees which jobs. It takes about a minute.</p>
           <p>
             In <strong>Team</strong>, set each person&apos;s role:
           </p>
@@ -205,13 +205,15 @@ export default function GettingStarted() {
             <span className="step-num">5</span> Create your first job
           </h2>
           <p>
-            Tap <strong>+</strong> to add a boat. Give it a name, a vessel type and a note about
-            the work (e.g. <em>&ldquo;Insurance job, repair fire damage and full paint&rdquo;</em>).
+            Tap <strong>+</strong> to add a job. Give it a name, what it is (the boat, the car,
+            the machine) and a note about the work (e.g.{' '}
+            <em>&ldquo;Insurance job, repair fire damage and full paint&rdquo;</em>).
           </p>
           <p>
-            Add your <strong>areas</strong>: foredeck, cockpit, flybridge, hull, whatever fits the
-            boat. Everything you capture files under an area, which is what makes reassembly fast
-            later.
+            Add your <strong>areas</strong>. The app suggests names that fit your trade, but you
+            type whatever you actually call them: foredeck and flybridge in a yard, engine bay and
+            undercarriage in a body shop. Everything you capture files under an area, which is
+            what makes reassembly fast later.
           </p>
         </section>
 
@@ -219,7 +221,7 @@ export default function GettingStarted() {
           <h2>
             <span className="step-num">6</span> Start capturing
           </h2>
-          <p>This is the core of ReFitIQ. As your crew strips the boat down:</p>
+          <p>This is the core of ReFitIQ. As your crew strips it down:</p>
           <ol className="steps-ol">
             <li>
               Tap <strong>+</strong> to capture.
@@ -316,7 +318,7 @@ export default function GettingStarted() {
               <a href="mailto:support@refit-iq.com" style={{ color: 'var(--accent)' }}>
                 support@refit-iq.com
               </a>
-              . A marine mechanic who uses ReFitIQ every day will answer.
+              . A mechanic who uses ReFitIQ every day will answer.
             </p>
             <div className="row hero-cta">
               <Link href="/signup?src=gs-footer" className="btn btn-primary">

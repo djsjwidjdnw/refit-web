@@ -29,7 +29,7 @@ export function NextSteps() {
         </li>
         <li>
           <strong>Set everyone&apos;s role.</strong> Admin, team lead, tech or parts. This is what
-          decides who sees which boats.
+          decides who sees which jobs.
         </li>
         <li>
           <strong>Create your first job</strong> and start capturing as you tear down.

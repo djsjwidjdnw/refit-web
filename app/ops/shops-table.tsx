@@ -53,7 +53,7 @@ export function ShopsTable({ shops }: { shops: OpsShop[] }) {
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
           <thead>
             <tr style={{ textAlign: 'left', color: 'var(--text-muted)', fontSize: 12 }}>
-              {['Shop', 'Plan', 'Status', 'Seats', 'Storage', 'MRR', 'Created', 'Last activity'].map((h) => (
+              {['Shop', 'Trade', 'Plan', 'Status', 'Seats', 'Storage', 'MRR', 'Created', 'Last activity'].map((h) => (
                 <th key={h} style={{ padding: '8px 10px', borderBottom: '1px solid var(--border, #333)', whiteSpace: 'nowrap' }}>
                   {h}
                 </th>
@@ -72,6 +72,9 @@ export function ShopsTable({ shops }: { shops: OpsShop[] }) {
                       manual
                     </span>
                   )}
+                </td>
+                <td style={{ padding: '8px 10px', borderBottom: '1px solid var(--border, #2a2a2a)', textTransform: 'capitalize' }}>
+                  {s.industry ?? 'marine'}
                 </td>
                 <td style={{ padding: '8px 10px', borderBottom: '1px solid var(--border, #2a2a2a)', textTransform: 'capitalize' }}>
                   {s.plan}
@@ -96,7 +99,7 @@ export function ShopsTable({ shops }: { shops: OpsShop[] }) {
             ))}
             {rows.length === 0 && (
               <tr>
-                <td colSpan={8} style={{ padding: 16, color: 'var(--text-muted)' }}>
+                <td colSpan={9} style={{ padding: 16, color: 'var(--text-muted)' }}>
                   No shops match.
                 </td>
               </tr>

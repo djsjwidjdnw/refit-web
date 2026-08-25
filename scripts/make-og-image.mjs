@@ -72,7 +72,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
 
   <g transform="translate(128, 0)">
     <text x="0" y="196" font-family="${FONT}" font-size="26" font-weight="600"
-          letter-spacing="3.4" fill="${MUTED}">${esc('FOR BOATYARD OWNERS')}</text>
+          letter-spacing="3.4" fill="${MUTED}">${esc('FOR SHOP OWNERS')}</text>
 
     <!-- The wordmark is the real logo art, composited over this SVG below —
          a typed-out "Re"+"Fit" was how the card ended up off-brand in the first place. -->
