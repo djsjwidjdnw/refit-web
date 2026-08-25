@@ -9,6 +9,10 @@
 // json file for manual deletion, which was done half-way (auth user removed, shops +
 // shop_entitlements rows left behind).
 //
+// That row has since been cleaned up: verified absent from public.shops on 2026-08-25, and
+// no entitlement row is left pointing at it. The paragraph above stays as the reason the
+// teardown below is in a `finally` — do not read it as an outstanding cleanup task.
+//
 // Teardown now runs in a `finally`, so it fires even when the run fails mid-flow. It
 // deletes the shops row (shop_entitlements cascades via 0027_entitlements.sql:70) and then
 // the auth user. If it cannot run — no service-role key — it prints the exact SQL and the
