@@ -16,7 +16,7 @@
 // recognise (see provision_new_shop_v2 in migration 0048), so a mismatch degrades to marine
 // rather than to an error — but it is still a mismatch, so keep them in step.
 
-export type IndustryValue = 'marine' | 'automotive';
+export type IndustryValue = 'marine' | 'automotive' | 'construction';
 
 export type IndustryOption = {
   value: IndustryValue;
@@ -39,6 +39,12 @@ export const INDUSTRY_OPTIONS: IndustryOption[] = [
     label: 'Automotive',
     hint: 'Cars and trucks. Areas like engine bay and undercarriage, and grade 5 and 8 on the fastener list.',
     shopExample: 'e.g. Bradshaw Restorations',
+  },
+  {
+    value: 'construction',
+    label: 'Construction equipment',
+    hint: 'Excavators, loaders and dozers. Areas like undercarriage and boom, and hydraulic fittings, hoses and bucket pins alongside the fasteners.',
+    shopExample: 'e.g. Bradshaw Plant Services',
   },
 ];
 
