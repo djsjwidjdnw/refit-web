@@ -21,10 +21,36 @@ export default async function OpsShopPage({ params }: { params: Promise<{ id: st
   const supabase = await createClient();
   const { data, error } = await supabase.rpc('ops_get_shop', { _shop_id: id });
 
-  if (error || !data) {
+  // Three different failures used to render one sentence, which made a stale session look
+  // identical to broken SQL and sent us hunting for a missing column that did not exist.
+  // Say which one it actually was, and show the Postgres error when there is one.
+  if (error) {
+    const denied = error.code === '42501';
     return (
       <div className="error" style={{ marginTop: 16 }}>
-        Could not load this shop (or your account isn’t authorized at the database layer).
+        <strong>
+          {denied
+            ? 'Your account is not a platform operator at the database layer.'
+            : 'The ops_get_shop query failed.'}
+        </strong>
+        <div style={{ marginTop: 6, fontFamily: 'ui-monospace, monospace', fontSize: 13 }}>
+          {error.code ? `${error.code}: ` : ''}
+          {error.message}
+        </div>
+        {!denied && (
+          <div className="note" style={{ marginTop: 8 }}>
+            This is a database error, not an access problem. Check the migration that last
+            touched ops_get_shop.
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="error" style={{ marginTop: 16 }}>
+        No shop found with id <code>{id}</code>. It may have been deleted.
       </div>
     );
   }
