@@ -1,7 +1,7 @@
 // verify-industry-signup.mjs — prove the industry picker works end to end on PRODUCTION.
 //
-// ⚠️  THIS WRITES TO THE LIVE SUPABASE PROJECT. It signs up two throwaway shops through
-// the real signup form at refit-iq.com, one per trade, and TEARS THEM DOWN in a `finally`
+// ⚠️  THIS WRITES TO THE LIVE SUPABASE PROJECT. It signs up one throwaway shop per trade through
+// the real signup form at refit-iq.com, and TEARS THEM DOWN in a `finally`
 // so a mid-run failure cannot leak a row. That leak has happened before: shop
 // 660416f1-dacb-45b0-951a-3b37aaa6f722 ("E2E Throwaway local1") is still orphaned because
 // an earlier script only printed cleanup SQL. If teardown cannot run, this prints the real
@@ -33,6 +33,11 @@ const bad = (m) => { console.error(`  ✗ ${m}`); process.exitCode = 1; };
 const STAMP = String(Date.now());
 const made = []; // { email, shopId, userId, trade }
 
+// Every trade in lib/industries.ts INDUSTRY_OPTIONS, in its order. Keep the two in step: this
+// script tried only marine and automotive after Construction was added (85d9cac), which is how
+// a Construction signup landing as marine went unnoticed until hardware-memory 0063.
+const TRADES = ['marine', 'automotive', 'construction'];
+
 // ── Philbrook's, before ────────────────────────────────────────────────────────────────
 const { data: philBefore } = await admin
   .from('shops')
@@ -49,7 +54,7 @@ for (const s of philBefore ?? []) {
 const browser = await chromium.launch({ executablePath: CHROME, headless: true });
 
 try {
-  for (const trade of ['automotive', 'marine']) {
+  for (const trade of TRADES) {
     const email = `refit-ind-${trade}-${STAMP}@mailinator.com`;
     const password = `Ind-test-${STAMP}!`;
     const shopName = `ZZ Industry Throwaway ${trade} ${STAMP}`;
@@ -62,8 +67,8 @@ try {
     // The picker must actually be on the page, and must offer exactly the trades that have
     // a pack. If a trade with no pack is selectable, that is the failure this gates.
     const opts = await page.$$eval('#industry option', (os) => os.map((o) => o.value));
-    if (JSON.stringify(opts) !== JSON.stringify(['marine', 'automotive']))
-      bad(`picker offers ${JSON.stringify(opts)}, expected ["marine","automotive"]`);
+    if (JSON.stringify(opts) !== JSON.stringify(TRADES))
+      bad(`picker offers ${JSON.stringify(opts)}, expected ${JSON.stringify(TRADES)}`);
     else ok(`picker offers exactly the trades that have a pack: ${opts.join(', ')}`);
 
     await page.fill('#shop', shopName);

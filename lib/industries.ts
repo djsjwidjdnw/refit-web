@@ -12,9 +12,11 @@
 //      rejects an unknown value, so a picker that runs ahead of the migration fails signup.
 //
 // The `value` strings must match the app's IndustryId union and the CHECK constraint
-// exactly. The server also normalises and falls back to 'marine' on anything it does not
-// recognise (see provision_new_shop_v2 in migration 0048), so a mismatch degrades to marine
-// rather than to an error — but it is still a mismatch, so keep them in step.
+// exactly. The server also normalises and falls back to 'marine' on anything the CHECK
+// constraint rejects (provision_new_shop_v2, hardware-memory migration 0063), so a mismatch
+// degrades to marine rather than to an error — but it is still a mismatch, so keep them in
+// step. Before 0063 the function kept its own two-trade list, so Construction landed as marine.
+// scripts/verify-industry-signup.mjs signs up every trade here; add new ones to its TRADES.
 
 export type IndustryValue = 'marine' | 'automotive' | 'construction';
 
