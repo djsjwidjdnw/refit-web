@@ -9,24 +9,21 @@ import { trackMeta } from '../meta-pixel';
 import { BrandMark } from '../brand-mark';
 import { DEFAULT_INDUSTRY, INDUSTRY_OPTIONS, industryOption, type IndustryValue } from '@/lib/industries';
 
-// Two modes, decided by whether an invite code was carried in via /signup?join=<code>
-// (usually because the tech tapped an admin's invite link, which routes through
-// /join/<code> → here when signed out):
-//   • JOIN  — no shop name; on submit we record a request against the invited shop
-//             (request_join_shop) and land on the dashboard's "waiting for approval" state.
-//   • CREATE — the original flow: name a new shop, provision it + a 14-day trial.
-// Either way the code / shop name is also stashed in user_metadata so it survives the
-// email-confirmation gap (replayed on first authed load — see lib/join + dashboard).
-export function SignupForm({ joinCode }: { joinCode: string | null }) {
+// The TRIAL signup: name a new shop, provision it and its 14-day trial. The shop name is also
+// stashed in user_metadata so it survives the email-confirmation gap (the dashboard's
+// "Create your shop" card prefills from it).
+//
+// Joining an existing shop lives at /join/<code> (Jon, 2026-10-22 #6): this form used to have
+// a JOIN mode, reached through /signup?join=<code>, which named no shop; that link now
+// redirects there (app/signup/page.tsx).
+export function SignupForm() {
   const router = useRouter();
-  const joining = joinCode != null;
 
   const [shopName, setShopName] = useState('');
   // Which trade's vocabulary the new shop gets. Only trades with a finished app pack are
   // offered (see lib/industries) — a picker that ran ahead of the packs would let someone
   // choose a trade and then land in a boat glossary.
   const [industry, setIndustry] = useState<IndustryValue>(DEFAULT_INDUSTRY);
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -41,22 +38,17 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
   function markStarted() {
     if (started) return;
     setStarted(true);
-    trackFunnel('signup_started', { mode: joining ? 'join' : 'create', src: ctaSource() });
+    trackFunnel('signup_started', { mode: 'create', src: ctaSource() });
   }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
     setError(null);
-    trackFunnel('signup_submitted', { mode: joining ? 'join' : 'create', src: ctaSource() });
+    trackFunnel('signup_submitted', { mode: 'create', src: ctaSource() });
     const supabase = createClient();
 
-    const meta: Record<string, string> = joining
-      ? {
-          pending_join_code: joinCode!.toUpperCase(),
-          ...(name.trim() ? { display_name: name.trim() } : {}),
-        }
-      : { shop_name: shopName.trim(), shop_industry: industry };
+    const meta: Record<string, string> = { shop_name: shopName.trim(), shop_industry: industry };
 
     const { data, error: signUpErr } = await supabase.auth.signUp({
       email,
@@ -82,48 +74,38 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
           ? 'That email already has a ReFitIQ account.'
           : signUpErr.message,
       );
-      trackFunnel('signup_failed', { mode: joining ? 'join' : 'create', reason: dup ? 'duplicate' : 'other' });
+      trackFunnel('signup_failed', { mode: 'create', reason: dup ? 'duplicate' : 'other' });
       return;
     }
 
     if (data.session) {
       // Session in hand → act now. (No session ⇒ email confirmation is on; the metadata
       // above is replayed on first authed load, so we just tell them to check their email.)
-      if (joining) {
-        await supabase.rpc('request_join_shop', { _join_code: joinCode! });
-        trackFunnel('join_requested');
-        router.push('/dashboard');
-      } else {
-        // v2, not v1. A defaulted second parameter on the original would give PostgREST
-        // two candidates for the same {_shop_name} body and break signup outright, so
-        // migration 0048 ships a distinctly-named function instead. v1 stays callable so
-        // the previously-deployed build keeps working until this one is live.
-        const { error: provisionErr } = await supabase.rpc('provision_new_shop_v2', {
-          _shop_name: shopName.trim(),
-          _industry: industry,
-        });
-        // The trial starts inside provision_new_shop, so a clean return is the moment the
-        // funnel actually converts. On failure the dashboard's CreateShop card recovers it.
-        trackFunnel(provisionErr ? 'signup_failed' : 'shop_created', { src: ctaSource() });
-        // Meta gets the conversion at the same moment — a provisioned shop, not a submitted
-        // form. Not fired in JOIN mode (a tech joining an existing shop is not a new trial),
-        // and not on failure: the CreateShop recovery card on /dashboard fires it instead,
-        // and a user only ever reaches that card when this fire didn't happen, so each
-        // converted signup registers exactly once.
-        if (!provisionErr) {
-          trackFunnel('trial_active', { src: ctaSource() });
-          trackMeta('CompleteRegistration');
-        }
-        router.push('/dashboard');
+      // v2, not v1. A defaulted second parameter on the original would give PostgREST
+      // two candidates for the same {_shop_name} body and break signup outright, so
+      // migration 0048 ships a distinctly-named function instead. v1 stays callable so
+      // the previously-deployed build keeps working until this one is live.
+      const { error: provisionErr } = await supabase.rpc('provision_new_shop_v2', {
+        _shop_name: shopName.trim(),
+        _industry: industry,
+      });
+      // The trial starts inside provision_new_shop, so a clean return is the moment the
+      // funnel actually converts. On failure the dashboard's CreateShop card recovers it.
+      trackFunnel(provisionErr ? 'signup_failed' : 'shop_created', { src: ctaSource() });
+      // Meta gets the conversion at the same moment — a provisioned shop, not a submitted
+      // form. Not fired for a tech joining an existing shop (that is /join), and not on
+      // failure: the CreateShop recovery card on /dashboard fires it instead, and a user
+      // only ever reaches that card when this fire didn't happen, so each converted
+      // signup registers exactly once.
+      if (!provisionErr) {
+        trackFunnel('trial_active', { src: ctaSource() });
+        trackMeta('CompleteRegistration');
       }
+      router.push('/dashboard');
       router.refresh();
     } else {
       setBusy(false);
-      setConfirmMsg(
-        joining
-          ? "Check your email to confirm your account, then sign in. We'll send your join request to the shop for approval."
-          : "Check your email to confirm your account, then sign in. We'll finish setting up your shop.",
-      );
+      setConfirmMsg("Check your email to confirm your account, then sign in. We'll finish setting up your shop.");
     }
   }
 
@@ -133,23 +115,22 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
         <div style={{ marginBottom: 28 }}>
           <BrandMark height={34} href="/" priority />
         </div>
-        <h1>{joining ? 'Join your shop' : 'Start your free trial'}</h1>
-        <p className="sub">
-          {joining
-            ? 'Create your account. Your shop admin approves you and you’re in.'
-            : '14 days free. Cancel anytime, no charge.'}
-        </p>
+        <h1>Start your free trial</h1>
+        <p className="sub">14 days free. Cancel anytime, no charge.</p>
         {/* Two lines, not three. The old set was a list of three in rhythm, each with a ✓
             glyph in front of it, which is the shape of a generated pricing page. These
             two answer what a cold visitor is weighing at the moment he looks at a form:
             what the 14 days give him, and when money is ever involved. Say the second one
             as the offer, never as a denial — see the house-style block in app/page.tsx. */}
-        {!joining && (
-          <ul className="reassure">
-            <li>Every feature for 14 days, with no limit on how many techs you add.</li>
-            <li>You only pay if you pick a plan at the end. Cancel before then and that is that.</li>
-          </ul>
-        )}
+        <ul className="reassure">
+          <li>Every feature for 14 days, with no limit on how many techs you add.</li>
+          <li>You only pay if you pick a plan at the end. Cancel before then and that is that.</li>
+        </ul>
+        {/* Jon, 2026-10-22 #6: a hire who lands here meant to JOIN a shop, not start one.
+            On 21 Oct one did, made "Phillbrooks", and then could not join the real shop. */}
+        <p className="note" style={{ textAlign: 'left', marginTop: 0 }}>
+          Joining your shop&apos;s crew? Open the invite link your shop admin sent you instead.
+        </p>
         {confirmMsg ? (
           <div className="card">
             <p style={{ margin: 0 }}>{confirmMsg}</p>
@@ -166,57 +147,40 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
           </div>
         ) : (
           <form onSubmit={onSubmit} onFocus={markStarted}>
-            {joining ? (
-              <div className="field">
-                <label htmlFor="name">Your name</label>
-                <input
-                  id="name"
-                  className="input"
-                  type="text"
-                  placeholder="e.g. Sam Rivera"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  autoComplete="name"
-                />
-              </div>
-            ) : (
-              <div className="field">
-                <label htmlFor="shop">Shop / business name</label>
-                <input
-                  id="shop"
-                  className="input"
-                  type="text"
-                  placeholder={industryOption(industry).shopExample}
-                  autoComplete="organization"
-                  value={shopName}
-                  onChange={(e) => setShopName(e.target.value)}
-                  required
-                />
-              </div>
-            )}
-            {/* CREATE mode only. A tech joining an existing shop inherits that shop's
-                trade, so asking him would be asking a question his answer cannot change. */}
-            {!joining && (
-              <div className="field">
-                <label htmlFor="industry">What does your shop work on?</label>
-                <select
-                  id="industry"
-                  className="input"
-                  value={industry}
-                  onChange={(e) => setIndustry(e.target.value as IndustryValue)}
-                  required
-                >
-                  {INDUSTRY_OPTIONS.map((o) => (
-                    <option key={o.value} value={o.value}>
-                      {o.label}
-                    </option>
-                  ))}
-                </select>
-                <p className="note" style={{ textAlign: 'left', marginTop: 6 }}>
-                  {industryOption(industry).hint}
-                </p>
-              </div>
-            )}
+            <div className="field">
+              <label htmlFor="shop">Shop / business name</label>
+              <input
+                id="shop"
+                className="input"
+                type="text"
+                placeholder={industryOption(industry).shopExample}
+                autoComplete="organization"
+                value={shopName}
+                onChange={(e) => setShopName(e.target.value)}
+                required
+              />
+            </div>
+            {/* A tech joining an existing shop inherits that shop's trade (/join asks
+                nothing of the kind). */}
+            <div className="field">
+              <label htmlFor="industry">What does your shop work on?</label>
+              <select
+                id="industry"
+                className="input"
+                value={industry}
+                onChange={(e) => setIndustry(e.target.value as IndustryValue)}
+                required
+              >
+                {INDUSTRY_OPTIONS.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+              <p className="note" style={{ textAlign: 'left', marginTop: 6 }}>
+                {industryOption(industry).hint}
+              </p>
+            </div>
             <div className="field">
               <label htmlFor="email">Work email</label>
               <input
@@ -270,17 +234,11 @@ export function SignupForm({ joinCode }: { joinCode: string | null }) {
               </div>
             )}
             <button className="btn btn-primary btn-block" type="submit" disabled={busy}>
-              {busy
-                ? 'Creating account…'
-                : joining
-                  ? 'Create account & request to join'
-                  : 'Start my free trial'}
+              {busy ? 'Creating account…' : 'Start my free trial'}
             </button>
-            {!joining && (
-              <p className="note" style={{ marginTop: 12 }}>
-                Nothing is charged during the 14 days. Cancel anytime.
-              </p>
-            )}
+            <p className="note" style={{ marginTop: 12 }}>
+              Nothing is charged during the 14 days. Cancel anytime.
+            </p>
           </form>
         )}
         <p className="note">
