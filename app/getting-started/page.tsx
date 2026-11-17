@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { StoreBadges } from '../components/store-badges';
+import { PRIVACY_URL } from '@/lib/stores';
 import type { Metadata } from 'next';
 import { BrandMark } from '../brand-mark';
 
@@ -20,9 +22,7 @@ export const metadata: Metadata = {
 // other way ("there is no card field on the form"), which reads as defensive. Say what the
 // trial is instead: 14 days, every feature, you only pay if you pick a plan.
 
-// The iOS listing is live and free; verified against the iTunes lookup API. There is no
-// Google Play listing yet, so this page says iPhone and nothing else.
-const APP_STORE_URL = 'https://apps.apple.com/us/app/refit/id6772761520';
+// Both listings are live (App Store; Google Play since 4 Nov 2026): lib/stores.
 
 const ROLES = [
   {
@@ -137,21 +137,14 @@ export default function GettingStarted() {
             <span className="step-num">2</span> Get the app
           </h2>
           <p>
-            Download <strong>ReFitIQ</strong> from the App Store on the iPhone your crew will use in
-            the yard. Sign in with the account you just created.
+            Download <strong>ReFitIQ</strong> from the App Store or Google Play on the phones your
+            crew will use in the yard. Sign in with the account you just created.
           </p>
           <p>
             The app is where the work happens. The website is where you handle billing and your
             team.
           </p>
-          <a
-            className="btn btn-ghost"
-            href={APP_STORE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Get ReFitIQ on the App Store →
-          </a>
+          <StoreBadges />
         </section>
 
         <section className="step-block" id="invite-your-crew">
@@ -334,10 +327,12 @@ export default function GettingStarted() {
 
       <footer className="footer">
         <div className="container">
+          <StoreBadges className="center" />
           <div className="footer-links">
             <Link href="/">Home</Link>
             <Link href="/getting-started">Getting started</Link>
             <Link href="/login">Sign in</Link>
+            <a href={PRIVACY_URL}>Privacy policy</a>
             <a href="mailto:support@refit-iq.com">support@refit-iq.com</a>
           </div>
           <div>© {new Date().getFullYear()} ReFitIQ · refit-iq.com</div>

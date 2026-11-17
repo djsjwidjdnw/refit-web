@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
@@ -7,6 +8,12 @@ import { CreateShop } from './create-shop';
 import { PlanPicker } from './plan-picker';
 import { NextSteps } from './next-steps';
 import { BrandMark } from '../brand-mark';
+
+export const metadata: Metadata = {
+  title: 'Your shop | ReFitIQ',
+  description: 'Your ReFitIQ shop: plan, billing and next steps.',
+};
+
 
 export const dynamic = 'force-dynamic';
 

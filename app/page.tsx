@@ -4,6 +4,8 @@ import { createPublicClient } from '@/lib/supabase/public';
 import RoiCalculator from './roi-calculator';
 import { CtaLink } from './cta-link';
 import { OutboundLink } from './outbound-link';
+import { StoreBadges } from './components/store-badges';
+import { APP_STORE_URL, PLAY_URL, PRIVACY_URL } from '@/lib/stores';
 import { StickyCta } from './sticky-cta';
 import { BrandMark } from './brand-mark';
 
@@ -115,8 +117,8 @@ async function getTiers(): Promise<Tier[]> {
 // the status bar cropped off, not App Store marketing art and not a mockup. Each one is
 // cut by scripts/crop-screenshots.mjs, which prints the w/h to paste in here.
 
-// The public listing. Offered as proof, not as a call to action — see OutboundLink.
-const APP_STORE_URL = 'https://apps.apple.com/us/app/refit/id6772761520';
+// The public listings (lib/stores). Offered as proof, not as a call to action — see OutboundLink.
+// Jon 17 Nov #11: the app is on Google Play as well since 4 Nov, so both are named and linked.
 
 // Five steps, one real screen each, in the order the work happens: tag it, find it,
 // read it, order it, hand it over. The boat file is the hero and is not repeated here —
@@ -350,8 +352,8 @@ export default async function Home() {
                 unskilled. The benefit is the same either way and it is the information that
                 moves, not the man. */}
             <p>
-              An iPhone app for shop owners. Your techs tag every part as it comes off, so
-              whoever puts it back has what he needs.
+              An iPhone and Android app for shop owners. Your techs tag every part as it comes
+              off, so whoever puts it back has what he needs.
             </p>
             <div className="hero-cta">
               {/* The button says what it does and nothing else. It used to carry a
@@ -390,7 +392,7 @@ export default async function Home() {
             {/* Where a skeptic looks for it: directly under the screen he is being asked
                 to believe in. */}
             <div className="shot-caption">Real screens from the app. Not mockups.</div>
-            <div className="hero-meta">iPhone. Works with no signal.</div>
+            <div className="hero-meta">iPhone and Android. Works with no signal.</div>
           </div>
         </section>
 
@@ -468,10 +470,14 @@ export default async function Home() {
               go back on, and the man who takes it off is not always the man who puts it back.
             </li>
             <li>
-              <b>It is on the App Store.</b> The listing is public, and the screens on this page
-              come out of it.{' '}
+              <b>It is on the App Store and Google Play.</b> Both listings are public, and the
+              screens on this page come out of the app.{' '}
               <OutboundLink href={APP_STORE_URL} dest="app-store" className="proof-link">
-                See the listing
+                App Store
+              </OutboundLink>
+              {' · '}
+              <OutboundLink href={PLAY_URL} dest="google-play" className="proof-link">
+                Google Play
               </OutboundLink>
             </li>
             <li>
@@ -725,10 +731,12 @@ export default async function Home() {
 
       <footer className="footer">
         <div className="container">
+          <StoreBadges className="center" />
           <div className="footer-links">
             <Link href="/getting-started">Getting started</Link>
             <Link href="/login">Sign in</Link>
             <Link href="/signup?src=footer">Start your free trial</Link>
+            <a href={PRIVACY_URL}>Privacy policy</a>
             <a href="mailto:support@refit-iq.com">support@refit-iq.com</a>
           </div>
           <div>© {new Date().getFullYear()} ReFitIQ · refit-iq.com</div>

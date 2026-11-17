@@ -1,6 +1,13 @@
+import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { SignupForm } from './signup-form';
+
+export const metadata: Metadata = {
+  title: 'Start your free trial | ReFitIQ',
+  description: 'Set up your shop on ReFitIQ: a shop name, a work email and a password. 14 days free.',
+};
+
 
 export const dynamic = 'force-dynamic';
 

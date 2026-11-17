@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { StoreBadges } from '../components/store-badges';
 
 // Shown on /dashboard while a shop is still trialing. Without this the page a new shop
 // owner lands on right after signup talks only about plans and seats, which is the one
@@ -7,7 +8,6 @@ import Link from 'next/link';
 //
 // The App Store listing is live and free (verified against the iTunes lookup API); there
 // is no Google Play listing, so this deliberately says iPhone only.
-const APP_STORE_URL = 'https://apps.apple.com/us/app/refit/id6772761520';
 
 export function NextSteps() {
   return (
@@ -15,12 +15,10 @@ export function NextSteps() {
       <h2>Next steps</h2>
       <ol>
         <li>
-          <strong>Get the app.</strong> Download ReFitIQ on the iPhone your crew will use in the
-          yard and sign in with this account.
+          <strong>Get the app.</strong> Download ReFitIQ on the phones your crew will use in the
+          yard (iPhone or Android) and sign in with this account.
           <div className="ns-actions">
-            <a className="btn btn-primary" href={APP_STORE_URL} target="_blank" rel="noopener noreferrer">
-              Get ReFitIQ on the App Store →
-            </a>
+            <StoreBadges />
           </div>
         </li>
         <li>

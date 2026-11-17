@@ -65,7 +65,7 @@ export function BrandMark({
 
   if (!href) return img;
   return (
-    <Link href={href} aria-label="ReFitIQ home" style={{ display: 'inline-flex' }}>
+    <Link href={href} aria-label="ReFitIQ home" className="tap-pad" style={{ display: 'inline-flex' }}>
       {img}
     </Link>
   );

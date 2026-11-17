@@ -87,7 +87,10 @@ a {
      `.btn { display: inline-block }` is declared later in this file, so a bare class ties
      at 0,1,0 and loses on source order. */
   .nav .nav-signin {
-    padding: 0;
+    /* Jon 17 Nov #11: a text link still needs a 44px target; the vertical padding is
+       given back by the margin, so the nav keeps its height. */
+    padding: 14px 8px;
+    margin: -14px -8px;
     border-color: transparent;
     background: transparent;
     font-size: 14px;
@@ -1669,4 +1672,41 @@ table.roles td {
   margin: 6px 0 0;
   font-size: 13px;
   color: var(--text-muted);
+}
+
+/* Jon 17 Nov #11: store badges, and footer / small links big enough to tap (44px). */
+.store-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.store-badges.center {
+  justify-content: center;
+}
+.store-badge {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}
+.store-badge img {
+  height: 48px;
+  width: auto;
+  display: block;
+}
+.footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.footer .store-badges {
+  justify-content: center;
+  margin-bottom: 14px;
+}
+/* A 44px tap area for small inline links without moving anything: the padding grows the
+   target, the equal negative margin gives the space back (Jon 17 Nov #11). */
+.field-link,
+.tap-pad {
+  padding-block: 12px;
+  margin-block: -12px;
 }

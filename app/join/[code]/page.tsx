@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { APP_STORE_URL, PLAY_URL } from '@/lib/stores';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { BrandMark } from '../../brand-mark';
@@ -29,7 +30,6 @@ export const dynamic = 'force-dynamic';
 //   • in a real shop      → say which, and how to get out of it; never a dead "all set".
 // A bad code gets no form at all: there is nothing to join.
 
-const APP_STORE_URL = 'https://apps.apple.com/us/app/refit/id6772761520';
 
 type Props = { params: Promise<{ code: string }> };
 
@@ -90,8 +90,8 @@ function GetTheApp({ email }: { email: string | null | undefined }) {
           iPhone: App Store →
         </a>
         <br />
-        <a href="/android" style={{ color: 'var(--accent)', fontWeight: 700 }}>
-          Android: download the app →
+        <a href={PLAY_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', fontWeight: 700 }}>
+          Android: Google Play →
         </a>
       </p>
     </div>
