@@ -1,8 +1,11 @@
 // The eight How it works screenshots (Jon, 17 Nov 2026 website package), made web-ready.
 //
 // Usage (from the repo root):
-//   node scripts/make-how-it-works-shots.mjs <package images dir> [out dir]
+//   node scripts/make-how-it-works-shots.mjs <package images dir> [out dir] [--only <name>...]
 // Defaults: ~/Downloads/refit-site-package/ReFitIQ-Website-Package/images -> public/how
+// --only rebuilds just the named shots (e.g. --only 02-project) and keeps the rest of
+// public/how and shots.json as they are. A shot with `src` reads that file instead of the
+// package (02 is Jon's fresh iPhone capture of 17 Nov, after the action tiles fix).
 //
 // The originals are only READ. For each one this:
 //   1. crops the phone's status bar off the top (clock, signal, battery);
@@ -22,8 +25,13 @@ import os from 'node:os';
 import path from 'node:path';
 import sharp from 'sharp';
 
-const SRC = process.argv[2] ?? path.join(os.homedir(), 'Downloads', 'refit-site-package', 'ReFitIQ-Website-Package', 'images');
-const OUT = process.argv[3] ?? path.join(process.cwd(), 'public', 'how');
+const argv = process.argv.slice(2);
+const onlyAt = argv.indexOf('--only');
+const ONLY = onlyAt >= 0 ? argv.slice(onlyAt + 1) : null;
+const pos = onlyAt >= 0 ? argv.slice(0, onlyAt) : argv;
+const DOWNLOADS = path.join(os.homedir(), 'Downloads');
+const SRC = pos[0] ?? path.join(DOWNLOADS, 'refit-site-package', 'ReFitIQ-Website-Package', 'images');
+const OUT = pos[1] ?? path.join(process.cwd(), 'public', 'how');
 
 const SHOTS = [
   {
@@ -36,12 +44,14 @@ const SHOTS = [
     ],
   },
   {
-    file: '02-refitiq-project-dashboard.png', name: '02-project', top: 170, css: 480,
+    // Castaway-6469's boat file on an iPhone, 17 Nov 2026, after the action tiles fix (one
+    // label per tile, "99+" on the badge). It replaced the package's 02, which showed "9..".
+    // The file Jon sent is 721px wide, so its 2x is 721, not 960.
+    src: path.join(DOWNLOADS, 'castaway-boat-file.png'), name: '02-project', top: 100, css: 480,
     blur: [
-      [88, 500, 650, 566],        // Due 11 Nov, 5 days overdue (the same line as 01)
-      [528, 1742, 820, 1806],     // Captured by Jon Anderson
-      [528, 2091, 820, 2155],     // Captured by scott_justin
-      [528, 2372, 830, 2446],     // Captured by Sean Wright
+      [56, 302, 390, 336],        // Due 11 Nov, 6 days overdue
+      [205, 1254, 466, 1284],     // Captured by Jon Anderson
+      [205, 1492, 455, 1516],     // Captured by scott_justin (cut off by the screen's edge)
     ],
   },
   { file: '03-refitiq-photo-gallery.jpeg', name: '03-gallery', top: 100, css: 330, blur: [] },
@@ -65,9 +75,13 @@ const SHOTS = [
 ];
 
 fs.mkdirSync(OUT, { recursive: true });
-const meta = [];
+const metaPath = path.join(OUT, 'shots.json');
+const meta = ONLY && fs.existsSync(metaPath) ? JSON.parse(fs.readFileSync(metaPath, 'utf8')) : [];
 for (const s of SHOTS) {
-  const src = path.join(SRC, s.file);
+  if (ONLY && !ONLY.includes(s.name)) continue;
+  const src = s.src ?? path.join(SRC, s.file);
+  // A new source can change the 2x width (02 went 960 -> 721): clear this shot's old files.
+  for (const f of fs.readdirSync(OUT)) if (f.startsWith(`${s.name}-`)) fs.rmSync(path.join(OUT, f));
   const img = sharp(src);
   const { width, height } = await img.metadata();
   const layers = [];
@@ -91,8 +105,10 @@ for (const s of SHOTS) {
     await base.clone().webp({ quality: 82 }).toFile(path.join(OUT, `${s.name}-${w}.webp`));
   }
   await sharp(cropped).webp({ quality: 85 }).toFile(path.join(OUT, `${s.name}-full.webp`));
-  meta.push({ name: s.name, w1: Math.min(width, s.css), w2: Math.min(width, s.css * 2), full: [width, ch], aspect: +(ch / width).toFixed(4) });
+  const entry = { name: s.name, w1: Math.min(width, s.css), w2: Math.min(width, s.css * 2), full: [width, ch], aspect: +(ch / width).toFixed(4) };
+  const at = meta.findIndex((m) => m.name === s.name);
+  if (at >= 0) meta[at] = entry; else meta.push(entry);
   console.log(`${s.name}: cropped ${width}x${ch}, blurred ${s.blur.length} box(es)`);
 }
-fs.writeFileSync(path.join(OUT, 'shots.json'), JSON.stringify(meta, null, 1));
+fs.writeFileSync(metaPath, JSON.stringify(meta, null, 1));
 console.log(`wrote ${meta.length} shots to ${OUT}`);

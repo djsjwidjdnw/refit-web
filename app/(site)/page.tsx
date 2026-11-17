@@ -86,8 +86,8 @@ export default function Home() {
             <Image
               src="/how/02-project-full.webp"
               alt="A ReFitIQ boat file mid-refit for Castaway-6469, with 465 parts and 83 of them on the foredeck."
-              width={1206}
-              height={2452}
+              width={721}
+              height={1468}
               priority
               sizes="(min-width: 760px) 380px, 340px"
             />

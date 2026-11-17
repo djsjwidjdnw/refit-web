@@ -70,7 +70,7 @@ export const HOW_SHOTS = [
     alt: 'ReFitIQ jobs overview showing pinned projects, capture counts and due dates.',
   },
   {
-    name: '02-project', w1: 480, w2: 960, full: [1206, 2452],
+    name: '02-project', w1: 480, w2: 721, full: [721, 1468],
     heading: 'Keep the whole project organized',
     copy: 'Find parts, focus on urgent work, filter by area or department, and access the tools your team needs from one project screen.',
     alt: 'ReFitIQ project dashboard with part records, area and department filters, and QR scan access.',

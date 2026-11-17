@@ -29,6 +29,7 @@ const PAGES = [
   { dir: 'contact', eyebrow: 'CONTACT', title: ['Contact and', 'support'], sub: 'support@refit-iq.com', shot: '07-history' },
 ];
 
+const SHOTS = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'public', 'how', 'shots.json'), 'utf8'));
 const LOGO = path.join(process.cwd(), 'public', 'brand', 'logo-compact.png');
 const logoMeta = await sharp(LOGO).metadata();
 const LOGO_H = 44;
@@ -55,7 +56,9 @@ for (const p of PAGES) {
 </svg>`;
   // One screen from the app on the right, in a dark phone outline.
   const shotH = 560;
-  const shot = await sharp(path.join(process.cwd(), 'public', 'how', `${p.shot}-960.webp`))
+  // The shot's 2x file, whatever its width (02 is 721px since its 17 Nov recapture).
+  const w2 = SHOTS.find((m) => m.name === p.shot).w2;
+  const shot = await sharp(path.join(process.cwd(), 'public', 'how', `${p.shot}-${w2}.webp`))
     .resize({ height: shotH - 20 })
     .toBuffer();
   const sm = await sharp(shot).metadata();
