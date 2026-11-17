@@ -89,9 +89,9 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
          of the same shape on one line, which is the cadence a reader clocks as
          machine-written before he has finished reading it. -->
     <text x="0" y="438" font-family="${FONT}" font-size="30" font-weight="400"
-          fill="${MUTED}">${esc('An iPhone app. Your techs tag every part as it comes off.')}</text>
+          fill="${MUTED}">${esc('An iPhone and Android app. Your techs tag every part')}</text>
     <text x="0" y="480" font-family="${FONT}" font-size="30" font-weight="400"
-          fill="${MUTED}">${esc('Whoever puts it back has what he needs.')}</text>
+          fill="${MUTED}">${esc('as it comes off. Whoever puts it back has what he needs.')}</text>
   </g>
 
   <!-- Footer strip -->
