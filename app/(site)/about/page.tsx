@@ -45,7 +45,7 @@ export default function About() {
               the work, while they were doing it.
             </p>
             <p className="yard-close">
-              The boat file on the home page is one of their jobs. A Nordhavn 60, and 458 parts
+              The boat file on the home page is one of their jobs. A Nordhavn 60, and 465 parts
               logged off it by the crew who pulled them.
             </p>
           </div>

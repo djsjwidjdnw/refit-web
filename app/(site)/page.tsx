@@ -76,7 +76,7 @@ export default function Home() {
           <div className="hero-cta">
             <CtaLink src="hero">Start your free trial</CtaLink>
           </div>
-          <div className="hero-note">458 parts off one teardown, on the screen below.</div>
+          <div className="hero-note">465 parts off one teardown, on the screen below.</div>
           <div className="hero-trust">
             <span>14 days free, then $99 to $299 a month.</span>
           </div>
@@ -84,10 +84,10 @@ export default function Home() {
         <div className="hero-shot">
           <div className="shot">
             <Image
-              src="/shots/boat-file-3.webp"
-              alt="A ReFitIQ boat file mid-refit for Castaway-6469: 64 parts flagged to replace, 458 captures, 82 of them on the foredeck, with areas for flybridge and the rest of the vessel."
+              src="/how/02-project-full.webp"
+              alt="A ReFitIQ boat file mid-refit for Castaway-6469, with 465 parts and 83 of them on the foredeck."
               width={1206}
-              height={2415}
+              height={2452}
               priority
               sizes="(min-width: 760px) 380px, 340px"
             />
@@ -146,7 +146,7 @@ export default function Home() {
               technicians who use it, on refits their crew was running at the time.
             </p>
             <p className="yard-close">
-              The boat file at the top of this page is one of their jobs. A Nordhavn 60, and 458
+              The boat file at the top of this page is one of their jobs. A Nordhavn 60, and 465
               parts logged off it by the crew who pulled them.{' '}
               <Link href="/about" className="proof-link">
                 About ReFitIQ
