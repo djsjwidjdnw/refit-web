@@ -19,7 +19,7 @@ import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { BrandMark } from '../brand-mark';
 import { CtaLink } from '../cta-link';
-import { SITE_PAGES } from '@/lib/site-content';
+import { BAR_PAGES, SITE_PAGES } from '@/lib/site-content';
 
 function isCurrent(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -86,7 +86,7 @@ export function SiteNav() {
         </Link>
 
         <nav className="site-links" aria-label="Main">
-          {SITE_PAGES.map((p) => (
+          {BAR_PAGES.map((p) => (
             <Link
               key={p.href}
               href={p.href}

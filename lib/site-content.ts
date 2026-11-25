@@ -20,6 +20,10 @@ export const SITE_PAGES = [
   { href: '/contact', label: 'Contact' },
 ] as const;
 
+// The desktop bar has room for seven; an eighth wraps the labels at 1280 px ("Get / the / app").
+// Stickers (Jon 19-21 Nov #12) is in the phone menu, the footer and the sitemap, not the bar.
+export const BAR_PAGES = SITE_PAGES.filter((p) => p.href !== '/stickers');
+
 // ── pricing: billing_plans (0027), the table checkout charges from ─────────────────────────
 // Read at most once per revalidate window. The fallback is the same locked catalogue
 // (lib/stripe/plans.ts PLAN_CATALOG), checked against billing_plans on 17 Nov 2026.
