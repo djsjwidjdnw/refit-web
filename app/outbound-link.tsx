@@ -9,7 +9,7 @@ import { trackFunnel } from '@/lib/analytics';
 //
 // The only current use is the App Store listing in the proof strip. That link is a real
 // leak on paid traffic, and it is here anyway because "there is a shipping app with a
-// public listing" is the one claim a skeptic can verify himself in five seconds. Keeping
+// public listing" is the one claim a skeptic can verify themselves in five seconds. Keeping
 // it instrumented means the decision to keep or pull it can be made from the funnel
 // rather than from an opinion.
 export function OutboundLink({

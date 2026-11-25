@@ -3,7 +3,7 @@
 //
 // Jon, 2026-10-22: "a person opening an invite link currently sees Start free trial". Part of
 // that was this card: /join/<code> inherited the site's own (app/opengraph-image.png), which
-// says "FOR SHOP OWNERS" and "14 days free. Cancel anytime." A tech being asked to join his
+// says "FOR SHOP OWNERS" and "14 days free. Cancel anytime." A tech being asked to join their
 // shop's crew was being pitched a trial. Next's file convention gives the /join segment its
 // own image; the page's generateMetadata puts the shop's NAME in the card's title, which a
 // static image cannot.

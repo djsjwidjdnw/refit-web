@@ -17,14 +17,14 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: 'ReFitIQ. You pay for that teardown twice.',
   description:
-    'An iPhone and Android app for shop owners. Your techs tag every part as it comes off, so whoever puts it back has what he needs. Built at Philbrook’s Boatyard. 14 days free.',
+    'An iPhone and Android app for shop owners. Your techs tag every part as it comes off, so whoever puts it back has what they need. Built at Philbrook’s Boatyard. 14 days free.',
   alternates: { canonical: '/' },
 };
 
 // ── HOUSE STYLE FOR EVERY USER-VISIBLE STRING ON THIS SITE ──────────────────────────
-// The reader is a tradesman in his fifties who owns the shop: a boatyard, a restoration
-// or body shop, a heavy-equipment yard, an aircraft maintenance outfit. Same man in all
-// four. He can smell copy that was generated, and the site took real backlash for exactly
+// The reader owns the shop and has spent decades in the trade: a boatyard, a restoration
+// or body shop, a heavy-equipment yard, an aircraft maintenance outfit. Same reader in all
+// four. They can smell copy that was generated, and the site took real backlash for exactly
 // that. So:
 //
 //   • NO em-dashes or en-dashes in rendered text. Full stops and commas only. (These
@@ -39,9 +39,12 @@ export const metadata: Metadata = {
 //     instead: 14 days free, every feature, cancel anytime, you only pay if you pick a
 //     plan. (`className="card"` is a stylesheet class and is unrelated.)
 //   • No rhetorical questions as headings.
+//   • GENDER NEUTRAL (Jon, 21 Nov 2026). The reader, the tech, whoever puts a part back:
+//     "they" / "them" / "their", or "the technician". Never "he" or "she" for them, in
+//     page copy, meta descriptions, alt text or the words baked into an OG image.
 //   • Short declarative sentences. Trade words. Real numbers and real parts.
-//   • And do not overcorrect into fake yard-talk. He spots forced folksiness as fast as
-//     he spots a language model. Neutral, direct, unpolished but competent.
+//   • And do not overcorrect into fake yard-talk. They spot forced folksiness as fast as
+//     they spot a language model. Neutral, direct, unpolished but competent.
 //   • TRADE-NEUTRAL IN THE COPY, MARINE IN THE PROOF. Every claim is written so a car
 //     restorer, an excavator shop and an aircraft outfit read themselves into it: job,
 //     teardown, part, fastener, shop. But every PROOF asset stays exactly what it is —
@@ -56,7 +59,7 @@ export const metadata: Metadata = {
 //     from a query against that column. If the mix ever changes, change the sentence.
 // ─────────────────────────────────────────────────────────────────────────────────────
 
-// Jon, 17 Nov: he asked for three benefits on Home, so there are three; they are written at
+// Jon, 17 Nov: Jon asked for three benefits on Home, so there are three; they are written at
 // different lengths so they do not read as a rhythm.
 
 const TEASER = HOW_SHOTS.filter((s) => ['01-jobs', '05-part-plan', '08-replacements'].includes(s.name));
@@ -71,7 +74,7 @@ export default function Home() {
           <h1>You pay for that teardown twice.</h1>
           <p>
             An iPhone and Android app for shop owners. Your techs tag every part as it comes
-            off, so whoever puts it back has what he needs.
+            off, so whoever puts it back has what they need.
           </p>
           <div className="hero-cta">
             <CtaLink src="hero">Start your free trial</CtaLink>

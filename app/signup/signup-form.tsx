@@ -119,8 +119,8 @@ export function SignupForm() {
         <p className="sub">14 days free. Cancel anytime, no charge.</p>
         {/* Two lines, not three. The old set was a list of three in rhythm, each with a ✓
             glyph in front of it, which is the shape of a generated pricing page. These
-            two answer what a cold visitor is weighing at the moment he looks at a form:
-            what the 14 days give him, and when money is ever involved. Say the second one
+            two answer what a cold visitor is weighing at the moment they look at a form:
+            what the 14 days give them, and when money is ever involved. Say the second one
             as the offer, never as a denial — see the house-style block in app/page.tsx. */}
         <ul className="reassure">
           <li>Every feature for 14 days, with no limit on how many techs you add.</li>

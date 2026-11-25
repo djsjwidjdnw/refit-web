@@ -3,7 +3,7 @@ import { CtaLink } from '../../cta-link';
 import { ScreenShot } from '../../components/screen-shot';
 import { HOW_SHOTS } from '@/lib/site-content';
 
-// How it works (Jon, 17 Nov 2026): the eight screens from his package, in his order, each in a
+// How it works (Jon, 17 Nov 2026): the eight screens from Jon's package, in Jon's order, each in a
 // phone frame beside (desktop) or below (phone) its heading and caption, sides alternating.
 // Tap a screen to open it at full size. Images: scripts/make-how-it-works-shots.mjs.
 export const metadata: Metadata = {

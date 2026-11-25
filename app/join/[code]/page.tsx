@@ -14,8 +14,8 @@ export const dynamic = 'force-dynamic';
 // the account, and leave them as a pending join request for the shop's admins to accept.
 //
 // What went wrong on 21 Oct (from the live API logs, see supabase/migrations/0064 in the app
-// repo): a hire made his account on the TRIAL form, so he owned an empty shop of his own, and
-// then this page told him "You already belong to a shop" four times until an admin moved him
+// repo): a hire made their account on the TRIAL form, so they owned an empty shop of their own, and
+// then this page told them "You already belong to a shop" four times until an admin moved them
 // by hand. Signed out, this page also used to bounce to /signup?join=<code>, a generic "Join
 // your shop" form with no shop name, under a link preview that said "FOR SHOP OWNERS … 14 days
 // free".
