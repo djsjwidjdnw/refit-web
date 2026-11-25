@@ -1317,7 +1317,7 @@ table.roles td {
 }
 
 /* Caption under the hero screenshot. A skeptic looks for the "is this real"
-   answer directly beneath the screen he is being asked to believe in, so that is
+   answer directly beneath the screen the reader is being asked to believe in, so that is
    where it goes rather than 6,000px down in a body paragraph. */
 .shot-caption {
   margin-top: 12px;
@@ -1444,8 +1444,8 @@ table.roles td {
 }
 
 /* The cost-of-the-moment list. Four concrete lines instead of a paragraph —
-   a man reading this in his own shop is scanning for
-   the line that applies to him. */
+   someone reading this in their own shop is scanning for
+   the line that applies to them. */
 .cost-list {
   list-style: none;
   padding: 0;
@@ -1473,7 +1473,7 @@ table.roles td {
   background: var(--accent);
 }
 
-/* The three things he says to the screen, answered in the open rather than inside a
+/* The three things the reader says to the screen, answered in the open rather than inside a
    collapsed <details> at ~7,000px. They were three matching cards across a
    repeat(3, 1fr) grid — the third such grid on one page — which also squeezed each
    answer into a third of the width. Now: rows, one hairline between them, no card
@@ -2129,4 +2129,33 @@ html.menu-open body {
   display: grid;
   gap: 12px;
   max-width: 640px;
+}
+
+/* Buy QR stickers (Jon 19-21 Nov #12): the photo beside the copy on a wide screen, above it on
+   a phone. The product list is lib/store.ts. */
+.store-product {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+}
+.store-photo img {
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+}
+.store-copy h2 { margin-top: 0; }
+.store-price {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text);
+  margin: 8px 0 12px;
+}
+.store-unit { font-size: 16px; font-weight: 500; color: var(--text-muted); }
+.store-details { padding-left: 20px; display: grid; gap: 8px; margin: 16px 0 24px; color: var(--text-muted); }
+.store-buy { margin-top: 8px; }
+.store-note { font-size: 14px; color: var(--text-muted); margin-top: 14px; }
+@media (max-width: 900px) {
+  .store-product { grid-template-columns: 1fr; gap: 24px; }
 }

@@ -16,6 +16,7 @@ export const SITE_PAGES = [
   { href: '/pricing', label: 'Pricing' },
   { href: '/about', label: 'About' },
   { href: '/get-the-app', label: 'Get the app' },
+  { href: '/stickers', label: 'Stickers' },
   { href: '/contact', label: 'Contact' },
 ] as const;
 
